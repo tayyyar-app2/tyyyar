@@ -1,18 +1,5 @@
 const SERVICE_FEE = 5;
 function render(){renderFiltered();}
-let selectedTip = 0;
-function setTip(amount) {
-  if (selectedTip === amount) {
-    // لو ضغط تاني على نفس الزرار → يلغي الإكرامية
-    selectedTip = 0;
-    document.querySelectorAll('[id^="tip-"]').forEach(el => el.classList.remove('acod'));
-  } else {
-    selectedTip = amount;
-    document.querySelectorAll('[id^="tip-"]').forEach(el => el.classList.remove('acod'));
-    document.getElementById('tip-' + amount).classList.add('acod');
-  }
-}
-
 
 // ===== SEARCH =====
 let srchQ='';
@@ -64,6 +51,7 @@ function renderFiltered(){
 }
 
 let cart={},brand='Bazooka',pay='cod',loc=null,seq=parseInt(localStorage.getItem('tyr_seq')||'0');
+let selectedTip = 0;
 // ===== RENDER =====
 function render(){
 // لو المطعم مغلق
@@ -184,7 +172,7 @@ function buildReview(nm,ph,ad){
   const payLbl=pay==='online'?'📲 انستاباي / فودافون كاش':'💵 عند الاستلام';
   const del=getDeliveryFee(ad);
   const serviceFee=6;
-  const grandTotal=tot+del+serviceFee;
+ const grandTotal=tot+del+serviceFee+selectedTip;
 
   document.getElementById('rl').innerHTML=it.map(i=>`
     <div class="ritem">
@@ -192,10 +180,15 @@ function buildReview(nm,ph,ad){
       <div class="rp">${i.t} ج.م</div>
     </div>`).join('');
    document.getElementById('tb').style.display='block';
+   const tipRow = selectedTip > 0
+  ? '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>❤️ إكرامية المندوب</span><span>' + selectedTip + ' ج.م</span></div>'
+  : '';
+
 document.getElementById('tb').innerHTML=`
   <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>🛒 إجمالي الطلب</span><span>${tot} ج.م</span></div>
   <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>🛵 رسوم التوصيل</span><span>${del} ج.م</span></div>
   <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>🔧 رسوم الخدمة</span><span>${SERVICE_FEE} ج.م</span></div>
+  ${tipRow}
   <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>المجموع الكلي</span><strong>${grandTotal} ج.م</strong></div>`;
  
 
@@ -210,6 +203,16 @@ function setPay(t){
   document.getElementById('pcc').className='pcard'+(t==='cod'?' acod':'');
   document.getElementById('pco').className='pcard'+(t==='online'?' aonline':'');
   document.getElementById('ob').style.display=t==='online'?'block':'none';
+}
+function setTip(amount) {
+  if (selectedTip === amount) {
+    selectedTip = 0;
+    document.querySelectorAll('.tip-card').forEach(el => el.classList.remove('active'));
+  } else {
+    selectedTip = amount;
+    document.querySelectorAll('.tip-card').forEach(el => el.classList.remove('active'));
+    document.getElementById('tip-' + amount).classList.add('active');
+  }
 }
 
 function getLoc(){
@@ -351,7 +354,8 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
     divider,
     `🛒 *إجمالي الطلب:* ${tot} ج.م\n🛵 *رسوم التوصيل:* ${del} ج.م\n🔧 *رسوم الخدمة:* ${SERVICE_FEE} ج.م`,
     divider,
-    `💰 *الإجمالي الكلي: ${grandTotal} ج.م*\n💳 *طريقة الدفع:* ${payLbl}`,
+    `🛵 *إكرامية للمندوب:* ${selectedTip > 0 ? selectedTip + ' ج.م' : 'لا يوجد'}`,
+`💰 *الإجمالي الكلي: ${grandTotal + selectedTip} ج.م*\n💳 *طريقة الدفع:* ${payLbl}`,
     onlinePayment,
     notes ? `\n📝 *ملاحظات:* ${notes}` : '',
     divider,
