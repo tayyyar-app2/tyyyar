@@ -1,5 +1,18 @@
-const SERVICE_FEE = 8;
+const SERVICE_FEE = 5;
 function render(){renderFiltered();}
+let selectedTip = 0;
+function setTip(amount) {
+  if (selectedTip === amount) {
+    // لو ضغط تاني على نفس الزرار → يلغي الإكرامية
+    selectedTip = 0;
+    document.querySelectorAll('[id^="tip-"]').forEach(el => el.classList.remove('acod'));
+  } else {
+    selectedTip = amount;
+    document.querySelectorAll('[id^="tip-"]').forEach(el => el.classList.remove('acod'));
+    document.getElementById('tip-' + amount).classList.add('acod');
+  }
+}
+
 
 // ===== SEARCH =====
 let srchQ='';
@@ -268,6 +281,17 @@ function getDeliveryFee(address) {
 
   // 1. حي الأندلس (سعر ثابت ومميز)
   if (ad.includes('الاندلس') || ad.includes('اندلس')) return 70;
+  if (ad.includes('الاردنيه') || ad.includes('الاردنيه')) return 25;
+  if (ad.includes('صيدناوي') || ad.includes('صيدناوي')) return 30;
+  if (ad.includes('الحي33') || ad.includes('الحي 33')) return 60;
+  if (ad.includes('الحي 28') || ad.includes('الحي28')) return 55;
+  if (ad.includes('دار مصر') || ad.includes('دار مصر')) return 40 ;
+  if (ad.includes('حي الياسمين') || ad.includes('حي الياسمين')) return 40;
+
+
+
+
+
 
   // 2. استخراج نوع المنطقة والرقم من النص
   // يدعم: حي، الحي، مجاورة، مجاوره (مع أو بدون مسافة قبل الرقم)

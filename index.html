@@ -172,6 +172,74 @@ src="https://www.facebook.com/tr?id=1489984089526553&ev=PageView&noscript=1"
         </div>
         <div class="obox" id="ob">💳 بعد تأكيد الطلب، هتلاقي رقم التحويل في رسالة الواتساب</div>
       </div>
+      <style>
+.tip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+.tip-card {
+  border: 2px solid #e0d5c5;
+  border-radius: 14px;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+.tip-card:hover {
+  border-color: #c0392b;
+  background: #fff8f7;
+}
+.tip-card.active {
+  border-color: #c0392b;
+  background: #fff0ee;
+  box-shadow: 0 2px 8px rgba(192,57,43,0.15);
+}
+.tip-emoji {
+  font-size: 20px;
+  display: block;
+  margin-bottom: 4px;
+}
+.tip-amount {
+  font-size: 26px;
+  font-weight: 900;
+  color: #27ae60;
+  display: block;
+  line-height: 1;
+}
+.tip-card.active .tip-amount {
+  color: #c0392b;
+}
+.tip-unit {
+  font-size: 13px;
+  color: #888;
+  display: block;
+  margin-top: 2px;
+}
+</style>
+
+<div class="fg">
+  <label>إكرامية للمندوب ❤️<span style="color:#999;font-size:13px">(اختياري)</span></label>
+  <div class="tip-grid" id="tip-grid">
+    <div class="tip-card" id="tip-5"  onclick="setTip(5)">
+      <span class="tip-emoji">💵</span>
+      <span class="tip-amount">5</span>
+      <span class="tip-unit">جنيه</span>
+    </div>
+    <div class="tip-card" id="tip-10" onclick="setTip(10)">
+      <span class="tip-emoji">💵</span>
+      <span class="tip-amount">10</span>
+      <span class="tip-unit">جنيه</span>
+    </div>
+    <div class="tip-card" id="tip-20" onclick="setTip(20)">
+      <span class="tip-emoji">💵</span>
+      <span class="tip-amount">20</span>
+      <span class="tip-unit">جنيه</span>
+    </div>
+  </div>
+</div>
       <div class="fg"><label>ملاحظات (اختياري)</label><textarea id="cno" placeholder="أي طلبات خاصة..."></textarea></div>
     </div>
     <div class="brow">
