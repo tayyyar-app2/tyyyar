@@ -205,6 +205,7 @@ function setPay(t){
   document.getElementById('ob').style.display=t==='online'?'block':'none';
 }
 function setTip(amount) {
+  amount = Number(amount);
   if (selectedTip === amount) {
     selectedTip = 0;
     document.querySelectorAll('.tip-card').forEach(el => el.classList.remove('active'));
