@@ -55,7 +55,7 @@ let selectedTip = 0;
 // ===== RENDER =====
 function render(){
 // لو المطعم مغلق
-if(!RESTAURANT_STATUS[brand]) {
+if(!isOpen(brand)) {
   // إظهار رسالة مغلق
   document.getElementById('closed-banner').style.display = 'block';
   // updateFab();
@@ -93,7 +93,7 @@ function unzoomImg(el){el.classList.remove('zoomed');}
 
 // ===== CART =====
 function chg(id,d){
-   if(!RESTAURANT_STATUS[brand]){
+  if(!isOpen(brand)) {
    toast('🔴 هذا المطعم مغلق حالياً', 1);
    return;
  }
@@ -264,7 +264,7 @@ function getLoc(){
 
 // ===== FAB: تأكيد الطلب =====
 function fabConfirm(){
-  if(!RESTAURANT_STATUS[brand]){
+  if(!isOpen(brand)) {
     toast('🔴 هذا المطعم مغلق حالياً', 1);
     return;
   }
@@ -365,7 +365,7 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
 }
 
 function placeOrder(){
-  if(!RESTAURANT_STATUS[brand]){
+ if(!isOpen(brand)) {
     toast('🔴 هذا المطعم مغلق حالياً', 1);
     return;
   }

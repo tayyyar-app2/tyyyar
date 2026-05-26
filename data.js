@@ -1,22 +1,39 @@
-const RESTAURANT_STATUS = {
-  'Bazooka':          true   ,    
-  'Karam El Sham':     true   ,
-
-  'B Laban':           true  ,
-  
-  'Wahmy Burger':      true ,  
-
-  'Koshary Al Khedewy':true  ,
-
-  'Hawawshi Al Refaie':false  ,
-
-  'Saadaawy Burger':   true  ,
-
-  'Krebs':             true  , 
-
-  'Sliceno'  :           true    ,
-  'Fan w Tarab':          true  ,
+const RESTAURANT_SCHEDULE = {
+  'Bazooka':            { open: '10:00', close: '03:00' },
+  'Karam El Sham':      { open: '9:00', close: '03:00' },
+  'B Laban':            { open: '10:00', close: '02:00' },
+  'Wahmy Burger':       { open: '10:00', close: '03:00' },
+  'Koshary Al Khedewy': { open: '10:00', close: '03:00' },
+  'Hawawshi Al Refaie': { open: '10:00', close: '03:00' },
+  'Saadaawy Burger':    { open: '10:00', close: '03:00' },
+  'Krebs':              { open: '10:00', close: '03:00' },
+  'Sliceno':            { open: '10:00', close: '03:00' },
+  'Fan w Tarab':        { open: '10:00', close: '03:00' },
 };
+
+function isOpen(brandKey) {
+  const schedule = RESTAURANT_SCHEDULE[brandKey];
+  if (!schedule) return false;
+
+  function toMins(timeStr) {
+    const [h, m] = timeStr.split(':').map(Number);
+    return h * 60 + m;
+  }
+
+  const now     = new Date();
+  const current = now.getHours() * 60 + now.getMinutes();
+
+  const openTime  = toMins(schedule.open);
+  let   closeTime = toMins(schedule.close);
+
+  // 3 الصبح أصغر من 10 الصبح = بيتعدى منتصف الليل
+  if (closeTime < openTime) closeTime += 24 * 60;
+
+  let adjustedCurrent = current;
+  if (current < openTime) adjustedCurrent += 24 * 60;
+
+  return adjustedCurrent >= openTime && adjustedCurrent < closeTime;
+}
 const WA='201277092892', PAY_NUM='01024130987';
 const BL={'Bazooka':'بازوكا','Karam El Sham':'كرام الشام','B Laban':'B لبن','Wahmy Burger':'وهمي برجر','Koshary Al Khedewy':'كشري الخديوي','Hawawshi Al Refaie':'حواوشي الرفاعي','Saadaawy Burger':'سعداوي برجر','Krebs':'كريبز','Sliceno':'سلايزينو','Fan w Tarab':'فن وطرب',};
 const BRANDS=['Bazooka','Karam El Sham','B Laban','Wahmy Burger','Koshary Al Khedewy','Hawawshi Al Refaie','Saadaawy Burger','Krebs','Sliceno','Fan w Tarab',];
