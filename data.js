@@ -8,7 +8,7 @@ const RESTAURANT_STATUS = {
 
   'Koshary Al Khedewy':true  ,
 
-  'Hawawshi Al Refaie':true  ,
+  'Hawawshi Al Refaie':false  ,
 
   'Saadaawy Burger':   true  ,
 
