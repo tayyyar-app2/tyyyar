@@ -55,7 +55,7 @@ let selectedTip = 0;
 // ===== RENDER =====
 function render(){
 // لو المطعم مغلق
-if(!isOpen(brand)) {
+ if(!isOpen(brand)) {
   // إظهار رسالة مغلق
   document.getElementById('closed-banner').style.display = 'block';
   // updateFab();
