@@ -8,7 +8,7 @@ const RESTAURANT_SCHEDULE = {
   'Saadaawy Burger':    { open: '10:00', close: '04:00' },
   'Krebs':              { open: '10:00', close: '04:00' },
   'Sliceno':            { open: '10:00', close: '04:00' },
-  'Fan w Tarab':        { open: '10:00', close: '04:00' },
+  'Fan w Tarab':        { open: '6:00', close: '04:00' },
 };
 
 function isOpen(brandKey) {
