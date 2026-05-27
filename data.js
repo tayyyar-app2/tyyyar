@@ -1,6 +1,6 @@
 const RESTAURANT_SCHEDULE = {
   'Bazooka':            { open: '10:00', close: '05:00' },
-  'Karam El Sham':      { open: '9:00', close: '03:00' },
+  'Karam El Sham':      { open: '9:00', close: '05:00' },
   'B Laban':            { open: '10:00', close: '04:00' },
   'Wahmy Burger':       { open: '10:00', close: '05:00' },
   'Koshary Al Khedewy': { open: '10:00', close: '05:00' },
