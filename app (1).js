@@ -288,7 +288,7 @@ function getDeliveryFee(address) {
   if (ad.includes('الاردنيه') || ad.includes('الاردنيه')) return 25;
   if (ad.includes('صيدناوي') || ad.includes('صيدناوي')) return 30;
   if (ad.includes('الحي33') || ad.includes('الحي 33')) return 60;
-  if (ad.includes('الحي 28') || ad.includes('الحي28')) return 55;
+  if (ad.includes('الحي 28') || ad.includes('الحي28')) return 65;
   if (ad.includes('دار مصر') || ad.includes('دار مصر')) return 40 ;
   if (ad.includes('حي الياسمين') || ad.includes('حي الياسمين')) return 40;
 
@@ -299,7 +299,7 @@ function getDeliveryFee(address) {
 
   // 2. استخراج نوع المنطقة والرقم من النص
   // يدعم: حي، الحي، مجاورة، مجاوره (مع أو بدون مسافة قبل الرقم)
-  const match = ad.match(/(?:الحي|حي|المجاورة|مجاورة|المجاوره|مجاوره)\s*(\d+)/);
+  const match = ad.match(/(?:الحي|حي|المجاورة|مجاورة|المجاوره|مجاوره|العاشر من رمضان |الحي الثاني عشر|الحي الخامس  عشر|)\s*(\d+)/);
 
   if (match) {
     const num = parseInt(match[1], 10);
