@@ -383,50 +383,49 @@ function placeOrder(){
   fbq('track', 'InitiateCheckout');
   window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,'_blank');
   // back end ===
-  fetch('https://tayyar-8dc9c-default-rtdb.firebaseio.com/orders.json', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        name: nm,
-        phone: ph,
-        address: ad,
-        brand: brand,
-        items: it,
-        orderTotal: tot,
-        delivery: getDeliveryFee(ad),
-        service: SERVICE_FEE,
-        grandTotal: tot + getDeliveryFee(ad) + SERVICE_FEE,
-        payment: pay,
-        orderNum: oid,
-        notes: notes,
-        timestamp: Date.now(),
-        status: 'جديد'
-    })
-});
-// back end ===
-  showSuccess();
-    fetch('https://tayyar-8dc9c-default-rtdb.firebaseio.com/orders.json', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-        name: nm,
-        phone: ph,
-        address: ad,
-        brand: brand,
-        items: it,
-        orderTotal: tot,
-        delivery: getDeliveryFee(ad),
-        service: SERVICE_FEE,
-        grandTotal: tot + getDeliveryFee(ad) + SERVICE_FEE,
-        payment: pay,
-        orderNum: oid,
-        notes: notes,
-        timestamp: Date.now(),
-        status: 'جديد'
-    })
-});
+  const delivFee = getDeliveryFee(ad);
+const orderData = {
+  name:         nm,
+  phone:        ph,
+  address:      ad,
+  brand:        brand,
+  items:        it,
+  orderTotal:   tot,
+  delivery:     delivFee,
+  service:      SERVICE_FEE,
+  grandTotal:   tot + delivFee + SERVICE_FEE,
+  payment:      pay,
+  orderNum:     oid,
+  notes:        notes,
+  timestamp:    Date.now(),
+  status:       'جديد',
+  driverStatus: 'pending'
+};
 
+function toFirestoreValue(val) {
+  if (typeof val === 'string')  return { stringValue: val };
+  if (typeof val === 'number')  return { integerValue: val };
+  if (typeof val === 'boolean') return { booleanValue: val };
+  if (Array.isArray(val)) return { arrayValue: { values: val.map(toFirestoreValue) } };
+  if (val && typeof val === 'object') {
+    const fields = {};
+    Object.entries(val).forEach(([k,v]) => { fields[k] = toFirestoreValue(v); });
+    return { mapValue: { fields } };
+  }
+  return { nullValue: null };
+}
 
+const firestoreFields = {};
+Object.entries(orderData).forEach(([k,v]) => { firestoreFields[k] = toFirestoreValue(v); });
+
+fetch('https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ fields: firestoreFields })
+}).catch(e => console.error('Firestore error:', e));
+
+showSuccess();
+  
 }
 
 let deliveryTimer=null;
