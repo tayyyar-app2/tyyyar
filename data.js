@@ -1,14 +1,14 @@
 const RESTAURANT_SCHEDULE = {
-  'Bazooka':            { open: '10:00', close: '05:00' },
-  'Karam El Sham':      { open: '9:00', close: '05:00' },
-  'B Laban':            { open: '10:00', close: '04:00' },
-  'Wahmy Burger':       { open: '10:00', close: '05:00' },
-  'Koshary Al Khedewy': { open: '10:00', close: '05:00' },
+  'Bazooka':            { open: '00:00', close: '00:00' },
+  'Karam El Sham':      { open: '00:00', close: '00:00' },
+  'B Laban':            { open: '00:00', close: '00:00' },
+  'Wahmy Burger':       { open: '00:00', close: '00:00' },
+  'Koshary Al Khedewy': { open: '00:00', close: '00:00' },
   'Hawawshi Al Refaie': { open: '00:00', close: '00:00' },
-  'Saadaawy Burger':    { open: '10:00', close: '04:00' },
-  'Krebs':              { open: '10:00', close: '04:00' },
-  'Sliceno':            { open: '10:00', close: '04:00' },
-  'Fan w Tarab':        { open: '5:51', close: '04:00' },
+  'Saadaawy Burger':    { open: '00:00', close: '00:00' },
+  'Krebs':              { open: '00:00', close: '00:00' },
+  'Sliceno':            { open: '00:00', close: '00:00' },
+  'Fan w Tarab':        { open: '00:00', close: '00:00' },
 };
 
 function isOpen(brandKey) {
