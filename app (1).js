@@ -383,24 +383,37 @@ function placeOrder(){
   fbq('track', 'InitiateCheckout');
   window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`,'_blank');
   // back end ===
-  const delivFee = getDeliveryFee(ad);
-const orderData = {
-  name:         nm,
-  phone:        ph,
-  address:      ad,
-  brand:        brand,
-  items:        it,
-  orderTotal:   tot,
-  delivery:     delivFee,
-  service:      SERVICE_FEE,
-  grandTotal:   tot + delivFee + SERVICE_FEE,
-  payment:      pay,
-  orderNum:     oid,
-  notes:        notes,
-  timestamp:    Date.now(),
-  status:       'جديد',
-  driverStatus: 'pending'
+  function toFV(v) {
+  if (typeof v === 'string')  return { stringValue: v };
+  if (typeof v === 'number')  return { doubleValue: v };
+  if (typeof v === 'boolean') return { booleanValue: v };
+  if (Array.isArray(v)) return { arrayValue: { values: v.map(toFV) } };
+  if (v && typeof v === 'object') {
+    const f={};Object.entries(v).forEach(([k,val])=>{f[k]=toFV(val);});
+    return { mapValue: { fields: f } };
+  }
+  return { nullValue: null };
+}
+
+const delivFee = getDeliveryFee(ad);
+const doc = {
+  name:nm, phone:ph, address:ad, brand:brand, items:it,
+  orderTotal:tot, delivery:delivFee, service:SERVICE_FEE,
+  grandTotal:tot+delivFee+SERVICE_FEE, payment:pay,
+  orderNum:oid, notes:notes, timestamp:Date.now(),
+  status:'جديد', driverStatus:'pending'
 };
+
+const fields={};
+Object.entries(doc).forEach(([k,v])=>{fields[k]=toFV(v);});
+
+fetch('https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders?key=AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8', {
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body:JSON.stringify({fields})
+}).then(r=>r.json()).then(r=>console.log('✅ Order saved:',r)).catch(e=>console.error('❌',e));
+
+showSuccess();
 
 function toFirestoreValue(val) {
   if (typeof val === 'string')  return { stringValue: val };
