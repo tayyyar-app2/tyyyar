@@ -440,19 +440,6 @@ fetch('https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)
 showSuccess();
   
 }
-// اشعار ntfy
-// إشعار ntfy لكل المندوبين
-fetch('https://ntfy.sh/tayyar-all-orders-2025', {
-  method: 'POST',
-  headers: {
-    'Title': '🛵 طلب جديد! ' + oid,
-    'Priority': 'urgent',
-    'Tags': 'rotating_light',
-    'Content-Type': 'text/plain; charset=utf-8'
-  },
-  body: `👤 ${nm}\n📍 ${ad}\n💰 ${tot + delivFee + SERVICE_FEE} ج.م`
-}).catch(()=>{});
-
 
 let deliveryTimer=null;
 function showSuccess(nm){
