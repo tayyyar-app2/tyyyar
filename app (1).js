@@ -605,13 +605,21 @@ function sendOtherOrder(){
     valid=false;
   }
   if(!valid)return;
+// تعديل اضافت 10  جنيهه
+const del=getDeliveryFee(address);
+const serviceFee = SERVICE_FEE;
+const shoppingFee = 10;
+// الاموجي تعديل
+const e1='\uD83D\uDE80'; const e2='\uD83C\uDF7D\uFE0F'; const e3='\uD83D\uDED2\uFE0F';
+const e4='\uD83D\uDDFA\uFE0F'; const e5='\uD83D\uDEF5'; const e6='\uD83D\uDD27';
+const e7='\uD83D\uDCB5'; const e8='\uD83D\uDCB0';
+// الاموجي تعديل
+const locLine=otherLoc?`\n📍 *الخريطة:* ${otherLoc.url}`:'';
 
-  const del=getDeliveryFee(address);
-  const serviceFee = SERVICE_FEE;
-  const locLine=otherLoc?`\n📍 *الخريطة:* ${otherLoc.url}`:'';
-
+const confirmed = confirm(`📢 تنبيه!\n\nهيتضاف 10 ج.م رسوم مشاوير فوق رسوم التوصيل والخدمة.\n\nالإجمالي الإضافي: ${del + serviceFee + shoppingFee} ج.م\n\nهتكمل؟`);
+if(!confirmed) return;
   const typeLabels={restaurant:'🍽️ مطعم',supermarket:'🛒 سوبر ماركت',pharmacy:'💊 صيدلية',};
-  const msg=`🚀 *طلب جديد من طيار*
+  const msg=`🚀 → ${e1} *طلب جديد من طيار*
 ━━━━━━━━━━━━━━━
 ${typeLabels[otherType]}: *${placeName}*
 ━━━━━━━━━━━━━━━
@@ -621,7 +629,8 @@ ${orderDetails}
 🗺️ *العنوان:* ${address}${locLine}
 🛵 *رسوم التوصيل:* ${del} ج.م
 🔧 *رسوم الخدمة:* ${serviceFee} ج.م
-💰 *إجمالي الرسوم:* ${del+SERVICE_FEE} ج.م
+🛍️ *رسوم المشاوير:* ${shoppingFee} ج.م
+💰 *إجمالي الرسوم:* ${del + serviceFee + shoppingFee} ج.م
 ━━━━━━━━━━━━━━━
 _تم الإرسال من تطبيق طيار_ 🛵`;
 
