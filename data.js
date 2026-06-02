@@ -1,5 +1,5 @@
 const RESTAURANT_SCHEDULE = {
-  'Bazooka':            { open: '10:00', close: '3:00' },
+  'Bazooka':            { open: '4:00', close: '3:00' },
   'Karam El Sham':      { open: '10:00', close: '3:00' },
   'B Laban':            { open: '10:00', close: '3:00' },
   'Wahmy Burger':       { open: '10:00', close: '3:00' },
@@ -12,6 +12,14 @@ const RESTAURANT_SCHEDULE = {
 };
 
 function isOpen(brandKey) {
+  try {
+    const fc = JSON.parse(localStorage.getItem('tyr_force')||'{}');
+    if (fc[brandKey]) return false;
+    const sc = JSON.parse(localStorage.getItem('tyr_schedule')||'{}');
+    if (sc[brandKey]) {
+      RESTAURANT_SCHEDULE[brandKey] = sc[brandKey];
+    }
+  } catch(e) {}
   const schedule = RESTAURANT_SCHEDULE[brandKey];
   if (!schedule) return false;
 

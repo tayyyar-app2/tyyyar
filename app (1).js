@@ -1,4 +1,49 @@
 const SERVICE_FEE = 5;
+// تحميل إعدادات الأدمن من Firebase
+(async function loadAdminSettings(){
+  try {
+    const API='AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8';
+    const URL=`https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/settings/config?key=${API}`;
+    const r = await fetch(URL);
+    if(!r.ok) return;
+    const doc = await r.json();
+    const f = doc.fields||{};
+    if(f.schedule?.mapValue?.fields){
+      const sc={};
+      Object.entries(f.schedule.mapValue.fields).forEach(([k,v])=>{
+        if(v.mapValue?.fields){
+          const mf=v.mapValue.fields;
+          sc[k]={open:mf.open?.stringValue||'10:00',close:mf.close?.stringValue||'3:00'};
+        }
+      });
+      localStorage.setItem('tyr_schedule',JSON.stringify(sc));
+    }
+    if(f.forceClose?.mapValue?.fields){
+      const fc={};
+      Object.entries(f.forceClose.mapValue.fields).forEach(([k,v])=>{
+        fc[k]=v.booleanValue||false;
+      });
+      localStorage.setItem('tyr_force',JSON.stringify(fc));
+    }
+    if(f.products?.mapValue?.fields){
+      const pr={};
+      Object.entries(f.products.mapValue.fields).forEach(([k,v])=>{
+        pr[k]=v.stringValue||'available';
+      });
+      localStorage.setItem('tyr_products',JSON.stringify(pr));
+    }
+    if(typeof render==='function') render();
+  } catch(e){ console.log('admin settings error',e); }
+})();
+
+function getProductStatus(id){
+  try {
+    const pr=JSON.parse(localStorage.getItem('tyr_products')||'{}');
+    return pr[id]||'available';
+  } catch(e){ return 'available'; }
+}
+////////التعديل علي حالات المنتاجات///////
+
 function render(){renderFiltered();}
 
 // ===== SEARCH =====
@@ -33,8 +78,10 @@ function renderFiltered(){
     const imgEl=p.img
       ? `<img src="${p.img}" class="pc-img" alt="${p.n}" loading="lazy" onmousedown="zoomImg(this)" ontouchstart="zoomImg(this)" onmouseup="unzoomImg(this)" ontouchend="unzoomImg(this)">`
       : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:34px;min-height:90px;">${p.e}</div>`;
-    return `<div class="pc ${q>0?'in-cart':''}" id="pc${p.id}">
-      <div class="pc-img-wrap">${imgEl}<img src="${p.lg}" class="pc-logo-badge" alt=""></div>
+    const _st=getProductStatus(p.id);
+      const _ov=_st==='soldout'?`<div class="item-overlay soldout">غير متوفر</div>`:_st==='busy'?`<div class="item-overlay busy">⏳ طلب كثير</div>`:_st==='delayed'?`<div class="item-overlay busy">🕐 هيتأخر</div>`:'';
+       return `<div class="pc ${q>0?'in-cart':''} ${_st==='soldout'?'item-soldout':''}" id="pc${p.id}">
+      <div class="pc-img-wrap">${imgEl}${_ov}<img src="${p.lg}" class="pc-logo-badge" alt=""></div>
       <div class="pcb">
         <div><div class="pcn">${p.n}</div><div class="pcd">${p.d}</div></div>
         <div class="pcf">
@@ -70,8 +117,10 @@ function render(){
     const imgEl=p.img
       ? `<img src="${p.img}" class="pc-img" alt="${p.n}" loading="lazy" onmousedown="zoomImg(this)" ontouchstart="zoomImg(this)" onmouseup="unzoomImg(this)" ontouchend="unzoomImg(this)">`
       : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:34px;min-height:90px;">${p.e}</div>`;
-    return `<div class="pc ${q>0?'in-cart':''}" id="pc${p.id}">
-      <div class="pc-img-wrap">${imgEl}<img src="${p.lg}" class="pc-logo-badge" alt=""></div>
+         const _st=getProductStatus(p.id);
+        const _ov=_st==='soldout'?`<div class="item-overlay soldout">غير متوفر</div>`:_st==='busy'?`<div class="item-overlay busy">⏳ طلب كثير</div>`:_st==='delayed'?`<div class="item-overlay busy">🕐 هيتأخر</div>`:'';
+          return `<div class="pc ${q>0?'in-cart':''} ${_st==='soldout'?'item-soldout':''}" id="pc${p.id}">
+      <div class="pc-img-wrap">${imgEl}${_ov}<img src="${p.lg}" class="pc-logo-badge" alt=""></div>
       <div class="pcb">
         <div><div class="pcn">${p.n}</div><div class="pcd">${p.d}</div></div>
         <div class="pcf">
