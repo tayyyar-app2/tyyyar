@@ -9,7 +9,7 @@ const RESTAURANT_SCHEDULE = {
   'Krebs':              { open: '12:00', close: '3:00' },
   'Sliceno':            { open: '12:00', close: '3:00' },
   'Fan w Tarab':        { open: '12:00', close: '3:00' },
-  'sokradorf':          { open: '12:00', close: '3:00' },
+  'sokradorf':          { open: '9:00', close: '5:00' },
 };
 
 function isOpen(brandKey) {
