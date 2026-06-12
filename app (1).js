@@ -205,6 +205,7 @@ function updateHeaderBrand(b){
 // ===== STEPS =====
 function goStep(n){
   if(n===2&&cartItems().length===0){toast('⚠️ اختر منتج على الأقل!',1);return;}
+  if(n===2) prefillUserProfile();
   if(n===3){
     const nm=document.getElementById('cn').value.trim();
     const ph=document.getElementById('cp').value.trim();
@@ -412,6 +413,42 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
     `⏱️ جاهز خلال *25 - 45 دقيقة*\n${border}║ شكراً لثقتك في طيار✈️  ║\n╚══════════════════╝`,
   ].filter(Boolean).join('\n');
 }
+// ===== حفظ واسترجاع بيانات العميل =====
+function saveUserProfile(nm,ph,ad){
+  localStorage.setItem('tyr_user',JSON.stringify({nm,ph,ad}));
+  const url=new URL(window.location.href);
+  url.searchParams.set('u_nm',nm);
+  url.searchParams.set('u_ph',ph);
+  url.searchParams.set('u_ad',ad);
+  window.history.replaceState({},'',url);
+}
+function loadUserProfile(){
+  const params=new URL(window.location.href).searchParams;
+  if(params.get('u_nm')) return {nm:params.get('u_nm'),ph:params.get('u_ph'),ad:params.get('u_ad')};
+  const raw=localStorage.getItem('tyr_user');
+  return raw?JSON.parse(raw):null;
+}
+function prefillUserProfile(){
+  const profile=loadUserProfile();
+  if(!profile) return;
+  const cn=document.getElementById('cn');
+  const cp=document.getElementById('cp');
+  const ca=document.getElementById('ca');
+  if(cn&&!cn.value) cn.value=profile.nm;
+  if(cp&&!cp.value) cp.value=profile.ph;
+  if(ca&&!ca.value) ca.value=profile.ad;
+  const url=new URL(window.location.href);
+  url.searchParams.delete('u_nm');
+  url.searchParams.delete('u_ph');
+  url.searchParams.delete('u_ad');
+  window.history.replaceState({},'',url);
+  toast('👋 أهلاً! تم تحميل بياناتك تلقائياً');
+}
+function clearUserProfile(){
+  localStorage.removeItem('tyr_user');
+  ['cn','cp','ca'].forEach(id=>document.getElementById(id).value='');
+  toast('🗑️ تم مسح بياناتك المحفوظة');
+}
 
 function placeOrder(){
  if(!isOpen(brand)) {
@@ -424,6 +461,7 @@ function placeOrder(){
   const ph=document.getElementById('cp').value.trim();
   const ad=document.getElementById('ca').value.trim();
   const notes=document.getElementById('cno').value.trim();
+  saveUserProfile(nm,ph,ad);
   seq++;localStorage.setItem('tyr_seq',seq);
   const oid='TYR-'+String(seq).padStart(4,'0');
   const payLbl=pay==='online'?'📲 انستاباي / فودافون كاش':'💵 الدفع عند الاستلام';
@@ -520,7 +558,8 @@ function showSuccess(nm){
 function resetAll(){
   if(deliveryTimer) clearTimeout(deliveryTimer);
   cart={};loc=null;pay='cod';
-  ['cn','cp','ca','cno'].forEach(id=>document.getElementById(id).value='');
+  ['cno'].forEach(id=>document.getElementById(id).value='');
+  prefillUserProfile();
   document.getElementById('lh').style.display='none';
   const locIcon=document.getElementById('loc-icon');
   if(locIcon) locIcon.innerHTML='<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#7a6a54"/>';
