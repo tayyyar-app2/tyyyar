@@ -1,0 +1,27 @@
+{
+  "name": "طيار - توصيل طلبات",
+  "short_name": "طيار",
+  "description": "توصيل الطلبات في العاشر من رمضان",
+  "start_url": "/tyyyar/",
+  "scope": "/tyyyar/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#e53935",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/tyyyar/img/logo.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/tyyyar/img/logo.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
