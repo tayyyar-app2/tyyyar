@@ -126,7 +126,7 @@ textarea{resize:none;height:68px;}
 .sw p{font-size:14px;color:var(--tx2);line-height:1.8;margin-bottom:14px;}
 .bnew{background:var(--sur2);border:1.5px solid var(--brd);border-radius:12px;padding:12px 28px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;color:var(--txt);}
 /* ===== INSTALL BANNER ===== */
-.ibanner{display:none;position:fixed;bottom:0;left:0;right:0;background:#1a1208;padding:14px 16px;z-index:200;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,0.3);}
+.ibanner{display:none;position:fixed;top:0;left:0;right:0;background:#1a1208;padding:14px 16px;z-index:200;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
 /* ===== VIEWS ===== */
 .view{display:none;}
 .view.active{display:block;}
