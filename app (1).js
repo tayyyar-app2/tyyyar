@@ -798,3 +798,51 @@ function installApp(){if(!dP)return;dP.prompt();dP.userChoice.then(()=>{dP=null;
 if(/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase())&&!window.navigator.standalone){
   setTimeout(()=>document.getElementById('ib').style.display='flex',5000);
 }
+// ===== PUSH NOTIFICATIONS =====
+const VAPID_KEY = 'YJUcGJ1PSIlghuHUUv2hAUAOrP_aZ3JbA3E36sKJ36s';
+const FCM_API = 'AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8';
+const FCM_PROJECT = 'tayyyar1';
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
+  return outputArray;
+}
+
+async function saveTokenToFirestore(token) {
+  try {
+    const url = `https://firestore.googleapis.com/v1/projects/${FCM_PROJECT}/databases/(default)/documents/fcm_tokens/${token}?key=${FCM_API}`;
+    await fetch(url, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fields: {
+          token: { stringValue: token },
+          createdAt: { stringValue: new Date().toISOString() },
+          platform: { stringValue: 'web' }
+        }
+      })
+    });
+  } catch(e) { console.log('token save error', e); }
+}
+
+async function initPushNotifications() {
+  try {
+    if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
+    const reg = await navigator.serviceWorker.ready;
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') return;
+    const subscription = await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(VAPID_KEY)
+    });
+    const token = JSON.stringify(subscription);
+    await saveTokenToFirestore(btoa(token).substring(0, 100));
+    console.log('Push notifications enabled');
+  } catch(e) { console.log('Push init error', e); }
+}
+
+setTimeout(initPushNotifications, 10000);
