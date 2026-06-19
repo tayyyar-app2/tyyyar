@@ -798,51 +798,109 @@ function installApp(){if(!dP)return;dP.prompt();dP.userChoice.then(()=>{dP=null;
 if(/iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase())&&!window.navigator.standalone){
   setTimeout(()=>document.getElementById('ib').style.display='flex',5000);
 }
-// ===== PUSH NOTIFICATIONS =====
-const VAPID_KEY = 'YJUcGJ1PSIlghuHUUv2hAUAOrP_aZ3JbA3E36sKJ36s';
-const FCM_API = 'AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8';
-const FCM_PROJECT = 'tayyyar1';
+// ===== TRANSPORT / RIDE =====
+let rideVehicle = 'moto';
+let rideLoc = null;
 
-function urlBase64ToUint8Array(base64String) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for (let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
-  return outputArray;
+const TAXI_SURCHARGE = 50; // فرق سعر التاكسي عن الموتوسيكل
+
+function selectVehicleType(type) {
+  rideVehicle = type;
+  document.getElementById('vc-moto').className = 'vehicle-card' + (type === 'moto' ? ' selected-moto' : '');
+  document.getElementById('vc-taxi').className = 'vehicle-card' + (type === 'taxi' ? ' selected-taxi' : '');
+  calcRidePrice();
 }
 
-async function saveTokenToFirestore(token) {
-  try {
-    const url = `https://firestore.googleapis.com/v1/projects/${FCM_PROJECT}/databases/(default)/documents/fcm_tokens/${token}?key=${FCM_API}`;
-    await fetch(url, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fields: {
-          token: { stringValue: token },
-          createdAt: { stringValue: new Date().toISOString() },
-          platform: { stringValue: 'web' }
-        }
-      })
-    });
-  } catch(e) { console.log('token save error', e); }
+function calcRidePrice() {
+  const toVal = document.getElementById('ride-to') ? document.getElementById('ride-to').value.trim() : '';
+  const card = document.getElementById('ride-estimate-card');
+  if (!card) return;
+  if (!toVal) { card.style.display = 'none'; return; }
+
+  const motoPrice = getDeliveryFee(toVal);
+  const taxiPrice = motoPrice + TAXI_SURCHARGE;
+  const total = rideVehicle === 'taxi' ? taxiPrice : motoPrice;
+  const vehicleLabel = rideVehicle === 'taxi' ? 'تاكسي 🚕' : 'موتوسيكل 🛵';
+
+  document.getElementById('ride-dist-val').textContent = motoPrice + ' ج.م';
+  document.getElementById('ride-base-val').textContent = taxiPrice + ' ج.م';
+  document.getElementById('ride-km-label').textContent = 'النوع المختار';
+  document.getElementById('ride-km-val').textContent = vehicleLabel;
+  document.getElementById('ride-total-val').textContent = total + ' ج.م';
+  card.style.display = 'block';
 }
 
-async function initPushNotifications() {
-  try {
-    if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
-    const reg = await navigator.serviceWorker.ready;
-    const permission = await Notification.requestPermission();
-    if (permission !== 'granted') return;
-    const subscription = await reg.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_KEY)
-    });
-    const token = JSON.stringify(subscription);
-    await saveTokenToFirestore(btoa(token).substring(0, 100));
-    console.log('Push notifications enabled');
-  } catch(e) { console.log('Push init error', e); }
+function getRideLoc() {
+  const btn = document.getElementById('ride-gps-btn');
+  const hint = document.getElementById('ride-loc-hint');
+  const isFB = navigator.userAgent.includes('FBAN') || navigator.userAgent.includes('FBAV');
+  if (isFB) {
+    hint.style.display = 'block';
+    hint.style.color = '#dc2626';
+    hint.innerHTML = '⚠️ افتح في متصفح خارجي لتحديد الموقع تلقائياً';
+    return;
+  }
+  if (!navigator.geolocation) { toast('المتصفح لا يدعم الموقع', 1); return; }
+  btn.disabled = true;
+  hint.style.display = 'block';
+  hint.style.color = 'var(--tx2)';
+  hint.textContent = 'جاري تحديد موقعك...';
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      rideLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+      const fromInp = document.getElementById('ride-from');
+      if (fromInp && !fromInp.value) fromInp.value = 'موقعك الحالي (تم التحديد تلقائياً)';
+      hint.style.color = 'var(--grn)';
+      hint.textContent = '✅ تم تحديد موقعك بنجاح';
+      btn.disabled = false;
+      calcRidePrice();
+      toast('📍 تم تحديد الموقع!');
+    },
+    err => {
+      btn.disabled = false;
+      hint.style.color = '#dc2626';
+      hint.textContent = err.code === 1 ? '❌ تم رفض الإذن — اكتب عنوانك يدوياً' : '❌ تعذّر الموقع — اكتب عنوانك يدوياً';
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
 }
 
-setTimeout(initPushNotifications, 10000);
+function sendRideOrder() {
+  const nm = document.getElementById('ride-name').value.trim();
+  const ph = document.getElementById('ride-phone').value.trim();
+  const from = document.getElementById('ride-from').value.trim();
+  const to = document.getElementById('ride-to').value.trim();
+  const notes = document.getElementById('ride-notes').value.trim();
+  if (!nm) { toast('⚠️ اكتب اسمك أولاً', 1); return; }
+  if (!ph) { toast('⚠️ اكتب رقم موبايلك', 1); return; }
+  if (!from) { toast('⚠️ اكتب موقعك أو اضغط 📍', 1); return; }
+  if (!to) { toast('⚠️ اكتب وجهتك', 1); return; }
+
+  const motoPrice = getDeliveryFee(to);
+  const total = rideVehicle === 'taxi' ? motoPrice + TAXI_SURCHARGE : motoPrice;
+  const vehicleLabel = rideVehicle === 'taxi' ? 'تاكسي 🚕' : 'موتوسيكل 🛵';
+  const locLine = rideLoc ? `\n📍 خريطة: https://maps.google.com/maps?q=${rideLoc.lat},${rideLoc.lon}` : '';
+  const msg = [
+    `╔══════════════════╗`,
+    `║  ✈️  طيار — مواصلات  ║`,
+    `╚══════════════════╝`,
+    ``,
+    `🚖 نوع الرحلة: ${vehicleLabel}`,
+    `━━━━━━━━━━━━━━━━━━━━`,
+    `👤 الاسم: ${nm}`,
+    `📱 الموبايل: ${ph}`,
+    `📍 من: ${from}${locLine}`,
+    `🏁 إلى: ${to}`,
+    `━━━━━━━━━━━━━━━━━━━━`,
+    `💰 السعر: ${total} ج.م`,
+    `💵 الدفع: كاش عند الركوب`,
+    notes ? `📝 ملاحظات: ${notes}` : '',
+    `━━━━━━━━━━━━━━━━━━━━`,
+    `⏱️ سيتم التواصل معك خلال دقائق`,
+    `╔══════════════════╗`,
+    `║ شكراً لثقتك في طيار ✈️ ║`,
+    `╚══════════════════╝`,
+  ].filter(Boolean).join('\n');
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank');
+  toast('✅ تم فتح واتساب بطلبك!');
+}

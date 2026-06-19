@@ -102,7 +102,8 @@ src="https://www.facebook.com/tr?id=1489984089526553&ev=PageView&noscript=1"
     <button class="sbtn active" id="s1" onclick="goStep(1)"><span class="ico">🛒</span>المنيو</button>
     <button class="sbtn" id="s2" onclick="goStep(2)"><span class="ico">📋</span>بياناتك</button>
     <button class="sbtn" id="s3" onclick="goStep(3)"><span class="ico">✅</span>تأكيد</button>
-    <button class="sbtn" id="s3" onclick="goStep(4)"><span class="ico">🏪</span>اطلب من اماكن اخري</button>
+    <button class="sbtn" id="s4" onclick="goStep(4)"><span class="ico">🏪</span>اطلب من اماكن اخري</button>
+    <button class="sbtn" id="s5" onclick="goStep(5)"><span class="ico">🛵</span>مواصلات</button>
   </div>
 
   <!-- VIEW 1
@@ -382,6 +383,59 @@ src="https://www.facebook.com/tr?id=1489984089526553&ev=PageView&noscript=1"
 
   <div style="height:16px;"></div>
 </div>
+<!-- VIEW 5: مواصلات -->
+ <div class="view" id="view-5">
+  <div style="text-align:center;padding:60px 20px;">
+    <div style="font-size:60px;margin-bottom:16px;">🛵</div>
+    <h2 style="font-size:22px;font-weight:900;color:var(--org);margin-bottom:10px;">قريباً إن شاء الله</h2>
+    <p style="font-size:14px;color:var(--tx2);line-height:1.8;">خدمة المواصلات قيد التجهيز<br>هتكون متاحة قريباً لطلب موتوسيكل أو تاكسي 🚕</p>
+  </div>
+</div>
+<!-- <div class="view" id="view-5"> -->
+  <!-- <div class="other-section-title">🛵 اطلب مواصلات</div> -->
+<!--  -->
+  <!-- <div class="slbl">اختار نوع الرحلة</div> -->
+  <!-- <div class="vehicle-grid" id="vehicle-grid"> -->
+    <!-- <div class="vehicle-card" id="vc-moto" onclick="selectVehicleType('moto')"> -->
+      <!-- <span class="vehicle-emoji">🛵</span> -->
+      <!-- <div class="vehicle-name">موتوسيكل</div> -->
+      <!-- <div class="vehicle-desc">سريع واقتصادي</div> -->
+     <!-- <div class="vehicle-price moto-price">السعر حسب منطقتك</div> -->
+    <!-- </div> -->
+    <!-- <div class="vehicle-card" id="vc-taxi" onclick="selectVehicleType('taxi')"> -->
+      <!-- <span class="vehicle-emoji">🚕</span> -->
+      <!-- <div class="vehicle-name">تاكسي</div> -->
+      <!-- <div class="vehicle-desc">مريح للعائلة</div> -->
+     <!-- <div class="vehicle-price taxi-price">السعر حسب منطقتك</div> -->
+    <!-- </div> -->
+  <!-- </div> -->
+<!--  -->
+  <!-- <div class="fcard" style="margin-top:12px"> -->
+    <!-- <div class="fg"><label>👤 اسمك</label><input type="text" id="ride-name" placeholder="اسمك الكريم"></div> -->
+    <!-- <div class="fg"><label>📱 رقم موبايلك</label><input type="tel" id="ride-phone" placeholder="01XXXXXXXXX"></div> -->
+    <!-- <div class="fg"> -->
+      <!-- <label>📍 موقعك الحالي</label> -->
+      <!-- <div class="lrow"> -->
+        <!-- <input type="text" id="ride-from" placeholder="مثال: الحي السابع"> -->
+        <!-- <button class="bloc" id="ride-gps-btn" onclick="getRideLoc()">📍</button> -->
+      <!-- </div> -->
+      <!-- <div class="lhint" id="ride-loc-hint"></div> -->
+    <!-- </div> -->
+    <!-- <div class="fg"><label>🏁 المكان اللي عايز تروح ليه </label><input type="text" id="ride-to" placeholder="مثال: مول العاشر" oninput="calcRidePrice()"></div> -->
+    <!-- <div class="fg"><label>📝 ملاحظات (اختياري)</label><textarea id="ride-notes" placeholder="أي تفاصيل..."></textarea></div> -->
+  <!-- </div> -->
+<!--  -->
+  <!-- <div class="ride-estimate-card" id="ride-estimate-card" style="display:none"> -->
+    <!-- <div class="ride-estimate-row"><span>🛵 سعر الموتوسيكل</span><span id="ride-dist-val">—</span></div> -->
+     <!-- <div class="ride-estimate-row"><span>🚕 سعر التاكسي</span><span id="ride-base-val">—</span></div> -->
+    <!-- <div class="ride-estimate-row"><span id="ride-km-label">النوع المختار</span><span id="ride-km-val">—</span></div> -->
+    <!-- <div class="ride-estimate-divider"></div> -->
+    <!-- <div class="ride-estimate-total"><span>💰 السعر النهائي</span><span id="ride-total-val">—</span></div> -->
+  <!-- </div> -->
+<!--  -->
+  <!-- <button class="bwa-other" style="margin-top:14px" onclick="sendRideOrder()"><span>💬</span> اطلب دلوقتي على واتساب</button> -->
+  <!-- <div style="height:16px"></div> -->
+<!-- </div> -->
   
   <!-- SUCCESS -->
   <div class="sw" id="sw">
@@ -413,7 +467,7 @@ src="https://www.facebook.com/tr?id=1489984089526553&ev=PageView&noscript=1"
 <!-- <div style="position:fixed;bottom:88px;left:12px;background:#25d366;color:#fff;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;font-family:Tajawal,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.2);z-index:999">
   💬 خدمة العملاء
 </div> -->
-
+<div class="wa-label">خدمة العملاء</div>
 <a href="https://wa.me/201024130987" target="_blank" rel="noopener noreferrer" class="whatsapp-float" title="تواصل مع خدمة العملاء">
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     
