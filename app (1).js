@@ -223,12 +223,13 @@ function buildReview(nm,ph,ad){
   const del=getDeliveryFee(ad);
   const serviceFee=6;
  const grandTotal=tot+del+serviceFee+selectedTip;
-
   document.getElementById('rl').innerHTML=it.map(i=>`
     <div class="ritem">
-      <div><div class="rn">${i.e} ${i.n}</div><div class="rs">${BL[i.brand]} · ${i.q} × ${i.p} ج.م</div></div>
+      ${i.img ? `<img src="${i.img}" style="width:54px;height:54px;object-fit:cover;border-radius:10px;margin-left:10px;flex-shrink:0;">` : `<span style="font-size:28px;margin-left:10px;">${i.e}</span>`}
+     <div style="flex:1"><div class="rn">${i.n}</div><div class="rs"><span style="color:#e8742a;font-weight:700;">${BL[i.brand]}</span> · ${i.q} × ${i.p} ج.م</div></div>
       <div class="rp">${i.t} ج.م</div>
     </div>`).join('');
+
    document.getElementById('tb').style.display='block';
    const tipRow = selectedTip > 0
   ? '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>❤️ إكرامية المندوب</span><span>' + selectedTip + ' ج.م</span></div>'
@@ -403,10 +404,9 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
     divider,
     `📦 *تفاصيل الطلب:*${itemsText}\n`,
     divider,
-    `🛒 *إجمالي الطلب:* ${tot} ج.م\n🛵 *رسوم التوصيل:* ${del} ج.م\n🔧 *رسوم الخدمة:* ${SERVICE_FEE} ج.م`,
+    `🛒 *إجمالي الطلب:* ${tot} ج.م\n🛵 *رسوم التوصيل:* ${del} ج.م\n🔧 *رسوم الخدمة:* ${SERVICE_FEE} ج.م\n❤️ *إكرامية للمندوب:* ${selectedTip > 0 ? selectedTip + ' ج.م' : 'لا يوجد'}\n💰 *الإجمالي الكلي: ${grandTotal + selectedTip} ج.م*`,
     divider,
-    `🛵 *إكرامية للمندوب:* ${selectedTip > 0 ? selectedTip + ' ج.م' : 'لا يوجد'}`,
-`💰 *الإجمالي الكلي: ${grandTotal + selectedTip} ج.م*\n💳 *طريقة الدفع:* ${payLbl}`,
+    `💳 *طريقة الدفع:* ${payLbl}`,
     onlinePayment,
     notes ? `\n📝 *ملاحظات:* ${notes}` : '',
     divider,
