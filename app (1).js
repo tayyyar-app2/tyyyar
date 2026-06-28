@@ -164,16 +164,16 @@ function updateBadges(){
 
 function cartItems(){return Object.entries(cart).map(([id,q])=>{const p=MENU.find(x=>x.id==id);return p?{...p,q,t:p.p*q}:null}).filter(Boolean);}
 function cartTotal(){return cartItems().reduce((s,i)=>s+i.t,0);}
-
 function updateFab(){
   const fab=document.getElementById('fab'),it=cartItems(),c=it.reduce((s,i)=>s+i.q,0);
   if(c===0){fab.style.display='none';return;}
+  // لو المستخدم في step 3، ما نخليش الـ FAB يظهر
+  const activeStep=document.querySelector('.sbtn.active');
+  if(activeStep && activeStep.id==='s3'){fab.style.display='none';return;}
   fab.style.display='flex';
   document.getElementById('fc').textContent=c+' قطعة';
   document.getElementById('ft').textContent=' | '+cartTotal()+' ج.م';
 }
-
-
 // ===== BRAND =====
 function setBrand(b,btn){
   brand=b;
@@ -215,7 +215,13 @@ function goStep(n){
   }
   document.querySelectorAll('.view').forEach((v,i)=>v.classList.toggle('active',i+1===n));
   [1,2,3].forEach(i=>{const b=document.getElementById('s'+i);b.className='sbtn'+(i===n?' active':i<n?' done':'');});
-  window.scrollTo({top:0,behavior:'smooth'});
+  // لو وصل لشاشة التأكيد، اخبّي الـ FAB واعمل scroll للأسفل عشان يشوف زرار الواتساب
+  if(n===3){
+    document.getElementById('fab').style.display='none';
+    setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),100);
+  } else {
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 }
 function buildReview(nm,ph,ad){
   const it=cartItems(),tot=cartTotal(),notes=document.getElementById('cno').value.trim();
