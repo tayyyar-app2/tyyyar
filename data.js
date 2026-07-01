@@ -318,8 +318,6 @@ const MENU=[
   { id: 792, brand: 'B Laban', n: 'سنكوريتا (Jumbo)', e:'بلبن', d: 'حلوى', p:210 , img: './img/sankorit بلبن1.jpeg' },
   { id: 767, brand: 'B Laban', n: '  المتكندره', e:'بلبن', d: 'حلوى', p: 160, img: './img//المتكندره.webp' },
   { id: 768, brand: 'B Laban', n: '  المتكندره حجم اكبر', e:'بلبن', d: 'حلوى', p: 375, img: './img//المتكندره.webp' },
-  { id: 264, brand: 'B Laban', n: 'شوكيز جرة', e:'بلبن', d: 'حلوى', p: 45, img: './img/شوكيز.jpeg' },
-  { id: 265, brand: 'B Laban', n: 'شوكيز ٢ قطع',    e:'بلبن',  d: 'حلوى', p: 20, img: './img/شوكيز.jpeg' },
   { id: 787, brand: 'B Laban', n: 'دو باغي شيكولاته', e:'بلبن', d: 'حلوى', p: 145, img: './img/دوباغي شيكولاته.png' },
   { id: 788, brand: 'B Laban', n: 'خالتي ماتيلدا', e:'بلبن', d: 'حلوى', p: 145, img: './img/خالتي متيالدا.jpeg' },
   { id: 789, brand: 'B Laban', n: 'بومباستيك', e:'بلبن', d: 'حلوى', p: 145, img: './img/البومبستك.jpeg' },
