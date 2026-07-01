@@ -144,11 +144,12 @@ function unzoomImg(el){el.classList.remove('zoomed');}
 
 // ===== CART =====
 function chg(id,d){
-  if(!isOpen(brand)) {
+  const p=MENU.find(x=>x.id==id);
+  const pBrand=p?p.brand:brand;
+  if(!isOpen(pBrand)) {
    toast('🔴 هذا المطعم مغلق حالياً', 1);
    return;
  }
-  const p=MENU.find(x=>x.id==id);
   const cur=cart[id]||0;
   if(d>0 && cur===0 && p && p.extras && p.extras.length){
     openExtrasModal(id,true);
@@ -301,10 +302,16 @@ function buildReview(nm,ph,ad){
   const del=getDeliveryFee(ad);
   const serviceFee=6;
  const grandTotal=tot+del+serviceFee+selectedTip;
-  document.getElementById('rl').innerHTML=it.map(i=>`
+ document.getElementById('rl').innerHTML=it.map(i=>`
     <div class="ritem">
       ${i.img ? `<img src="${i.img}" style="width:54px;height:54px;object-fit:cover;border-radius:10px;margin-left:10px;flex-shrink:0;">` : `<span style="font-size:28px;margin-left:10px;">${i.e}</span>`}
-     <div style="flex:1"><div class="rn">${i.n}</div>${i.extras&&i.extras.length?`<div style="font-size:11px;color:#e8742a;margin:2px 0;">+ ${i.extras.map(e=>e.n).join('، ')}</div>`:''}<div class="rs"><span style="color:#e8742a;font-weight:700;">${BL[i.brand]}</span> · ${i.q} × ${i.p+i.extrasSum} ج.م</div></div>
+     <div style="flex:1"><div class="rn">${i.n}</div>${i.extras&&i.extras.length?`<div style="font-size:11px;color:#e8742a;margin:2px 0;">+ ${i.extras.map(e=>e.n).join('، ')}</div>`:''}<div class="rs"><span style="color:#e8742a;font-weight:700;">${BL[i.brand]}</span> · ${i.p+i.extrasSum} ج.م / قطعة</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+          <button onclick="updateReviewQty(${i.id},-1)" style="width:26px;height:26px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:16px;font-weight:700;color:#e8742a;line-height:1;">−</button>
+          <span style="min-width:16px;text-align:center;font-weight:700;">${i.q}</span>
+          <button onclick="updateReviewQty(${i.id},1)" style="width:26px;height:26px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:16px;font-weight:700;color:#e8742a;line-height:1;">+</button>
+        </div>
+      </div>
       <div class="rp">${i.t} ج.م</div>
     </div>`).join('');
    document.getElementById('tb').style.display='block';
@@ -324,6 +331,19 @@ document.getElementById('tb').innerHTML=`
   const locTxt=loc?` <a href="${loc.url}" target="_blank" style="color:var(--grn);font-size:11px">📍 خريطة</a>`:'';
   document.getElementById('ic').innerHTML=`👤 ${nm}<br>📱 ${ph}<br>🗺️ ${ad}${locTxt}<br>${payLbl}${payEx}${notes?`<br>📝 ${notes}`:''}`;
 }
+
+function updateReviewQty(id,d){
+  chg(id,d);
+  refreshReview();
+}
+function refreshReview(){
+  if(cartItems().length===0){ goStep(1); toast('🛒 السلة بقت فاضية'); return; }
+  const nm=document.getElementById('cn').value.trim();
+  const ph=document.getElementById('cp').value.trim();
+  const ad=document.getElementById('ca').value.trim();
+  buildReview(nm,ph,ad);
+}
+
 
 
 function setPay(t){
