@@ -82,8 +82,8 @@ function renderFiltered(){
       const _ov=_st==='soldout'?`<div class="item-overlay soldout">غير متوفر</div>`:_st==='busy'?`<div class="item-overlay busy">⏳ طلب كثير</div>`:_st==='delayed'?`<div class="item-overlay busy">🕐 هيتأخر</div>`:'';
        return `<div class="pc ${q>0?'in-cart':''} ${_st==='soldout'?'item-soldout':''}" id="pc${p.id}">
       <div class="pc-img-wrap">${imgEl}${_ov}<img src="${p.lg}" class="pc-logo-badge" alt=""></div>
-      <div class="pcb">
-        <div><div class="pcn">${p.n}</div><div class="pcd">${p.d}</div></div>
+<div class="pcb">
+        <div><div class="pcn">${p.n}</div><div class="pcd">${p.d}</div>${p.extras&&p.extras.length&&q===0?'<div style="font-size:11px;color:#e8742a;margin-top:2px;">🧁 يوجد إضافات</div>':''}</div>
         <div class="pcf">
           <div class="pcp">${p.p} ج.م</div>
           <div class="qc">
@@ -92,12 +92,14 @@ function renderFiltered(){
             <button class="qb" onclick="chg(${p.id},1)">+</button>
           </div>
         </div>
+        ${p.extras&&p.extras.length&&q>0?`<div style="cursor:pointer;color:#e8742a;font-size:12px;font-weight:600;margin-top:4px;text-align:left;" onclick="openExtrasModal(${p.id},false)">✏️ تعديل الإضافات</div>`:''}
       </div>
     </div>`;
   }).join('');
 }
 
-let cart={},brand='Bazooka',pay='cod',loc=null,seq=parseInt(localStorage.getItem('tyr_seq')||'0');
+
+let cart={},cartExtras={},brand='Bazooka',pay='cod',loc=null,seq=parseInt(localStorage.getItem('tyr_seq')||'0');
 let selectedTip = 0;
 // ===== RENDER =====
 function render(){
@@ -146,14 +148,74 @@ function chg(id,d){
    toast('🔴 هذا المطعم مغلق حالياً', 1);
    return;
  }
-  const n=Math.max(0,(cart[id]||0)+d);
-  if(n===0)delete cart[id];else cart[id]=n;
+  const p=MENU.find(x=>x.id==id);
+  const cur=cart[id]||0;
+  if(d>0 && cur===0 && p && p.extras && p.extras.length){
+    openExtrasModal(id,true);
+    return;
+  }
+  const n=Math.max(0,cur+d);
+  if(n===0){delete cart[id];delete cartExtras[id];}else cart[id]=n;
   const qe=document.getElementById('qn'+id),ce=document.getElementById('pc'+id);
   if(qe)qe.textContent=n;
   if(ce)ce.className='pc '+(n>0?'in-cart':'');
   updateFab();updateBadges();
 }
+function openExtrasModal(id,isNew){
+  const p=MENU.find(x=>x.id==id);
+  if(!p||!p.extras) return;
+  const sel=cartExtras[id]||[];
+  const rows=p.extras.map(e=>`
+    <label style="display:flex;justify-content:space-between;align-items:center;padding:12px 4px;border-bottom:1px solid #eee;font-size:14px;">
+      <span><input type="checkbox" value="${e.id}" ${sel.includes(e.id)?'checked':''} style="margin-left:8px;transform:scale(1.2);">${e.n}</span>
+      <span style="color:#e8742a;font-weight:700;">+${e.p} ج.م</span>
+    </label>`).join('');
+  const html=`<div id="extras-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)cancelExtras(${id},${isNew})">
+    <div style="background:#fff;width:100%;max-width:480px;border-radius:16px 16px 0 0;padding:18px 16px 20px;max-height:75vh;overflow-y:auto;">
+      <div style="font-weight:800;font-size:16px;margin-bottom:2px;">🧁 إضافات لـ ${p.n}</div>
+      <div style="font-size:15px;color:#ff6302;margin-bottom:10px;">اختياري — مش لازم تختار حاجة</div>
+      ${rows}
+    <div style="display:flex;gap:10px;margin-top:16px;">
+        <button onclick="${isNew?`skipExtras(${id})`:`cancelExtras(${id},${isNew})`}" style="flex:1;padding:13px;background:#f1f1f1;color:#555;border:none;border-radius:10px;font-weight:700;font-size:15px;">${isNew?'بدون إضافات':'إلغاء'}</button>
+        <button onclick="confirmExtras(${id},${isNew})" style="flex:2;padding:13px;background:#e8742a;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:15px;">${isNew?'إضافة للسلة':'حفظ التعديل'}</button>
+      </div>
+    </div>
+  </div>`;
+  const div=document.createElement('div');
+  div.id='extras-modal-wrap';
+  div.innerHTML=html;
+  document.body.appendChild(div);
+}
+function skipExtras(id){
+  cartExtras[id]=[];
+  cart[id]=(cart[id]||0)+1;
+  closeExtrasModal();
+  const qe=document.getElementById('qn'+id),ce=document.getElementById('pc'+id);
+  if(qe)qe.textContent=cart[id]||0;
+  if(ce)ce.className='pc in-cart';
+  render();
+  updateFab();updateBadges();
+  toast('✅ تمت الإضافة من غير إضافات');
+}
 
+function cancelExtras(id,isNew){ closeExtrasModal(); }
+function closeExtrasModal(){
+  const el=document.getElementById('extras-modal-wrap');
+  if(el) el.remove();
+}
+function confirmExtras(id,isNew){
+  const wrap=document.getElementById('extras-modal-wrap');
+  const checked=[...wrap.querySelectorAll('input[type=checkbox]:checked')].map(c=>c.value);
+  cartExtras[id]=checked;
+  if(isNew) cart[id]=(cart[id]||0)+1;
+  closeExtrasModal();
+  const qe=document.getElementById('qn'+id),ce=document.getElementById('pc'+id);
+  if(qe)qe.textContent=cart[id]||0;
+  if(ce)ce.className='pc '+((cart[id]||0)>0?'in-cart':'');
+  render();
+  updateFab();updateBadges();
+  toast(isNew?'✅ تمت الإضافة للسلة':'✅ تم حفظ الإضافات');
+}
 function updateBadges(){
   BRANDS.forEach(b=>{
     const c=MENU.filter(p=>p.brand===b).reduce((s,p)=>s+(cart[p.id]||0),0);
@@ -162,7 +224,17 @@ function updateBadges(){
   });
 }
 
-function cartItems(){return Object.entries(cart).map(([id,q])=>{const p=MENU.find(x=>x.id==id);return p?{...p,q,t:p.p*q}:null}).filter(Boolean);}
+function cartItems(){
+  return Object.entries(cart).map(([id,q])=>{
+    const p=MENU.find(x=>x.id==id);
+    if(!p) return null;
+    const selIds=cartExtras[id]||[];
+    const selExtras=(p.extras||[]).filter(e=>selIds.includes(e.id));
+    const extrasSum=selExtras.reduce((s,e)=>s+e.p,0);
+    const unitP=p.p+extrasSum;
+    return {...p,q,extras:selExtras,extrasSum,t:unitP*q};
+  }).filter(Boolean);
+}
 function cartTotal(){return cartItems().reduce((s,i)=>s+i.t,0);}
 function updateFab(){
   const fab=document.getElementById('fab'),it=cartItems(),c=it.reduce((s,i)=>s+i.q,0);
@@ -232,10 +304,9 @@ function buildReview(nm,ph,ad){
   document.getElementById('rl').innerHTML=it.map(i=>`
     <div class="ritem">
       ${i.img ? `<img src="${i.img}" style="width:54px;height:54px;object-fit:cover;border-radius:10px;margin-left:10px;flex-shrink:0;">` : `<span style="font-size:28px;margin-left:10px;">${i.e}</span>`}
-     <div style="flex:1"><div class="rn">${i.n}</div><div class="rs"><span style="color:#e8742a;font-weight:700;">${BL[i.brand]}</span> · ${i.q} × ${i.p} ج.م</div></div>
+     <div style="flex:1"><div class="rn">${i.n}</div>${i.extras&&i.extras.length?`<div style="font-size:11px;color:#e8742a;margin:2px 0;">+ ${i.extras.map(e=>e.n).join('، ')}</div>`:''}<div class="rs"><span style="color:#e8742a;font-weight:700;">${BL[i.brand]}</span> · ${i.q} × ${i.p+i.extrasSum} ج.م</div></div>
       <div class="rp">${i.t} ج.م</div>
     </div>`).join('');
-
    document.getElementById('tb').style.display='block';
    const tipRow = selectedTip > 0
   ? '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>❤️ إكرامية المندوب</span><span>' + selectedTip + ' ج.م</span></div>'
@@ -389,7 +460,7 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
 
   // بناء تفاصيل المنتجات
   const itemsText = Object.entries(byBrand).map(([b, ps]) => {
-    const lines = ps.map(i => `• ${i.n}\n  ${i.q} × ${i.p} ج.م = *${i.t} ج.م*`).join('\n');
+    const lines = ps.map(i => `• ${i.n}${i.extras&&i.extras.length?`\n  🧁 ${i.extras.map(e=>e.n+' (+'+e.p+' ج.م)').join('، ')}`:''}\n  ${i.q} × ${i.p+(i.extrasSum||0)} ج.م = *${i.t} ج.م*`).join('\n');
     return `\n${brandEmojis[b]} *${BL[b]}*\n─────────────\n${lines}`;
   }).join('\n');
 
