@@ -709,10 +709,10 @@ const MENU=[
 ];
 // ===== إضافات B Laban (بسبوسة، نوتيلا، لوتس...) =====
 const BLABAN_EXTRAS = [
-  { id: 'ex_basbousa',  n: 'بسبوسة',  p: 10 },
-  { id: 'ex_nutella',   n: 'نوتيلا',  p: 15 },
-  { id: 'ex_lotus',     n: 'لوتس',    p: 15 },
-  { id: 'ex_pistachio', n: 'بستاشيو', p: 20 },
-  { id: 'ex_nuts',      n: 'مكسرات',  p: 15 },
+  { id: 'ex_basbousa',  n: 'بسبوسة',        p:25 , popular: true },
+  { id: 'ex_nutella',   n: 'نوتيلا',        p: 25, popular: true },
+  { id: 'ex_lotus',     n: 'لوتس',          p: 35},
+  { id: 'ex_pistachio', n: 'لوتس بودر',       p: 35 },
+  { id: 'ex_nuts',      n: 'مكسرات',        p: 40, popular: true },
 ];
 MENU.filter(p => p.brand === 'B Laban').forEach(p => { p.extras = BLABAN_EXTRAS; });

@@ -165,9 +165,9 @@ function openExtrasModal(id,isNew){
   const p=MENU.find(x=>x.id==id);
   if(!p||!p.extras) return;
   const sel=cartExtras[id]||[];
-  const rows=p.extras.map(e=>`
+ const rows=p.extras.map(e=>`
     <label style="display:flex;justify-content:space-between;align-items:center;padding:12px 4px;border-bottom:1px solid #eee;font-size:14px;">
-      <span><input type="checkbox" value="${e.id}" ${sel.includes(e.id)?'checked':''} style="margin-left:8px;transform:scale(1.2);">${e.n}</span>
+      <span style="display:flex;align-items:center;gap:6px;"><input type="checkbox" value="${e.id}" ${sel.includes(e.id)?'checked':''} style="margin-left:2px;transform:scale(1.2);">${e.n}${e.popular?'<span style="background:#fde3d2;color:#e8742a;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;">🔥 شائع</span>':''}</span>
       <span style="color:#e8742a;font-weight:700;">+${e.p} ج.م</span>
     </label>`).join('');
   const html=`<div id="extras-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)cancelExtras(${id},${isNew})">
