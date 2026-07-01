@@ -715,4 +715,5 @@ const BLABAN_EXTRAS = [
   { id: 'ex_pistachio', n: 'لوتس بودر',       p: 35 },
   { id: 'ex_nuts',      n: 'مكسرات',        p: 40, popular: true },
 ];
-MENU.filter(p => p.brand === 'B Laban').forEach(p => { p.extras = BLABAN_EXTRAS; });
+const BLABAN_EXTRA_IDS = [332, 333, 349, 334, 791, 789, 296, 297, 298 ,348];
+MENU.filter(p => p.brand === 'B Laban' && BLABAN_EXTRA_IDS.includes(p.id)).forEach(p => { p.extras = BLABAN_EXTRAS; });
