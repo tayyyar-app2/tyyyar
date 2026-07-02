@@ -200,14 +200,15 @@ function parseDoc(doc){
 async function loadFromFirebase(){
   showToast('⏳ جاري التحميل...','saving');
   const cfg=await fbGet('settings/config');
-  if(cfg&&cfg.schedule) schedState=cfg.schedule;
-  else BRANDS.forEach(b=>{const s=RESTAURANT_SCHEDULE[b]||{open:'10:00',close:'3:00'};schedState[b]={open:s.open,close:s.close};});
-  if(cfg&&cfg.forceClose) forceState=cfg.forceClose;
-  else BRANDS.forEach(b=>forceState[b]=false);
-  if(cfg&&cfg.products) prodState=cfg.products;
-  else MENU.forEach(p=>prodState[p.id]=p.status||'available');
-  if(cfg&&cfg.prices) priceState=cfg.prices;
-  else MENU.forEach(p=>priceState[p.id]=p.p);
+  BRANDS.forEach(b=>{
+    const s=RESTAURANT_SCHEDULE[b]||{open:'10:00',close:'03:00'};
+    schedState[b]=(cfg&&cfg.schedule&&cfg.schedule[b])?cfg.schedule[b]:{open:s.open,close:s.close};
+    forceState[b]=(cfg&&cfg.forceClose&&cfg.forceClose[b]!==undefined)?cfg.forceClose[b]:false;
+  });
+  MENU.forEach(p=>{
+    prodState[p.id]=(cfg&&cfg.products&&cfg.products[p.id]!==undefined)?cfg.products[p.id]:(p.status||'available');
+    priceState[p.id]=(cfg&&cfg.prices&&cfg.prices[p.id]!==undefined)?cfg.prices[p.id]:p.p;
+  });
   activeBrand=activeBrand||BRANDS[0];
   renderAll();
   showToast('✅ تم التحميل','ok');
@@ -218,6 +219,7 @@ async function saveAll(){
   btn.disabled=true;
   showToast('⏳ جاري الحفظ...','saving');
   BRANDS.forEach(b=>{
+    if(!schedState[b]) schedState[b]={open:'10:00',close:'03:00'};
     const op=document.getElementById('open-'+b);
     const cl=document.getElementById('close-'+b);
     const fc=document.getElementById('force-'+b);
