@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم طيار ✈️</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117;--card:#1a1d27;--card2:#21253a;--border:#2e3350;
+  --accent:#e8742a;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;
+  --tx:#f0f0f0;--tx2:#9ca3af;--r:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;}
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 0%,#1e1230 0%,#0f1117 60%);}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:44px 36px;width:340px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.5);}
+.login-logo{font-size:52px;margin-bottom:8px;}
+.login-title{font-size:24px;font-weight:900;color:var(--accent);margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--tx2);margin-bottom:28px;}
+.login-input{width:100%;padding:13px 16px;border-radius:12px;border:2px solid var(--border);background:var(--card2);color:var(--tx);font-family:'Tajawal',sans-serif;font-size:16px;margin-bottom:10px;text-align:center;letter-spacing:4px;outline:none;transition:border-color .2s;}
+.login-input:focus{border-color:var(--accent);}
+.login-btn{width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--accent),#d4621e);color:#fff;font-family:'Tajawal',sans-serif;font-size:17px;font-weight:800;cursor:pointer;}
+.login-err{color:var(--red);font-size:13px;margin-top:8px;display:none;}
+#dashboard{display:none;}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar-logo{font-size:20px;font-weight:900;color:var(--accent);}
+.top-btns{display:flex;gap:10px;align-items:center;}
+.btn-save{padding:9px 20px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.btn-save:disabled{opacity:.5;cursor:not-allowed;}
+.btn-out{padding:9px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--tx2);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;}
+.main{max-width:860px;margin:0 auto;padding:20px 14px 60px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 12px;text-align:center;}
+.stat-n{font-size:30px;font-weight:900;color:var(--accent);line-height:1;}
+.stat-l{font-size:12px;color:var(--tx2);margin-top:3px;}
+.sec-title{font-size:18px;font-weight:800;margin:28px 0 14px;display:flex;align-items:center;gap:8px;}
+.rest-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:560px){.rest-grid{grid-template-columns:1fr;}}
+.rest-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;}
+.rest-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.rest-name{font-size:15px;font-weight:800;}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.dot.open{background:var(--green);box-shadow:0 0 6px var(--green);}
+.dot.closed{background:var(--red);box-shadow:0 0 6px var(--red);}
+.time-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+.time-lbl{font-size:12px;color:var(--tx2);width:50px;flex-shrink:0;}
+.time-inp{flex:1;padding:8px 10px;border-radius:9px;border:1px solid var(--border);background:var(--card2);color:var(--tx);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;text-align:center;}
+.force-row{display:flex;align-items:center;gap:10px;margin-top:6px;background:var(--card2);border-radius:9px;padding:9px 12px;}
+.force-lbl{font-size:12px;color:var(--tx2);flex:1;}
+.toggle{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0;}
+.toggle input{display:none;}
+.tslider{position:absolute;inset:0;border-radius:999px;background:var(--border);transition:background .3s;}
+.tslider::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;right:3px;transition:transform .3s;}
+.toggle input:checked+.tslider{background:var(--red);}
+.toggle input:checked+.tslider::after{transform:translateX(-20px);}
+.brand-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;}
+.btab{padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--tx2);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;}
+.btab.active{border-color:var(--accent);background:rgba(232,116,42,.15);color:var(--accent);}
+.prod-list{display:flex;flex-direction:column;gap:7px;}
+.prod-item{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:10px 14px;display:flex;align-items:center;gap:12px;}
+.prod-img{width:52px;height:52px;border-radius:9px;object-fit:cover;flex-shrink:0;background:var(--card2);}
+.prod-emoji{width:52px;height:52px;border-radius:9px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.prod-info{flex:1;min-width:0;}
+.prod-name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.prod-price{font-size:12px;color:var(--yellow);margin-top:2px;}
+.price-row{display:flex;align-items:center;gap:5px;margin-top:3px;}
+.price-inp{width:64px;padding:5px 7px;border-radius:7px;border:1px solid var(--border);background:var(--card2);color:var(--yellow);font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;outline:none;text-align:center;}
+.price-inp:focus{border-color:var(--accent);}
+.price-cur{font-size:12px;color:var(--tx2);}
+.st-select{padding:7px 10px;border-radius:9px;border:1px solid var(--border);background:var(--card2);color:var(--tx);font-family:'Tajawal',sans-serif;font-size:12px;outline:none;cursor:pointer;flex-shrink:0;font-weight:700;}
+.st-select.available{border-color:var(--green);color:var(--green);}
+.st-select.busy{border-color:var(--yellow);color:var(--yellow);}
+.st-select.soldout{border-color:var(--red);color:var(--red);}
+.st-select.delayed{border-color:#a855f7;color:#a855f7;}
+.loader{text-align:center;padding:30px;color:var(--tx2);font-size:14px;}
+.spin{display:inline-block;width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:8px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);padding:11px 26px;border-radius:999px;font-size:14px;font-weight:700;box-shadow:0 8px 32px rgba(0,0,0,.4);z-index:9999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast.ok{background:var(--green);color:#fff;}
+.toast.err{background:var(--red);color:#fff;}
+.toast.saving{background:var(--yellow);color:#000;}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">✈️</div>
+    <div class="login-title">لوحة تحكم طيار</div>
+    <div class="login-sub">ادخل كلمة المرور</div>
+    <input class="login-input" type="password" id="pw" placeholder="● ● ● ● ●" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">دخول 🔓</button>
+    <div class="login-err" id="login-err">❌ كلمة المرور غلط</div>
+  </div>
+</div>
+
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-logo">✈️ طيار - أدمن</div>
+    <div class="top-btns">
+      <button class="btn-save" id="save-btn" onclick="saveAll()">💾 حفظ الكل</button>
+      <button class="btn-out" onclick="doLogout()">خروج</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="stats">
+      <div class="stat"><div class="stat-n" id="st-open">-</div><div class="stat-l">مطعم مفتوح</div></div>
+      <div class="stat"><div class="stat-n" id="st-soldout">-</div><div class="stat-l">غير متوفر</div></div>
+      <div class="stat"><div class="stat-n" id="st-busy">-</div><div class="stat-l">طلب كثير/هيتأخر</div></div>
+    </div>
+    <div class="sec-title">🏪 مواعيد وحالة المطاعم</div>
+    <div id="rest-grid" class="rest-grid"><div class="loader"><div class="spin"></div><br>جاري التحميل...</div></div>
+    <div class="sec-title">🍽️ حالة المنتجات</div>
+    <div class="brand-tabs" id="brand-tabs"></div>
+    <div class="prod-list" id="prod-list"><div class="loader"><div class="spin"></div><br>جاري التحميل...</div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+const PASS='tayyar2024';
+const API_KEY='AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8';
+const PROJECT_ID='tayyyar1';
+const BASE_URL=`https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
+
+let schedState={},forceState={},prodState={},priceState={},activeBrand=null;
+
+function doLogin(){
+  if(document.getElementById('pw').value===PASS){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    loadFromFirebase();
+  } else {
+    const e=document.getElementById('login-err');
+    e.style.display='block';
+    document.getElementById('pw').value='';
+    setTimeout(()=>e.style.display='none',2000);
+  }
+}
+function doLogout(){
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('pw').value='';
+}
+
+async function fbGet(path){
+  const r=await fetch(`${BASE_URL}/${path}?key=${API_KEY}`);
+  if(!r.ok)return null;
+  return parseDoc(await r.json());
+}
+async function fbSet(path,data){
+  const r=await fetch(`${BASE_URL}/${path}?key=${API_KEY}`,{
+    method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({fields:toFS(data)})
+  });
+  return r.ok;
+}
+function toFS(obj){
+  const f={};
+  Object.entries(obj).forEach(([k,v])=>{
+    if(typeof v==='string') f[k]={stringValue:v};
+    else if(typeof v==='boolean') f[k]={booleanValue:v};
+    else if(typeof v==='number') f[k]={integerValue:String(v)};
+    else if(v&&typeof v==='object') f[k]={mapValue:{fields:toFS(v)}};
+  });
+  return f;
+}
+function parseDoc(doc){
+  if(!doc||!doc.fields)return null;
+  const obj={};
+  Object.entries(doc.fields).forEach(([k,v])=>{
+    if(v.stringValue!==undefined) obj[k]=v.stringValue;
+    else if(v.booleanValue!==undefined) obj[k]=v.booleanValue;
+    else if(v.integerValue!==undefined) obj[k]=Number(v.integerValue);
+    else if(v.mapValue) obj[k]=parseDoc(v.mapValue);
+  });
+  return obj;
+}
+
+async function loadFromFirebase(){
+  showToast('⏳ جاري التحميل...','saving');
+  const cfg=await fbGet('settings/config');
+  if(cfg&&cfg.schedule) schedState=cfg.schedule;
+  else BRANDS.forEach(b=>{const s=RESTAURANT_SCHEDULE[b]||{open:'10:00',close:'3:00'};schedState[b]={open:s.open,close:s.close};});
+  if(cfg&&cfg.forceClose) forceState=cfg.forceClose;
+  else BRANDS.forEach(b=>forceState[b]=false);
+  if(cfg&&cfg.products) prodState=cfg.products;
+  else MENU.forEach(p=>prodState[p.id]=p.status||'available');
+  if(cfg&&cfg.prices) priceState=cfg.prices;
+  else MENU.forEach(p=>priceState[p.id]=p.p);
+  activeBrand=activeBrand||BRANDS[0];
+  renderAll();
+  showToast('✅ تم التحميل','ok');
+}
+
+async function saveAll(){
+  const btn=document.getElementById('save-btn');
+  btn.disabled=true;
+  showToast('⏳ جاري الحفظ...','saving');
+  BRANDS.forEach(b=>{
+    const op=document.getElementById('open-'+b);
+    const cl=document.getElementById('close-'+b);
+    const fc=document.getElementById('force-'+b);
+    if(op) schedState[b].open=op.value;
+    if(cl) schedState[b].close=cl.value;
+    if(fc) forceState[b]=fc.checked;
+  });
+  MENU.forEach(p=>{
+    const el=document.getElementById('pst-'+p.id);
+    if(el) prodState[p.id]=el.value;
+    const pel=document.getElementById('prc-'+p.id);
+    if(pel) priceState[p.id]=Number(pel.value)||p.p;
+  });
+  const ok=await fbSet('settings/config',{
+    schedule:schedState,forceClose:forceState,products:prodState,prices:priceState,
+    updatedAt:new Date().toISOString()
+  });
+  btn.disabled=false;
+  if(ok){showToast('✅ تم الحفظ بنجاح!','ok');updateStats();}
+  else showToast('❌ في مشكلة في الحفظ','err');
+}
+
+function renderRestaurants(){
+  document.getElementById('rest-grid').innerHTML=BRANDS.map(b=>{
+    const s=schedState[b]||{open:'10:00',close:'3:00'};
+    const fc=forceState[b]||false;
+    const op=!fc&&isTimeOpen(s.open,s.close);
+    return `<div class="rest-card">
+      <div class="rest-head"><span class="rest-name">${BL[b]||b}</span><span class="dot ${op?'open':'closed'}" id="dot-${b}"></span></div>
+      <div class="time-row"><span class="time-lbl">⏰ فتح</span><input type="time" class="time-inp" id="open-${b}" value="${s.open}" onchange="refreshDot('${b}')"></div>
+      <div class="time-row"><span class="time-lbl">🔒 قفل</span><input type="time" class="time-inp" id="close-${b}" value="${s.close}" onchange="refreshDot('${b}')"></div>
+      <div class="force-row"><span class="force-lbl">🔴 إغلاق قسري الآن</span>
+        <label class="toggle"><input type="checkbox" id="force-${b}" ${fc?'checked':''} onchange="refreshDot('${b}')"><span class="tslider"></span></label>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function refreshDot(b){
+  const fc=document.getElementById('force-'+b)?.checked;
+  const op=document.getElementById('open-'+b)?.value;
+  const cl=document.getElementById('close-'+b)?.value;
+  const dot=document.getElementById('dot-'+b);
+  if(dot) dot.className='dot '+((!fc&&isTimeOpen(op,cl))?'open':'closed');
+  updateStats();
+}
+
+function isTimeOpen(o,c){
+  if(!o||!c)return false;
+  const m=t=>{const[h,n]=t.split(':').map(Number);return h*60+(n||0);};
+  const now=new Date(),cur=now.getHours()*60+now.getMinutes();
+  let op=m(o),cl=m(c);
+  if(cl<op)cl+=1440;
+  let adj=cur;if(cur<op)adj+=1440;
+  return adj>=op&&adj<cl;
+}
+
+function renderBrandTabs(){
+  document.getElementById('brand-tabs').innerHTML=BRANDS.map(b=>`
+    <button class="btab ${activeBrand===b?'active':''}" onclick="setTab('${b}')">${BL[b]||b}</button>
+  `).join('');
+}
+
+function setTab(b){activeBrand=b;renderBrandTabs();renderProducts();}
+
+function renderProducts(){
+  const items=MENU.filter(p=>p.brand===activeBrand);
+  document.getElementById('prod-list').innerHTML=items.map(p=>{
+    const st=prodState[p.id]||'available';
+    const img=p.img
+      ?`<img class="prod-img" src="${p.img}" alt="${p.n}" loading="lazy" onerror="this.outerHTML='<div class=prod-emoji>${p.e||'🍽️'}</div>'">`
+      :`<div class="prod-emoji">${p.e||'🍽️'}</div>`;
+    const pr=priceState[p.id]!=null?priceState[p.id]:p.p;
+    return `<div class="prod-item">${img}
+      <div class="prod-info"><div class="prod-name">${p.n}</div>
+        <div class="price-row"><input type="number" class="price-inp" id="prc-${p.id}" value="${pr}"><span class="price-cur">ج.م</span></div>
+      </div>
+      <select class="st-select ${st}" id="pst-${p.id}" onchange="changeProd(${p.id},this)">
+        <option value="available" ${st==='available'?'selected':''}>✅ متوفر</option>
+        <option value="busy"      ${st==='busy'?'selected':''}>⏳ طلب كثير</option>
+        <option value="delayed"   ${st==='delayed'?'selected':''}>🕐 هيتأخر</option>
+        <option value="soldout"   ${st==='soldout'?'selected':''}>❌ غير متوفر</option>
+      </select>
+    </div>`;
+  }).join('');
+}
+
+function changeProd(id,sel){prodState[id]=sel.value;sel.className='st-select '+sel.value;updateStats();}
+
+function updateStats(){
+  let openN=0;
+  BRANDS.forEach(b=>{
+    const fc=document.getElementById('force-'+b)?.checked??forceState[b];
+    const op=document.getElementById('open-'+b)?.value??(schedState[b]||{}).open;
+    const cl=document.getElementById('close-'+b)?.value??(schedState[b]||{}).close;
+    if(!fc&&isTimeOpen(op,cl))openN++;
+  });
+  const all=Object.values(prodState);
+  document.getElementById('st-open').textContent=openN;
+  document.getElementById('st-soldout').textContent=all.filter(v=>v==='soldout').length;
+  document.getElementById('st-busy').textContent=all.filter(v=>v==='busy'||v==='delayed').length;
+}
+
+function showToast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type}`;t.classList.add('show');
+  if(type!=='saving')setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function renderAll(){renderRestaurants();renderBrandTabs();renderProducts();updateStats();}
+</script>
+</body>
+</html>
