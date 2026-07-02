@@ -148,17 +148,32 @@ function doLogout(){
 }
 
 async function fbGet(path){
-  const r=await fetch(`${BASE_URL}/${path}?key=${API_KEY}`);
-  if(!r.ok)return null;
-  return parseDoc(await r.json());
+  try{
+    const r=await fetch(`${BASE_URL}/${path}?key=${API_KEY}`);
+    if(!r.ok){console.error('fbGet failed:',r.status,await r.text());return null;}
+    return parseDoc(await r.json());
+  }catch(err){
+    console.error('fbGet error:',err);
+    return null;
+  }
 }
 async function fbSet(path,data){
-  const r=await fetch(`${BASE_URL}/${path}?key=${API_KEY}`,{
-    method:'PATCH',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({fields:toFS(data)})
-  });
-  return r.ok;
+  try{
+    const r=await fetch(`${BASE_URL}/${path}?key=${API_KEY}`,{
+      method:'PATCH',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({fields:toFS(data)})
+    });
+    if(!r.ok){
+      const errText=await r.text();
+      console.error('fbSet failed:',r.status,errText);
+      return false;
+    }
+    return true;
+  }catch(err){
+    console.error('fbSet error:',err);
+    return false;
+  }
 }
 function toFS(obj){
   const f={};
