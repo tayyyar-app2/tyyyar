@@ -314,7 +314,7 @@ const MENU=[
   { id: 263, brand: 'Karam El Sham', n: 'وجبه شيش وكفته', d: 'مشويات', p: 200, img: './img/logo karm alshm 2.jpeg' },
    // كرم الشام=====
   //  بلبن===
-  { id: 793, brand: 'B Laban', n: 'سنكوريتا', e:'بلبن', d: 'حلوى', p:135 , img: './img/sankorit بلبن1.jpeg' },
+  { id: 793, brand: 'B Laban', n: 'سنكوريتا', e:'بلبن', d: 'حلوى', p:130 , img: './img/sankorit بلبن1.jpeg' },
   { id: 792, brand: 'B Laban', n: 'سنكوريتا (Jumbo)', e:'بلبن', d: 'حلوى', p:210 , img: './img/sankorit بلبن1.jpeg' },
   { id: 767, brand: 'B Laban', n: '  المتكندره', e:'بلبن', d: 'حلوى', p: 160, img: './img//المتكندره.webp' },
   { id: 768, brand: 'B Laban', n: '  المتكندره حجم اكبر', e:'بلبن', d: 'حلوى', p: 375, img: './img//المتكندره.webp' },
