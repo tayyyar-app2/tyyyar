@@ -595,8 +595,7 @@ const doc = {
 
 const fields={};
 Object.entries(doc).forEach(([k,v])=>{fields[k]=toFV(v);});
-
-fetch('https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders?key=AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8', {
+fetch(`https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders?documentId=${oid}&key=AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8`, {
   method:'POST',
   headers:{'Content-Type':'application/json'},
   body:JSON.stringify({fields})
@@ -642,7 +641,7 @@ function showSuccess(oid){
   document.getElementById('sw-title').textContent='تم إرسال طلبك! 🎉';
   document.getElementById('sw-msg').textContent='تم فتح واتساب برسالة طلبك الكامل';
   document.getElementById('timing-badge').textContent='⏱️ طلبك سيكون جاهز خلال 25 - 45 دقيقة';
-  
+  localStorage.setItem('tyr_last_order', oid);
   const orderId = oid || localStorage.getItem('tyr_last_order');
   if(orderId) startOrderTracking(orderId);
 }
@@ -1089,22 +1088,26 @@ function updateTimelineUI(status, statusTimes){
     document.getElementById('timing-badge').textContent='✅ تم التوصيل بنجاح!';
   }
 }
-
 function startOrderTracking(oid){
-  renderTimeline();
   if(trackingInterval) clearInterval(trackingInterval);
   const API='AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8';
   const url=`https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders/${oid}?key=${API}`;
+  
   async function poll(){
     try{
       const r=await fetch(url);
-      if(!r.ok) return;
+      if(!r.ok) {console.log('Not found yet'); return;}
       const json=await r.json();
       const {status, statusTimes}=parseFirestoreDoc(json);
+      renderTimeline();
       updateTimelineUI(status, statusTimes);
       if(status==='delivered'||status==='cancelled') clearInterval(trackingInterval);
     }catch(e){ console.error('tracking error', e); }
   }
   poll();
-  trackingInterval=setInterval(poll, 6000);
+  trackingInterval=setInterval(poll, 1000);
 }
+ 
+ 
+ 
+ 
