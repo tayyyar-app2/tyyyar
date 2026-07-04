@@ -602,7 +602,7 @@ fetch('https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)
   body:JSON.stringify({fields})
 }).then(r=>r.json()).then(r=>console.log('✅ Order saved:',r)).catch(e=>console.error('❌',e));
 
-showSuccess();
+showSuccess(oid);
 
 function toFirestoreValue(val) {
   if (typeof val === 'string')  return { stringValue: val };
@@ -626,39 +626,55 @@ fetch('https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)
   body: JSON.stringify({ fields: firestoreFields })
 }).catch(e => console.error('Firestore error:', e));
 
-showSuccess();
+showSuccess(oid);
   
 }
 
 let deliveryTimer=null;
-function showSuccess(nm){
+function showSuccess(oid){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById('steps-bar').style.display='none';
   document.getElementById('fab').style.display='none';
   const sw=document.getElementById('sw');
   sw.style.display='block';
-  // Reset to loading state
   document.getElementById('loading-ring').style.display='block';
   document.getElementById('done-circle').style.display='none';
   document.getElementById('sw-title').textContent='تم إرسال طلبك! 🎉';
   document.getElementById('sw-msg').textContent='تم فتح واتساب برسالة طلبك الكامل';
   document.getElementById('timing-badge').textContent='⏱️ طلبك سيكون جاهز خلال 25 - 45 دقيقة';
-  // After 65 seconds show delivered (for demo, use 65000ms)
-  // In real use this would be much longer - using 70*60*1000 = 70 min
-  // For demo we use 8 seconds
-  if(deliveryTimer) clearTimeout(deliveryTimer);
-  deliveryTimer=setTimeout(()=>{
-    document.getElementById('loading-ring').style.display='none';
-    document.getElementById('done-circle').style.display='flex';
-    document.getElementById('sw-title').textContent='تم توصيل طلبك! ✅';
-    document.getElementById('sw-msg').textContent=`شكراً ${nm || ''} على ثقتك في طيار 🚀`;
-    document.getElementById('timing-badge').style.background='linear-gradient(135deg,#25d366,#128c7e)';
-    document.getElementById('timing-badge').textContent='✅ تم التوصيل بنجاح!';
-  }, 60*84*1000); // 70 minutes
+  
+  const orderId = oid || localStorage.getItem('tyr_last_order');
+  if(orderId) startOrderTracking(orderId);
 }
+// function showSuccess(nm){
+//   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+//   document.getElementById('steps-bar').style.display='none';
+//   document.getElementById('fab').style.display='none';
+//   const sw=document.getElementById('sw');
+//   sw.style.display='block';
+//   // Reset to loading state
+//   document.getElementById('loading-ring').style.display='block';
+//   document.getElementById('done-circle').style.display='none';
+//   document.getElementById('sw-title').textContent='تم إرسال طلبك! 🎉';
+//   document.getElementById('sw-msg').textContent='تم فتح واتساب برسالة طلبك الكامل';
+//   document.getElementById('timing-badge').textContent='⏱️ طلبك سيكون جاهز خلال 25 - 45 دقيقة';
+//   // After 65 seconds show delivered (for demo, use 65000ms)
+//   // In real use this would be much longer - using 70*60*1000 = 70 min
+//   // For demo we use 8 seconds
+//   if(deliveryTimer) clearTimeout(deliveryTimer);
+//   deliveryTimer=setTimeout(()=>{
+//     document.getElementById('loading-ring').style.display='none';
+//     document.getElementById('done-circle').style.display='flex';
+//     document.getElementById('sw-title').textContent='تم توصيل طلبك! ✅';
+//     document.getElementById('sw-msg').textContent=`شكراً ${nm || ''} على ثقتك في طيار 🚀`;
+//     document.getElementById('timing-badge').style.background='linear-gradient(135deg,#25d366,#128c7e)';
+//     document.getElementById('timing-badge').textContent='✅ تم التوصيل بنجاح!';
+//   }, 60*84*1000); // 70 minutes
+// }
 
 function resetAll(){
-  if(deliveryTimer) clearTimeout(deliveryTimer);
+    // الجديد تتباع
+  if(trackingInterval) clearInterval(trackingInterval); 
   cart={};loc=null;pay='cod';
   ['cno'].forEach(id=>document.getElementById(id).value='');
   prefillUserProfile();
@@ -1000,4 +1016,95 @@ function sendRideOrder() {
   ].filter(Boolean).join('\n');
   window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank');
   toast('✅ تم فتح واتساب بطلبك!');
+}
+let trackingInterval=null;
+const ORDER_STEPS = [
+  { key:'received',  title:'وصل لنا الطلب',   desc:'تم استلام طلبك بنجاح',      icon:'✅' },
+  { key:'preparing', title:'بنجهز الطلب',      desc:'جاري تحضير الطلب',          icon:'📦' },
+  { key:'on_way',    title:'بنحضر الطلب',      desc:'الطلب في الطريق إليك',      icon:'🛵' },
+  { key:'delivered', title:'تم تسليم الطلب',   desc:'تم تسليم طلبك بنجاح',       icon:'📬' }
+];
+
+function mapDriverStatusToStep(driverStatus){
+  const order=['received','preparing','on_way','delivered'];
+  return order.includes(driverStatus) ? driverStatus : 'pending';
+}
+
+function parseFirestoreDoc(json){
+  const f=json.fields||{};
+  const driverStatus=f.driverStatus?.stringValue||'pending';
+  const status=mapDriverStatusToStep(driverStatus);
+  const statusTimes={};
+  if(f.receivedAt?.stringValue) statusTimes.received = f.receivedAt.stringValue;
+  if(f.preparingAt?.stringValue) statusTimes.preparing = f.preparingAt.stringValue;
+  if(f.onWayAt?.stringValue) statusTimes.on_way = f.onWayAt.stringValue;
+  if(f.deliveredAt?.stringValue) statusTimes.delivered = f.deliveredAt.stringValue;
+  return {status, statusTimes};
+}
+
+function renderTimeline(){
+  const sw=document.getElementById('sw');
+  if(!sw) return;
+  let tl=document.getElementById('order-timeline');
+  if(!tl){
+    tl=document.createElement('div');
+    tl.id='order-timeline';
+    tl.style.cssText='text-align:right;margin:16px auto 0;max-width:340px;padding:0 16px;';
+    const msgEl=document.getElementById('sw-msg');
+    if(msgEl && msgEl.parentNode) msgEl.parentNode.insertBefore(tl, msgEl.nextSibling);
+    else sw.appendChild(tl);
+  }
+  tl.innerHTML = ORDER_STEPS.map(s=>`
+    <div class="tl-step" data-step="${s.key}" style="display:flex;align-items:center;gap:12px;padding:10px 0;">
+      <div class="tl-dot" style="width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;background:#eee;color:#aaa;flex-shrink:0;transition:.3s;">${s.icon}</div>
+      <div style="flex:1;">
+        <div class="tl-title" style="font-weight:bold;font-size:14px;color:#333;">${s.title}</div>
+        <div class="tl-desc" style="font-size:12px;color:#888;">${s.desc}</div>
+      </div>
+      <div class="tl-time" style="font-size:11px;color:#aaa;">--:--</div>
+    </div>
+  `).join('');
+}
+
+function updateTimelineUI(status, statusTimes){
+  const order=ORDER_STEPS.map(s=>s.key);
+  const idx = (status==='cancelled') ? -1 : (status==='pending' ? 0 : order.indexOf(status)+1);
+  order.forEach((key,i)=>{
+    const row=document.querySelector(`.tl-step[data-step="${key}"]`);
+    if(!row) return;
+    const dot=row.querySelector('.tl-dot');
+    const timeEl=row.querySelector('.tl-time');
+    if(i<idx){ dot.style.background='#25d366'; dot.style.color='#fff'; dot.textContent='✓'; }
+    else if(i===idx){ dot.style.background='#ff7a1a'; dot.style.color='#fff'; }
+    else { dot.style.background='#eee'; dot.style.color='#aaa'; }
+    const t = statusTimes && statusTimes[key];
+    if(t) timeEl.textContent = new Date(t).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+  });
+  if(status==='delivered'){
+    document.getElementById('loading-ring').style.display='none';
+    document.getElementById('done-circle').style.display='flex';
+    document.getElementById('sw-title').textContent='تم توصيل طلبك! ✅';
+    document.getElementById('sw-msg').textContent='شكراً على ثقتك في طيار 🚀';
+    document.getElementById('timing-badge').style.background='linear-gradient(135deg,#25d366,#128c7e)';
+    document.getElementById('timing-badge').textContent='✅ تم التوصيل بنجاح!';
+  }
+}
+
+function startOrderTracking(oid){
+  renderTimeline();
+  if(trackingInterval) clearInterval(trackingInterval);
+  const API='AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8';
+  const url=`https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders/${oid}?key=${API}`;
+  async function poll(){
+    try{
+      const r=await fetch(url);
+      if(!r.ok) return;
+      const json=await r.json();
+      const {status, statusTimes}=parseFirestoreDoc(json);
+      updateTimelineUI(status, statusTimes);
+      if(status==='delivered'||status==='cancelled') clearInterval(trackingInterval);
+    }catch(e){ console.error('tracking error', e); }
+  }
+  poll();
+  trackingInterval=setInterval(poll, 6000);
 }
