@@ -1,6 +1,6 @@
 {
   "name": "طيار مندوبي",
-  "short_name": "طيار",
+  "short_name": "  طيار مندوب",
   "description": "تطبيق المندوبين - طيار لتوصيل الطلبات",
   "start_url": "./index.html",
   "scope": "./",
@@ -17,19 +17,19 @@
   ],
   "icons": [
     {
-      "src": "https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png",
+      "src": "./img man/طيار مندوب",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png",
+      "src": "./img man/طيار مندوب",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png",
+      "src": "./img man/طيار مندوب",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
@@ -44,7 +44,7 @@
       "url": "./index.html?tab=new",
       "icons": [
         {
-          "src": "https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png",
+          "src": "./img man/طيار مندوب",
           "sizes": "96x96"
         }
       ]
