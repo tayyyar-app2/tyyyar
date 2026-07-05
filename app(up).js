@@ -1020,7 +1020,7 @@ let trackingInterval=null;
 const ORDER_STEPS = [
   { key:'received',  title:'وصل لنا الطلب',   desc:'تم استلام طلبك بنجاح',      icon:'✅' },
   { key:'preparing', title:'بنجهز الطلب',      desc:'جاري تحضير الطلب',          icon:'📦' },
-  { key:'on_way',    title:'بنحضر الطلب',      desc:'الطلب في الطريق إليك',      icon:'🛵' },
+  { key:'on_way',    title:'الطلب في الطريق إليك ',      desc:'الطلب في الطريق إليك',      icon:'🛵' },
   { key:'delivered', title:'تم تسليم الطلب',   desc:'تم تسليم طلبك بنجاح',       icon:'📬' }
 ];
 
