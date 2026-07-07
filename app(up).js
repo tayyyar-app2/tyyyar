@@ -539,7 +539,7 @@ function prefillUserProfile(){
   url.searchParams.delete('u_ph');
   url.searchParams.delete('u_ad');
   window.history.replaceState({},'',url);
-  toast('❤️ ✅ تم حفظ بياناتك! في الطلب الجاي هتتملي تلقائيًا 😊✈️ ');
+  toast('👋 أهلاً! تم حفظ بياناتك تلقائياً');
 }
 function clearUserProfile(){
   localStorage.removeItem('tyr_user');
