@@ -4,17 +4,21 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <link rel="manifest" href="./manifest.json"/>
-<meta name="theme-color" content="#ff6633"/>
+<meta name="theme-color" content="#f5a623"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="طيار مندوب"/>
 <link rel="apple-touch-icon" href="https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png"/>
-<title>طيار – المندوب</title>
+<title>طيار – نظام التوصيل</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"/>
 <style>
+/* ══════════════════════════════
+   RESET & ROOT
+   ══════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
-body{font-family:'Cairo',sans-serif;background:#0d0d0d;color:#f0f0f0;min-height:100dvh;overscroll-behavior:none}
+body{font-family:'Cairo',sans-serif;background:#0d0d0d;color:#f0f0f0;min-height:100dvh;overscroll-behavior:none;transition:background .3s,color .3s}
+body.light{background:#f5f5f5;color:#1a1a1a}
 :root{
   --acc:#f5a623;--acc2:rgba(245,166,35,.15);--accg:rgba(245,166,35,.25);
   --grn:#22c55e;--grn2:rgba(34,197,94,.12);
@@ -23,18 +27,86 @@ body{font-family:'Cairo',sans-serif;background:#0d0d0d;color:#f0f0f0;min-height:
   --red:#ef4444;--red2:rgba(239,68,68,.12);
   --card:#1a1a1a;--sur:#141414;--brd:#242424;--mut:#666;--sub:#999
 }
+body.light{
+  --card:#ffffff;--sur:#f0f0f0;--brd:#e0e0e0;--mut:#888;--sub:#555;
+  --acc2:rgba(245,166,35,.1);--grn2:rgba(34,197,94,.1);
+  --blu2:rgba(59,130,246,.1);--pur2:rgba(168,85,247,.1);--red2:rgba(239,68,68,.1)
+}
+
+/* ══════════════════════════════
+   LOGIN / REGISTER SCREENS
+   ══════════════════════════════ */
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100dvh;padding:20px}
+.login-box{background:var(--card);border:1px solid var(--brd);border-radius:24px;padding:36px 28px;width:100%;max-width:380px;text-align:center;animation:fadeup .4s ease}
+.login-logo{width:72px;height:72px;background:var(--acc);border-radius:18px;display:grid;place-items:center;font-size:36px;margin:0 auto 16px}
+.login-title{font-size:24px;font-weight:900;margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--mut);margin-bottom:24px}
+.login-input{width:100%;background:var(--sur);border:1px solid var(--brd);border-radius:12px;padding:14px 16px;font-family:'Cairo',sans-serif;font-size:15px;color:#f0f0f0;text-align:center;outline:none;margin-bottom:12px;transition:border-color .2s}
+body.light .login-input{color:#1a1a1a}
+.login-input:focus{border-color:var(--acc)}
+.login-input::placeholder{color:var(--mut);font-size:13px}
+.login-btn{width:100%;background:var(--acc);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Cairo',sans-serif;font-size:16px;font-weight:900;cursor:pointer;transition:.15s}
+.login-btn:active{transform:scale(.97)}
+.login-link{display:block;margin-top:16px;font-size:13px;color:var(--acc);cursor:pointer;text-decoration:underline;font-weight:700}
+.login-link:hover{color:#e8940f}
+.login-err{color:var(--red);font-size:13px;margin-bottom:8px;display:none}
+.login-divider{display:flex;align-items:center;gap:10px;margin:16px 0}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--brd)}
+.login-divider span{font-size:12px;color:var(--mut);white-space:nowrap}
+
+/* Registration Form */
+.register-section{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--brd)}
+.register-section.show{display:block;animation:fadeup .3s ease}
+.register-section .register-title{font-size:16px;font-weight:900;color:var(--acc);margin-bottom:4px}
+.register-section .register-sub{font-size:12px;color:var(--mut);margin-bottom:16px}
+.register-btn{width:100%;background:var(--blu2);color:var(--blu);border:1px solid rgba(59,130,246,.3);border-radius:12px;padding:12px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:.15s;margin-top:8px}
+.register-btn:active{transform:scale(.97)}
+.cancel-register{display:block;margin-top:12px;font-size:12px;color:var(--mut);cursor:pointer;text-decoration:underline}
+
+/* Pending Approval Screen */
+.pending-screen{display:none;align-items:center;justify-content:center;min-height:100dvh;padding:20px}
+.pending-screen.show{display:flex;animation:fadeup .4s ease}
+.pending-box{background:var(--card);border:1px solid var(--acc);border-radius:24px;padding:36px 28px;width:100%;max-width:380px;text-align:center;box-shadow:0 0 30px var(--accg)}
+.pending-icon{width:80px;height:80px;background:var(--acc2);border-radius:20px;display:grid;place-items:center;font-size:40px;margin:0 auto 16px}
+.pending-title{font-size:20px;font-weight:900;margin-bottom:8px;color:var(--acc)}
+.pending-desc{font-size:14px;color:var(--sub);line-height:1.8;margin-bottom:20px}
+.pending-info{background:var(--sur);border-radius:12px;padding:14px;margin-bottom:20px;text-align:right}
+.pending-info div{font-size:13px;padding:4px 0;color:var(--sub)}
+.pending-info div strong{color:#f0f0f0}
+.pending-change{font-size:13px;color:var(--mut);cursor:pointer;text-decoration:underline}
+.pending-change:hover{color:var(--acc)}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ══════════════════════════════
+   ADMIN LOGIN
+   ══════════════════════════════ */
+.admin-login-link{position:fixed;bottom:20px;right:50%;transform:translateX(50%);z-index:10;font-size:11px;color:var(--mut);cursor:pointer;opacity:.4;transition:.2s}
+.admin-login-link:hover{opacity:.8;color:var(--acc)}
+
+/* ══════════════════════════════
+   HEADER
+   ══════════════════════════════ */
 header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--brd);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+body.light header{background:rgba(245,245,245,.97)}
 .logo{display:flex;align-items:center;gap:10px;flex:1}
 .lbox{width:38px;height:38px;background:var(--acc);border-radius:10px;display:grid;place-items:center;font-size:20px;flex-shrink:0}
 .ltx{font-size:18px;font-weight:900;line-height:1.1}
 .lsub{font-size:10px;color:var(--mut)}
 .hbtns{display:flex;gap:8px;align-items:center}
-.pill{display:flex;align-items:center;gap:6px;background:var(--sur);border:1px solid var(--brd);border-radius:99px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--mut);transition:.3s}
+.pill{display:flex;align-items:center;gap:6px;background:var(--sur);border:1px solid var(--brd);border-radius:99px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--mut);transition:.3s;cursor:pointer}
 .pill.on{color:var(--grn)}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--mut);transition:.3s;flex-shrink:0}
 .pill.on .dot{background:var(--grn);box-shadow:0 0 7px var(--grn);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 .end-day-btn{background:var(--red2);color:var(--red);border:1px solid rgba(239,68,68,.3);border-radius:99px;padding:5px 12px;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.theme-toggle{width:36px;height:36px;border-radius:50%;background:var(--sur);border:1px solid var(--brd);color:var(--mut);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.theme-toggle:active{transform:scale(.92)}
+.logout-btn{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);border-radius:99px;padding:5px 12px;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+
+/* ══════════════════════════════
+   NOTIFICATION & INSTALL BAR
+   ══════════════════════════════ */
 #nb{display:none;background:var(--acc2);border-bottom:1px solid rgba(245,166,35,.25);padding:9px 16px;font-size:13px;color:var(--acc);font-weight:700;text-align:center;gap:8px;align-items:center;justify-content:center}
 #nb.show{display:flex}
 #nb button{background:var(--acc);color:#000;border:none;border-radius:99px;padding:4px 12px;font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;cursor:pointer}
@@ -42,6 +114,10 @@ header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-f
 #install-bar.show{display:flex}
 #install-bar button{background:var(--acc);color:#000;border:none;border-radius:99px;padding:4px 12px;font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;cursor:pointer}
 #install-bar .xi{background:transparent;color:var(--mut);font-size:16px;padding:2px 8px}
+
+/* ══════════════════════════════
+   TABS & FILTERS
+   ══════════════════════════════ */
 .mtabs{display:flex;border-bottom:1px solid var(--brd)}
 .mtab{flex:1;padding:12px;text-align:center;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;color:var(--mut);cursor:pointer;border:none;background:none;transition:.2s;position:relative}
 .mtab.active{color:var(--acc)}
@@ -57,10 +133,24 @@ header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-f
 .tb span{background:var(--brd);border-radius:99px;padding:1px 6px;font-size:11px}
 .tb.active{background:var(--acc);border-color:var(--acc);color:#000}
 .tb.active span{background:rgba(0,0,0,.2);color:#000}
+.search-bar{padding:10px 12px 0;display:none}
+.search-bar.show{display:block}
+.search-bar input{width:100%;background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:10px 14px;font-family:'Cairo',sans-serif;font-size:13px;color:#f0f0f0;outline:none;transition:border-color .2s}
+body.light .search-bar input{color:#1a1a1a}
+.search-bar input:focus{border-color:var(--acc)}
+.search-bar input::placeholder{color:var(--mut)}
+.brand-filter{padding:10px 12px 0;display:none;overflow-x:auto;scrollbar-width:none}
+.brand-filter.show{display:flex;gap:6px}
+.brand-filter::-webkit-scrollbar{display:none}
+.bf-btn{flex-shrink:0;background:var(--sur);border:1px solid var(--brd);border-radius:99px;padding:5px 12px;font-family:'Cairo',sans-serif;font-size:11px;font-weight:700;color:var(--mut);cursor:pointer;transition:.2s}
+.bf-btn.active{background:var(--pur);border-color:var(--pur);color:#fff}
+
+/* ══════════════════════════════
+   ORDER CARDS
+   ══════════════════════════════ */
 .list{padding:10px 12px 90px;display:flex;flex-direction:column;gap:10px}
-.card{background:var(--card);border:1px solid var(--brd);border-radius:14px;overflow:hidden;animation:fadeup .25s ease}
+.card{background:var(--card);border:1px solid var(--brd);border-radius:14px;overflow:hidden;animation:fadeup .25s ease;touch-action:pan-y;user-select:none}
 .card.isnew{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc),0 4px 20px var(--accg)}
-@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes flash{0%,100%{background:var(--card)}50%{background:rgba(245,166,35,.07)}}
 .card.fl{animation:flash .5s ease 3}
 .ch{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 9px;border-bottom:1px solid var(--brd)}
@@ -84,14 +174,18 @@ header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-f
 .tr{display:flex;justify-content:space-between;font-size:12px;color:var(--sub)}
 .tr.fin{font-size:14px;font-weight:900;color:#f0f0f0;margin-top:4px;padding-top:7px;border-top:1px solid var(--brd)}
 .tr.fin span:last-child{color:var(--acc)}
-.acts{display:flex;gap:7px;padding:0 14px 13px}
-.btn{flex:1;border:none;border-radius:10px;padding:11px;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:.15s}
+.acts{display:flex;gap:7px;padding:0 14px 13px;flex-wrap:wrap}
+.btn{flex:1;border:none;border-radius:10px;padding:11px;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:.15s;min-width:120px}
 .btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;cursor:default;transform:none!important}
 .btn-p{background:var(--blu2);color:var(--blu);border:1px solid rgba(59,130,246,.3)}
 .btn-d{background:var(--grn2);color:var(--grn);border:1px solid rgba(34,197,94,.3)}
 .btn-r{background:var(--pur2);color:var(--pur);border:1px solid rgba(168,85,247,.3)}
 .btn-o{background:var(--acc2);color:var(--acc);border:1px solid rgba(245,166,35,.3)}
 .btn-c{flex:0;background:var(--sur);color:var(--sub);border:1px solid var(--brd);padding:11px 13px;border-radius:10px;font-size:16px;cursor:pointer}
+.btn-wa{background:rgba(37,211,102,.12);color:#25d366;border:1px solid rgba(37,211,102,.3)}
+.btn-map{background:var(--blu2);color:var(--blu);border:1px solid rgba(59,130,246,.3)}
+.btn-undo{background:var(--pur2);color:var(--pur);border:1px solid rgba(168,85,247,.3)}
 .btn-dn{background:var(--grn2);color:var(--grn);border:1px solid rgba(34,197,94,.2);opacity:.5;cursor:default}
 .empty{text-align:center;padding:55px 20px;display:none}
 .empty.show{display:block}
@@ -103,9 +197,14 @@ header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-f
 @keyframes spin{to{transform:rotate(360deg)}}
 .snd{position:fixed;bottom:20px;left:12px;z-index:200;background:var(--sur);border:1px solid var(--brd);border-radius:99px;padding:9px 15px;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;color:var(--mut);cursor:pointer;display:flex;align-items:center;gap:6px;transition:.2s;box-shadow:0 4px 16px rgba(0,0,0,.4)}
 .snd.on{background:var(--grn2);border-color:rgba(34,197,94,.35);color:var(--grn)}
+.search-btn{position:fixed;bottom:20px;right:12px;z-index:200;background:var(--acc);color:#000;border:none;border-radius:50%;width:50px;height:50px;font-size:20px;cursor:pointer;box-shadow:0 4px 16px var(--accg);transition:.2s}
+.search-btn:active{transform:scale(.9)}
+
+/* ══════════════════════════════
+   ARCHIVE
+   ══════════════════════════════ */
 #archive-view{display:none;padding-bottom:80px}
 #archive-view.show{display:block}
-#today-view.hide{display:none}
 .arch-day{margin:10px 12px 0;border:1px solid var(--brd);border-radius:14px;overflow:hidden}
 .arch-day-hdr{background:var(--sur);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .arch-day-date{font-weight:900;font-size:14px}
@@ -115,6 +214,87 @@ header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-f
 .arch-oid{font-weight:900;color:var(--acc);font-size:13px;margin-bottom:5px}
 .arch-info{color:var(--sub);font-size:12px;line-height:1.7}
 .arch-total{font-weight:700;color:var(--grn);margin-top:5px;font-size:13px}
+
+/* ══════════════════════════════
+   STATS VIEW
+   ══════════════════════════════ */
+.stats-view{padding:10px 12px;display:none}
+.stats-view.show{display:block}
+.stat-card{background:var(--card);border:1px solid var(--brd);border-radius:14px;padding:16px;margin-bottom:10px}
+.stat-title{font-size:12px;color:var(--mut);font-weight:700;margin-bottom:8px}
+.stat-row{display:flex;justify-content:space-between;font-size:13px;padding:6px 0;border-bottom:1px solid var(--brd)}
+.stat-row:last-child{border:none}
+.stat-val{font-weight:900;color:var(--acc)}
+
+/* ══════════════════════════════
+   ADMIN PANEL
+   ══════════════════════════════ */
+#admin-view{display:none;padding-bottom:80px}
+#admin-view.show{display:block}
+.admin-section{margin:12px;padding:16px;background:var(--card);border:1px solid var(--brd);border-radius:14px}
+.admin-section-title{font-size:14px;font-weight:900;color:var(--acc);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.admin-input{width:100%;background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:12px 14px;font-family:'Cairo',sans-serif;font-size:14px;color:#f0f0f0;outline:none;margin-bottom:10px;transition:border-color .2s}
+body.light .admin-input{color:#1a1a1a}
+.admin-input:focus{border-color:var(--acc)}
+.admin-btn{background:var(--acc);color:#000;border:none;border-radius:10px;padding:12px 20px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:.15s}
+.admin-btn:active{transform:scale(.97)}
+.driver-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--brd);gap:10px}
+.driver-row:last-child{border:none}
+.driver-info{flex:1}
+.driver-name{font-weight:900;font-size:14px;color:var(--acc)}
+.driver-phone{font-size:11px;color:var(--mut);margin-top:2px;direction:ltr}
+.driver-status{font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px}
+.driver-status.active{background:var(--grn2);color:var(--grn)}
+.driver-status.pending-approval{background:var(--acc2);color:var(--acc)}
+.driver-status.banned{background:var(--red2);color:var(--red);text-decoration:line-through}
+.driver-actions{display:flex;gap:6px;flex-shrink:0}
+.driver-act-btn{border:none;border-radius:8px;padding:8px 10px;font-size:14px;cursor:pointer;transition:.15s;background:var(--sur);border:1px solid var(--brd)}
+.driver-act-btn.ban{color:var(--red)}
+.driver-act-btn.unban{color:var(--grn)}
+.driver-act-btn.approve{color:var(--grn)}
+.driver-act-btn.delete{color:var(--red);border-color:rgba(239,68,68,.3)}
+.driver-act-btn:active{transform:scale(.92)}
+
+/* Pending Drivers Section */
+.pending-section{margin:12px;padding:16px;background:var(--card);border:1px solid var(--acc);border-radius:14px;position:relative}
+.pending-section-title{font-size:14px;font-weight:900;color:var(--acc);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.pending-badge{background:var(--red);color:#fff;font-size:11px;font-weight:900;border-radius:99px;padding:2px 8px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.pending-driver-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--brd);gap:10px}
+.pending-driver-row:last-child{border:none}
+.pending-driver-info{flex:1}
+.pending-driver-name{font-weight:900;font-size:14px;color:#f0f0f0}
+.pending-driver-phone{font-size:11px;color:var(--mut);margin-top:2px;direction:ltr}
+.pending-driver-date{font-size:10px;color:var(--mut);margin-top:2px}
+.pending-driver-actions{display:flex;gap:6px;flex-shrink:0}
+.pd-btn{border:none;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;transition:.15s;font-family:'Cairo',sans-serif}
+.pd-btn.approve{background:var(--grn2);color:var(--grn);border:1px solid rgba(34,197,94,.3)}
+.pd-btn.reject{background:var(--red2);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.pd-btn:active{transform:scale(.92)}
+
+/* Performance Card */
+.perf-card{background:var(--sur);border:1px solid var(--brd);border-radius:12px;padding:14px;margin-top:10px}
+.perf-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.perf-name{font-weight:900;font-size:14px;color:var(--acc)}
+.perf-grade{font-size:13px;font-weight:900;padding:4px 12px;border-radius:99px}
+.perf-grade.excellent{background:var(--grn2);color:var(--grn)}
+.perf-grade.good{background:var(--blu2);color:var(--blu)}
+.perf-grade.average{background:var(--acc2);color:var(--acc)}
+.perf-grade.poor{background:var(--red2);color:var(--red)}
+.perf-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.perf-stat{text-align:center;padding:8px;background:var(--card);border-radius:8px}
+.perf-stat-val{font-size:18px;font-weight:900;color:var(--acc)}
+.perf-stat-label{font-size:10px;color:var(--mut);margin-top:2px}
+.perf-time-bar{margin-top:10px}
+.perf-time-label{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);margin-bottom:4px}
+.perf-bar-bg{height:6px;background:var(--brd);border-radius:3px;overflow:hidden}
+.perf-bar-fill{height:100%;border-radius:3px;transition:width .5s ease}
+
+/* ══════════════════════════════
+   MODALS & TOAST
+   ══════════════════════════════ */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:9999;background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:10px 20px;font-family:'Cairo',sans-serif;font-size:13px;font-weight:700;box-shadow:0 4px 20px rgba(0,0,0,.4);animation:toastIn .3s ease;transition:opacity .3s;max-width:90%;text-align:center}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:999;align-items:center;justify-content:center;padding:20px}
 .modal.show{display:flex}
 .mbox{background:var(--card);border:1px solid var(--brd);border-radius:20px;padding:28px;width:100%;max-width:340px;text-align:center}
@@ -122,6 +302,7 @@ header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-f
 .mtit{font-size:18px;font-weight:900;margin-bottom:6px}
 .msub{font-size:13px;color:var(--mut);margin-bottom:20px}
 .minp{width:100%;background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:13px;font-family:'Cairo',sans-serif;font-size:18px;color:#f0f0f0;text-align:center;letter-spacing:4px;outline:none;margin-bottom:10px;transition:border-color .2s}
+body.light .minp{color:#1a1a1a}
 .minp:focus{border-color:var(--acc)}
 .mbtn{width:100%;background:var(--acc);color:#000;border:none;border-radius:10px;padding:13px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:900;cursor:pointer;margin-bottom:8px}
 .mcancel{width:100%;background:transparent;color:var(--mut);border:1px solid var(--brd);border-radius:10px;padding:11px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
@@ -133,25 +314,117 @@ header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-f
 </head>
 <body>
 
+<!-- ══════════════════════════════
+     LOGIN SCREEN
+     ══════════════════════════════ -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">🛵</div>
+    <div class="login-title">طيار</div>
+    <div class="login-sub">أدخل رقمك المسجل للدخول</div>
+    <div class="login-err" id="login-err">❌ الرقم مش مسجل أو محظور</div>
+    <input class="login-input" id="login-name" type="text" placeholder="الاسم الكامل" maxlength="40"/>
+    <input class="login-input" id="login-phone" type="tel" placeholder="أدخل رقم الموبايل" maxlength="15" autocomplete="tel"/>
+    <input class="login-input" id="login-pass" type="password" placeholder="كلمة السر" maxlength="30"/>
+    <button class="login-btn" onclick="doLogin()">دخول 🚀</button>
+    <div class="login-divider"><span>أو</span></div>
+    <a class="login-link" id="show-register-link" onclick="showRegister()">مسجلش بعد؟ سجّل هنا</a>
+
+    <!-- Registration Section (toggled) -->
+    <div class="register-section" id="register-section">
+      <div class="register-title">📝 تسجيل مندوب جديد</div>
+      <div class="register-sub">ادخل بياناتك وكلمة السر اللي عايزها، وبعدين يستنى موافقة الأدمن</div>
+      <input class="login-input" id="reg-name" type="text" placeholder="اسمك الكامل" maxlength="40"/>
+      <input class="login-input" id="reg-phone" type="tel" placeholder="رقم الموبايل" maxlength="15" autocomplete="tel"/>
+      <input class="login-input" id="reg-pass" type="password" placeholder="كلمة سر (4 أحرف على الأقل)" maxlength="30"/>
+      <input class="login-input" id="reg-pass2" type="password" placeholder="تأكيد كلمة السر" maxlength="30"/>
+      <button class="register-btn" onclick="doRegister()">سجّل الآن ✉️</button>
+      <a class="cancel-register" onclick="hideRegister()">إلغاء، هسجل عادي</a>
+    </div>
+
+    <a class="login-link" style="font-size:11px;opacity:.5" onclick="showAdminLogin()">إدارة النظام (Admin)</a>
+  </div>
+</div>
+
+<!-- Pending Approval Screen -->
+<div class="pending-screen" id="pending-screen">
+  <div class="pending-box">
+    <div class="pending-icon">⏳</div>
+    <div class="pending-title">طلبك تحت المراجعة</div>
+    <div class="pending-desc">
+      تم إرسال طلب تسجيلك بنجاح! 🎉<br/>
+      الأدمن هيراجع طلبك ويوافق عليه قريباً.<br/>
+      أول ما يتوافق هتقدر تشتغل فوراً.
+    </div>
+    <div class="pending-info">
+      <div><strong>👤 الاسم:</strong> <span id="pend-name">-</span></div>
+      <div><strong>📞 الموبايل:</strong> <span id="pend-phone">-</span></div>
+      <div><strong>📅 تاريخ التسجيل:</strong> <span id="pend-date">-</span></div>
+      <div><strong>📊 الحالة:</strong> <span style="color:var(--acc)">قيد المراجعة ⏳</span></div>
+    </div>
+    <a class="pending-change" onclick="changePendingLogin()">تغيير بيانات تسجيل الدخول</a>
+  </div>
+</div>
+
+<!-- Admin Login Modal -->
+<div class="modal" id="admin-login-modal">
+  <div class="mbox">
+    <div class="mico">👑</div>
+    <div class="mtit">دخول الأدمن</div>
+    <div class="msub">أدخل بيانات الأدمن للتحكم بالنظام</div>
+    <input class="minp" id="admin-phone" type="tel" placeholder="رقم الأدمن" style="letter-spacing:1px;font-size:15px" maxlength="15"/>
+    <input class="minp" id="admin-pass" type="password" placeholder="كلمة السر" style="letter-spacing:1px;font-size:15px" maxlength="30" onkeydown="if(event.key==='Enter')doAdminLogin()"/>
+    <div class="merr" id="admin-login-err">❌ بيانات غلط!</div>
+    <button class="mbtn" onclick="doAdminLogin()">دخول 👑</button>
+    <button class="mcancel" onclick="document.getElementById('admin-login-modal').classList.remove('show')">إلغاء</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     MAIN APP (Driver + Admin)
+     ══════════════════════════════ -->
+<div id="main-app" style="display:none">
+
 <header>
   <div class="logo">
     <div class="lbox">🛵</div>
-    <div><div class="ltx">طيار</div><div class="lsub">لوحة المندوب</div></div>
+    <div><div class="ltx" id="app-title">طيار</div><div class="lsub" id="app-sub">لوحة المندوب</div></div>
   </div>
   <div class="hbtns">
-    <button class="end-day-btn" onclick="confirmEndDay()">📦 إنهاء اليوم</button>
-    <div class="pill" id="pill"><div class="dot"></div><span id="ptx">اتصال...</span></div>
+    <button class="end-day-btn" id="end-day-btn" onclick="confirmEndDay()">📦 إنهاء اليوم</button>
+    <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" title="وضع ليلي/نهاري">🌙</button>
+    <button class="theme-toggle" onclick="showTelegramSettings()" title="ربط Telegram">📱</button>
+    <div class="pill" id="pill" onclick="checkOnline()"><div class="dot"></div><span id="ptx">اتصال...</span></div>
+    <button class="logout-btn" onclick="doLogout()" id="logout-btn">خروج</button>
   </div>
 </header>
 
 <div id="nb"><span>🔔 فعّل الإشعارات للتنبيه بالأوردرات</span><button onclick="askNotif()">فعّل</button></div>
 <div id="install-bar"><span>📲 حمّل التطبيق على موبايلك</span><button onclick="installApp()">تحميل</button><button class="xi" onclick="this.parentElement.classList.remove('show')">×</button></div>
 
-<div class="mtabs">
+<!-- Driver Tabs -->
+<div class="mtabs" id="driver-tabs">
   <button class="mtab active" onclick="switchMain('today',this)">📋 طلبات اليوم</button>
+  <button class="mtab" onclick="switchMain('stats',this)">📊 إحصائياتي</button>
   <button class="mtab" onclick="switchMain('archive',this)">🗂️ الأرشيف</button>
 </div>
 
+<!-- Admin Tabs -->
+<div class="mtabs" id="admin-tabs" style="display:none">
+  <button class="mtab active" onclick="switchMain('admin',this)">👥 المندوبين</button>
+  <button class="mtab" onclick="switchMain('admin-perf',this)">📊 تقييم الأداء</button>
+  <button class="mtab" onclick="switchMain('admin-orders',this)">📋 كل الطلبات</button>
+</div>
+
+<!-- Search Bar -->
+<div class="search-bar" id="search-bar">
+  <input type="text" id="search-input" placeholder="🔍 ابحث باسم العميل، رقم الطلب، أو العنوان..." oninput="onSearch(this.value)"/>
+</div>
+
+<!-- Brand Filter -->
+<div class="brand-filter" id="brand-filter"></div>
+
+<!-- Today View -->
 <div id="today-view">
   <div class="stats">
     <div class="sc a"><div class="sn" id="s1">0</div><div class="sl">جديدة</div></div>
@@ -173,6 +446,13 @@ header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-f
   </div>
 </div>
 
+<!-- Stats View -->
+<div id="stats-view" class="stats-view">
+  <div style="padding:14px 12px 4px;font-size:14px;font-weight:700;color:var(--mut)">📊 إحصائياتي اليوم</div>
+  <div id="stats-content"></div>
+</div>
+
+<!-- Archive View -->
 <div id="archive-view">
   <div style="padding:14px 12px 4px;display:flex;align-items:center;justify-content:space-between">
     <div style="font-size:14px;font-weight:700;color:var(--mut)">📁 الأرشيف اليومي</div>
@@ -180,9 +460,50 @@ header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-f
   <div id="archive-list"></div>
 </div>
 
-<button class="snd on" id="snd" onclick="toggleSnd()">🔊 <span id="stx">الصوت شغال</span></button>
+<!-- Admin View -->
+<div id="admin-view">
+  <!-- Add Driver -->
+  <div class="admin-section" style="margin-top:12px">
+    <div class="admin-section-title">➕ إضافة مندوب يدوي</div>
+    <input class="admin-input" id="new-drv-name" placeholder="اسم المندوب"/>
+    <input class="admin-input" id="new-drv-phone" placeholder="رقم الموبايل" type="tel"/>
+    <input class="admin-input" id="new-drv-pass" placeholder="كلمة السر" type="password"/>
+    <button class="admin-btn" onclick="addDriver()">إضافة المندوب ✅</button>
+  </div>
 
-<!-- Password Modal -->
+  <!-- Pending Approvals -->
+  <div class="pending-section" id="pending-section" style="display:none">
+    <div class="pending-section-title">
+      🔔 طلبات تسجيل جديدة
+      <span class="pending-badge" id="pending-count-badge">0</span>
+    </div>
+    <div id="pending-drivers-list"></div>
+  </div>
+
+  <!-- Drivers List -->
+  <div class="admin-section">
+    <div class="admin-section-title">👥 المندوبين المعتمدين (<span id="drv-count">0</span>)</div>
+    <div id="drivers-list"></div>
+  </div>
+</div>
+
+<!-- Admin Performance View -->
+<div id="admin-perf-view" class="stats-view" style="display:none">
+  <div style="padding:14px 12px 4px;font-size:14px;font-weight:700;color:var(--mut)">📊 تقييم أداء المندوبين</div>
+  <div id="perf-content"></div>
+</div>
+
+<!-- Admin All Orders View -->
+<div id="admin-orders-view">
+  <div class="stats" style="margin-top:10px">
+    <div class="sc a"><div class="sn" id="as1">0</div><div class="sl">كل الطلبات</div></div>
+    <div class="sc b"><div class="sn" id="as2">0</div><div class="sl">موصلة</div></div>
+    <div class="sc c"><div class="sn" id="as3">0</div><div class="sl">إيرادات</div></div>
+  </div>
+  <div class="list" id="admin-orders-list" style="padding-bottom:30px"></div>
+</div>
+
+<!-- Password Modal for Archive -->
 <div class="modal" id="pass-modal">
   <div class="mbox">
     <div class="mico">🔐</div>
@@ -208,22 +529,33 @@ header{position:sticky;top:0;z-index:99;background:rgba(13,13,13,.97);backdrop-f
   </div>
 </div>
 
+<button class="snd on" id="snd" onclick="toggleSnd()">🔊 <span id="stx">الصوت شغال</span></button>
+<button class="search-btn" onclick="toggleSearch()" id="search-btn">🔍</button>
+
+</div><!-- end main-app -->
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-// ══════════════════════════════
-// 🔑 كلمة سر الأرشيف
-const ARCHIVE_PASS = "tayyar@2024";
-// ══════════════════════════════
+// ════════════════════════════════════════════
+// 🔑 CONFIGURATION
+// ════════════════════════════════════════════
 
-// PWA Manifest inline
-const mf = {name:"طيار - المندوب",short_name:"طيار مندوب",start_url:"./",display:"standalone",background_color:"#0d0d0d",theme_color:"#f5a623",orientation:"portrait",lang:"ar",dir:"rtl",icons:[{src:"https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png",sizes:"192x192",type:"image/png"},{src:"https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png",sizes:"512x512",type:"image/png"}]};
+// Admin credentials (change these in production!)
+const ADMIN_PHONE = atob('MTIzNDU2Nzg5MA=='); // "1234567890"
+const ADMIN_PASS  = atob('YWRtaW4xMjM=');   // "admin123"
+
+// Archive password (encrypted)
+const ARCHIVE_PASS_RAW = atob('dGF5eWFyQDIwMjQ=');
+
+// PWA Manifest
+const mf = {name:"طيار - نظام التوصيل",short_name:"طيار",start_url:"./",display:"standalone",background_color:"#0d0d0d",theme_color:"#f5a623",orientation:"portrait",lang:"ar",dir:"rtl",icons:[{src:"https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png",sizes:"192x192",type:"image/png"}]};
 const mfBlob = new Blob([JSON.stringify(mf)],{type:'application/json'});
 const mfLink = document.createElement('link');
 mfLink.rel='manifest'; mfLink.href=URL.createObjectURL(mfBlob);
 document.head.appendChild(mfLink);
 
-// Service Worker — ملف sw.js المنفصل على Netlify
+// Service Worker
 let swReg = null;
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js')
@@ -239,66 +571,440 @@ firebase.initializeApp({
 });
 const db = firebase.firestore();
 
-// State
-let activeOrders=[],archivedOrders=[],curFilt='all',sndOn=true,known=new Set(),first=true,ctx=null,archUnlocked=false,mainView='today';
+// ════════════════════════════════════════════
+// 📦 STATE
+// ════════════════════════════════════════════
+let currentUser = null; // { phone, name, role:'driver'|'admin' }
+let activeOrders=[], archivedOrders=[], allOrders=[];
+let curFilt='all', sndOn=true, ctx=null, archUnlocked=false, mainView='today';
+let searchQuery='', curBrand='all', first=true;
+let pendingDriverId = null; // for pending approval drivers
 
-// Listener — بيستخدم docChanges عشان يكشف الأوردرات الجديدة بدقة
-db.collection('orders').onSnapshot(snap=>{
-  document.getElementById('load').style.display='none';
-  const all=[];
-  snap.forEach(d=>all.push({_id:d.id,...d.data()}));
-  all.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
-  activeOrders=all.filter(o=>!o.archived);
-  archivedOrders=all.filter(o=>o.archived);
+// Theme & Sound
+const savedTheme = localStorage.getItem('theme') || 'dark';
+if(savedTheme === 'light') applyTheme('light');
+sndOn = localStorage.getItem('sndOn') !== 'false';
 
-  // كشف الأوردرات الجديدة فقط — مش كل snapshot
-  if(!first){
-    snap.docChanges().forEach(change=>{
-      if(change.type==='added'){
-        const data={_id:change.doc.id,...change.doc.data()};
-        if(!data.archived) onNew(data);
+// ════════════════════════════════════════════
+// 🔐 AUTHENTICATION
+// ════════════════════════════════════════════
+
+function showRegister(){
+  document.getElementById('register-section').classList.add('show');
+  document.getElementById('show-register-link').style.display='none';
+  document.getElementById('login-err').style.display='none';
+}
+
+function hideRegister(){
+  document.getElementById('register-section').classList.remove('show');
+  document.getElementById('show-register-link').style.display='';
+}
+
+function doRegister(){
+  // Debug log
+  console.log('🔵 doRegister called');
+  showToast('⏳ جاري التسجيل...');
+
+  const name = document.getElementById('reg-name').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim().replace(/\D/g,'');
+  const pass = document.getElementById('reg-pass').value.trim();
+  const pass2 = document.getElementById('reg-pass2').value.trim();
+
+  console.log('📝 Registration data:', {name, phone, passLength: pass.length, pass2Length: pass2.length});
+
+  if(!name || !phone || !pass){
+    document.getElementById('login-err').textContent = '❌ املأ كل الحقول';
+    document.getElementById('login-err').style.display = 'block';
+    return;
+  }
+
+  if(pass.length < 4){
+    document.getElementById('login-err').textContent = '❌ كلمة السر لازم 4 أحرف على الأقل';
+    document.getElementById('login-err').style.display = 'block';
+    return;
+  }
+
+  if(pass !== pass2){
+    document.getElementById('login-err').textContent = '❌ كلمة السر مش متطابقة';
+    document.getElementById('login-err').style.display = 'block';
+    return;
+  }
+
+  // Check if phone already exists
+  db.collection('drivers').where('phone','==',phone).limit(1).get()
+    .then(snap=>{
+      console.log('📡 Check phone result:', {empty: snap.empty, size: snap.size});
+      if(!snap.empty){
+        const data = snap.docs[0].data();
+        if(data.banned){
+          document.getElementById('login-err').textContent = '❌ الرقم ده محظور';
+          document.getElementById('login-err').style.display = 'block';
+          return;
+        }
+        if(data.approved){
+          document.getElementById('login-err').textContent = '❌ الرقم ده مسجل قبل كده — كلم الأدمن';
+          document.getElementById('login-err').style.display = 'block';
+          return;
+        }
+        // Already pending - show pending screen
+        if(data.approved === false){
+          console.log('⏳ Already pending, showing pending screen');
+          showPendingScreen(snap.docs[0].id, data);
+          return;
+        }
+      }
+
+      // Register new pending driver
+      console.log('➕ Creating new driver record...');
+      db.collection('drivers').add({
+        name: name,
+        phone: phone,
+        password: pass,
+        approved: false,
+        banned: false,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        lastLogin: null
+      }).then(docRef=>{
+        console.log('✅ Driver created with ID:', docRef.id);
+        // Show pending screen
+        showPendingScreen(docRef.id, {name, phone});
+      }).catch(e=>{
+        console.error('❌ Error creating driver:', e);
+        document.getElementById('login-err').textContent = '❌ حصل خطأ في التسجيل: ' + e.message;
+        document.getElementById('login-err').style.display = 'block';
+      });
+    })
+    .catch(e=>{
+      console.error('❌ Error checking phone:', e);
+      document.getElementById('login-err').textContent = '❌ حصل خطأ في الاتصال: ' + e.message;
+      document.getElementById('login-err').style.display = 'block';
+    });
+}
+
+function showPendingScreen(docId, data){
+  pendingDriverId = docId;
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('pending-screen').classList.add('show');
+  document.getElementById('pend-name').textContent = data.name || '-';
+  document.getElementById('pend-phone').textContent = data.phone || '-';
+  document.getElementById('pend-date').textContent = new Date().toLocaleDateString('ar-EG');
+}
+
+function changePendingLogin(){
+  document.getElementById('pending-screen').classList.remove('show');
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('register-section').classList.add('show');
+  document.getElementById('show-register-link').style.display = 'none';
+  // Pre-fill the pending data
+  if(pendingDriverId){
+    db.collection('drivers').doc(pendingDriverId).get().then(doc=>{
+      if(doc.exists){
+        const data = doc.data();
+        document.getElementById('reg-name').value = data.name || '';
+        document.getElementById('reg-phone').value = data.phone || '';
       }
     });
   }
+}
 
-  first=false;
-  render(); counts(); online(true);
-  if(mainView==='archive'&&archUnlocked) renderArchive();
-},err=>{console.error(err);online(false);});
+function doLogin(){
+  const name = document.getElementById('login-name').value.trim();
+  const phone = document.getElementById('login-phone').value.trim().replace(/\D/g,'');
+  const pass  = document.getElementById('login-pass').value.trim();
 
+  if(!phone || !pass){
+    document.getElementById('login-err').textContent='❌ أدخل رقمك وكلمة السر';
+    document.getElementById('login-err').style.display='block';
+    return;
+  }
+
+  db.collection('drivers').where('phone','==',phone).limit(1).get()
+    .then(snap=>{
+      if(snap.empty){
+        // Check if admin phone
+        if(phone === ADMIN_PHONE && pass === ADMIN_PASS){
+          doAdminLogin_auto();
+          return;
+        }
+        document.getElementById('login-err').textContent='❌ الرقم مش مسجل — سجل من هنا أو كلم الأدمن';
+        document.getElementById('login-err').style.display='block';
+        return;
+      }
+
+      const doc = snap.docs[0];
+      const data = doc.data();
+
+      if(data.password !== pass){
+        document.getElementById('login-err').textContent='❌ كلمة السر غلط';
+        document.getElementById('login-err').style.display='block';
+        return;
+      }
+
+      if(data.banned){
+        document.getElementById('login-err').textContent='❌ حسابك محظور — كلم الأدمن';
+        document.getElementById('login-err').style.display='block';
+        return;
+      }
+
+      if(data.approved === false){
+        // Still pending
+        showPendingScreen(doc.id, data);
+        return;
+      }
+
+      // Update name if provided
+      if(name && name !== data.name){
+        db.collection('drivers').doc(doc.id).update({name: name});
+      }
+
+      // Update last login
+      db.collection('drivers').doc(doc.id).update({lastLogin: firebase.firestore.FieldValue.serverTimestamp()});
+
+      // Save current user
+      currentUser = { id: doc.id, phone: data.phone, name: data.name || name, role: 'driver' };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+      // Hide login, show app
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('main-app').style.display='block';
+      document.getElementById('app-title').textContent = 'طيار';
+      document.getElementById('app-sub').textContent = 'مرحباً ' + currentUser.name;
+      document.getElementById('driver-tabs').style.display='flex';
+      document.getElementById('admin-tabs').style.display='none';
+      document.getElementById('end-day-btn').style.display='';
+      // Hide all admin views
+      document.getElementById('admin-view').style.display='none';
+      document.getElementById('admin-perf-view').style.display='none';
+      document.getElementById('admin-orders-view').style.display='none';
+
+      // Switch to today view
+      switchMain('today', document.querySelector('#driver-tabs .mtab'));
+
+      // Setup real-time listener for this driver
+      setupDriverListener();
+      showToast('🎉 أهلاً ' + currentUser.name);
+    })
+    .catch(e=>{
+      console.error(e);
+      document.getElementById('login-err').textContent='❌ حصل خطأ في الاتصال';
+      document.getElementById('login-err').style.display='block';
+    });
+}
+
+function doAdminLogin(){
+  const phone = document.getElementById('admin-phone').value.trim().replace(/\D/g,'');
+  const pass  = document.getElementById('admin-pass').value.trim();
+
+  if(phone !== ADMIN_PHONE || pass !== ADMIN_PASS){
+    document.getElementById('admin-login-err').style.display='block';
+    return;
+  }
+
+  currentUser = { phone: ADMIN_PHONE, name: 'الأدمن', role: 'admin' };
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+  document.getElementById('admin-login-modal').classList.remove('show');
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('main-app').style.display='block';
+  document.getElementById('app-title').textContent = 'طيار | Admin';
+  document.getElementById('app-sub').textContent = 'لوحة التحكم';
+  document.getElementById('driver-tabs').style.display='none';
+  document.getElementById('admin-tabs').style.display='flex';
+  document.getElementById('end-day-btn').style.display='none';
+
+  setupAdminListener();
+  showToast('👑 أهلاً الأدمن');
+}
+
+function doAdminLogin_auto(){
+  currentUser = { phone: ADMIN_PHONE, name: 'الأدمن', role: 'admin' };
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('main-app').style.display='block';
+  document.getElementById('app-title').textContent = 'طيار | Admin';
+  document.getElementById('app-sub').textContent = 'لوحة التحكم';
+  document.getElementById('driver-tabs').style.display='none';
+  document.getElementById('admin-tabs').style.display='flex';
+  document.getElementById('end-day-btn').style.display='none';
+  setupAdminListener();
+}
+
+function showAdminLogin(){
+  document.getElementById('admin-login-modal').classList.add('show');
+  setTimeout(()=>document.getElementById('admin-phone').focus(),300);
+}
+
+function doLogout(){
+  currentUser = null;
+  pendingDriverId = null;
+  localStorage.removeItem('currentUser');
+  document.getElementById('main-app').style.display='none';
+  document.getElementById('pending-screen').classList.remove('show');
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('login-phone').value='';
+  document.getElementById('login-pass').value='';
+  document.getElementById('login-name').value='';
+  document.getElementById('login-err').style.display='none';
+  document.getElementById('app-title').textContent = 'طيار';
+  document.getElementById('app-sub').textContent = 'لوحة المندوب';
+  document.getElementById('driver-tabs').style.display='flex';
+  document.getElementById('admin-tabs').style.display='none';
+  document.getElementById('end-day-btn').style.display='';
+  document.getElementById('register-section').classList.remove('show');
+  document.getElementById('show-register-link').style.display='';
+  activeOrders=[]; archivedOrders=[]; allOrders=[];
+}
+
+// Auto-login from saved session
+function autoLogin(){
+  try{
+    const saved = JSON.parse(localStorage.getItem('currentUser')||'{}');
+    if(saved && saved.role === 'admin'){
+      doAdminLogin_auto();
+    } else if(saved && saved.role === 'driver'){
+      doLogin_auto(saved);
+    }
+  }catch(e){}
+}
+
+function doLogin_auto(saved){
+  db.collection('drivers').where('phone','==',saved.phone).limit(1).get()
+    .then(snap=>{
+      if(!snap.empty){
+        const data = snap.docs[0].data();
+        if(data.banned){
+          doLogout();
+          return;
+        }
+        if(data.approved === false){
+          // Was approved before but got pending — treat as pending
+          showPendingScreen(snap.docs[0].id, data);
+          return;
+        }
+        currentUser = { id: snap.docs[0].id, phone: data.phone, name: data.name || saved.name, role: 'driver' };
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        document.getElementById('login-screen').style.display='none';
+        document.getElementById('main-app').style.display='block';
+        document.getElementById('app-title').textContent = 'طيار';
+        document.getElementById('app-sub').textContent = 'مرحباً ' + currentUser.name;
+        document.getElementById('driver-tabs').style.display='flex';
+        document.getElementById('admin-tabs').style.display='none';
+        document.getElementById('end-day-btn').style.display='';
+        // Hide all admin views
+        document.getElementById('admin-view').style.display='none';
+        document.getElementById('admin-perf-view').style.display='none';
+        document.getElementById('admin-orders-view').style.display='none';
+        // Switch to today view
+        switchMain('today', document.querySelector('#driver-tabs .mtab'));
+        setupDriverListener();
+      } else {
+        doLogout();
+      }
+    });
+}
+
+// ════════════════════════════════════════════
+// 📡 DRIVER LISTENER
+// ════════════════════════════════════════════
+function setupDriverListener(){
+  db.collection('orders').onSnapshot(snap=>{
+    document.getElementById('load').style.display='none';
+    allOrders=[];
+    snap.forEach(d=>allOrders.push({_id:d.id,...d.data()}));
+    allOrders.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+
+    // Filter: only show orders for this driver
+    activeOrders = allOrders.filter(o=>{
+      if(o.archived) return false;
+      if(o.driverPhone) return o.driverPhone === currentUser.phone;
+      return !o.driverPhone; // unassigned orders also shown
+    });
+
+    archivedOrders = allOrders.filter(o=>{
+      if(!o.archived) return false;
+      if(o.driverPhone) return o.driverPhone === currentUser.phone;
+      return !o.driverPhone;
+    });
+
+    // Detect new orders
+    if(!first){
+      snap.docChanges().forEach(change=>{
+        if(change.type==='added'){
+          const data={_id:change.doc.id,...change.doc.data()};
+          if(!data.archived && (!data.driverPhone || data.driverPhone===currentUser.phone)){
+            onNew(data);
+          }
+        }
+      });
+    }
+
+    first=false;
+    render(); counts(); online(true);
+    if(mainView==='archive'&&archUnlocked) renderArchive();
+    if(mainView==='stats') renderStats();
+  },err=>{
+    console.error(err); online(false);
+    setTimeout(()=>{ showToast('🔄 جاري إعادة الاتصال...'); },5000);
+  });
+}
+
+// ════════════════════════════════════════════
+// 📡 ADMIN LISTENER
+// ════════════════════════════════════════════
+function setupAdminListener(){
+  // Listen to orders
+  db.collection('orders').onSnapshot(snap=>{
+    document.getElementById('load').style.display='none';
+    allOrders=[];
+    snap.forEach(d=>allOrders.push({_id:d.id,...d.data()}));
+    allOrders.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+
+    activeOrders = allOrders.filter(o=>!o.archived);
+    archivedOrders = allOrders.filter(o=>o.archived);
+
+    render(); counts(); online(true);
+    if(mainView==='admin-perf') renderPerf();
+    if(mainView==='admin-orders') renderAdminOrders();
+  },err=>{ console.error(err); online(false); });
+
+  // Listen to drivers (both approved and pending)
+  db.collection('drivers').onSnapshot(snap=>{
+    renderDrivers();
+    renderPendingDrivers();
+    if(mainView==='admin-perf') renderPerf();
+  });
+}
+
+// ════════════════════════════════════════════
+// 🔔 onNew — عند وصول طلب جديد
+// ════════════════════════════════════════════
 function onNew(o){
-  // صوت 6 مرات
   if(sndOn){
-    [0,1400,2800,4200,5600,7000].forEach(delay=>{
+    [0,1400,2800].forEach(delay=>{
       setTimeout(()=>{ if(ctx) ctx.resume().then(beep); else beep(); }, delay);
     });
   }
+  if(navigator.vibrate) navigator.vibrate([300,100,300]);
 
-  // إشعار نظام حقيقي عن طريق Service Worker
   if(Notification.permission==='granted'){
-    const title = '🛵 طلب جديد! ' + (o.orderNum||'');
-    const body  = '👤 '+(o.name||'-')+'  |  📍 '+(o.address||'-')+'\n💰 '+(o.grandTotal||0).toLocaleString('ar-EG')+' ج.م';
-    const icon  = 'https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png';
-    const tag   = 'order-'+o._id;
-
-    const sendNotif = () => {
-      // بعت للـ SW عشان يطلع الإشعار برا التطبيق
-      if(navigator.serviceWorker.controller){
-        navigator.serviceWorker.controller.postMessage({
-          type:'NEW_ORDER', title, body, icon, tag
-        });
-      } else if(swReg){
-        swReg.showNotification(title,{body,icon,badge:icon,requireInteraction:true,vibrate:[500,200,500,200,500],tag,renotify:true});
-      } else {
-        try{ new Notification(title,{body,icon}); }catch(e){}
-      }
-    };
-    sendNotif();
+    const title='🛵 طلب جديد! '+(o.orderNum||'');
+    const body='👤 '+(o.name||'-')+'  |  📍 '+(o.address||'-')+'\n💰 '+(o.grandTotal||0).toLocaleString('ar-EG')+' ج.م';
+    const icon='https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png';
+    const tag='order-'+o._id;
+    if(navigator.serviceWorker.controller){
+      navigator.serviceWorker.controller.postMessage({type:'NEW_ORDER',title,body,icon,tag});
+    } else if(swReg){
+      swReg.showNotification(title,{body,icon,badge:icon,requireInteraction:true,vibrate:[500,200,500],tag,renotify:true});
+    } else {
+      try{ new Notification(title,{body,icon}); }catch(e){}
+    }
   }
-
-  // بانر واضح جوه التطبيق
+  
+  // 📱 بعت إشعار Telegram
+  const tgMsg=`👤 ${o.name||'-'}\n📍 ${o.address||'-'}\n💰 ${(o.grandTotal||0).toLocaleString('ar-EG')} ج.م`;
+  sendTelegramNotification('طلب جديد!', tgMsg, o.orderNum||o._id);
+  
   showAlertBanner(o);
-
   setTimeout(()=>{
     const c=document.getElementById('c-'+o._id);
     if(c){c.classList.add('fl');setTimeout(()=>c.classList.remove('fl'),2000);}
@@ -306,26 +1012,14 @@ function onNew(o){
 }
 
 function showAlertBanner(o){
-  // شيل القديم لو موجود
   const old=document.getElementById('alert-banner');
   if(old) old.remove();
-
   const banner=document.createElement('div');
   banner.id='alert-banner';
-  banner.style.cssText=`
-    position:fixed;top:0;left:0;right:0;z-index:9999;
-    background:linear-gradient(135deg,#f5a623,#e8940f);
-    color:#000;padding:14px 16px;
-    display:flex;align-items:center;gap:12px;
-    box-shadow:0 4px 24px rgba(245,166,35,.5);
-    animation:slideDown .3s ease;
-    cursor:pointer;
-  `;
-
+  banner.style.cssText=`position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#f5a623,#e8940f);color:#000;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(245,166,35,.5);animation:slideDown .3s ease;cursor:pointer`;
   const style=document.createElement('style');
   style.textContent='@keyframes slideDown{from{transform:translateY(-100%)}to{transform:translateY(0)}}';
   document.head.appendChild(style);
-
   banner.innerHTML=`
     <div style="font-size:28px">🛵</div>
     <div style="flex:1">
@@ -333,27 +1027,40 @@ function showAlertBanner(o){
       <div style="font-size:12px;margin-top:2px;opacity:.8">👤 ${o.name||'-'} &nbsp;|&nbsp; 📍 ${o.address||'-'}</div>
       <div style="font-size:12px;margin-top:1px;opacity:.8">💰 ${(o.grandTotal||0).toLocaleString('ar-EG')} ج.م</div>
     </div>
-    <div style="font-size:20px;opacity:.6">×</div>
-  `;
-
+    <div style="font-size:20px;opacity:.6">×</div>`;
   banner.onclick=()=>{ banner.remove(); };
   document.body.prepend(banner);
-
-  // يختفي تلقائي بعد 8 ثواني
   setTimeout(()=>{ if(banner.parentNode) banner.remove(); }, 8000);
 }
 
+// ════════════════════════════════════════════
+// 🎨 RENDER
+// ════════════════════════════════════════════
 function render(){
   const list=document.getElementById('list');
   list.querySelectorAll('.card').forEach(c=>c.remove());
+
   const shown=activeOrders.filter(o=>{
     const st=o.driverStatus||'pending';
     if(curFilt==='all') return true;
     if(curFilt==='active') return ['received','preparing','on_way'].includes(st);
     return st===curFilt;
+  }).filter(o=>{
+    if(curBrand!=='all' && o.brand!==curBrand) return false;
+    return true;
+  }).filter(o=>{
+    if(!searchQuery) return true;
+    const q=searchQuery.toLowerCase();
+    return (o.orderNum||'').toLowerCase().includes(q)
+        || (o.name||'').toLowerCase().includes(q)
+        || (o.address||'').toLowerCase().includes(q)
+        || (o.phone||'').includes(q)
+        || (o.brand||'').toLowerCase().includes(q);
   });
+
   document.getElementById('emp').classList.toggle('show',shown.length===0);
   shown.forEach(o=>list.appendChild(buildCard(o)));
+  updateBrandFilter();
 }
 
 function buildCard(o){
@@ -361,11 +1068,11 @@ function buildCard(o){
   const div=document.createElement('div');
   div.className='card'+(st==='pending'?' isnew':'');
   div.id='c-'+o._id;
+
   const stLbl={pending:'⚪ طلب جديد',received:'🟣 مستلم',preparing:'🟠 بيتجهز',on_way:'🔵 في الطريق',delivered:'✅ تم التوصيل'};
   const stCls={pending:'p',received:'r',preparing:'p',on_way:'k',delivered:'d'};
   const time=o.timestamp?new Date(o.timestamp).toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'}):'';
 
-  // Items — n=الاسم، p=السعر، q=الكمية
   let ihtml='';
   const items=o.items;
   if(items){
@@ -375,7 +1082,8 @@ function buildCard(o){
       const price=it.p||it.price||0;
       const qty=it.q||it.quantity||it.qty||1;
       const tot=it.t||(price*qty);
-      ihtml+=`<div class="irow"><span class="iname">${name} ${o.brand?`(${o.brand})`:''}</span><span class="iqty">${qty}×</span><span class="ipr">${tot.toLocaleString('ar-EG')} ج</span></div>`;
+      const ib=it.brand||it.b||'';
+      ihtml+=`<div class="irow"><span class="iname">${name} ${ib?`(${ib})`:''}</span><span class="iqty">${qty}×</span><span class="ipr">${tot.toLocaleString('ar-EG')} ج</span></div>`;
     });
   }
 
@@ -384,12 +1092,32 @@ function buildCard(o){
   const ph=o.phone||'';
   const pay=o.payment==='cod'?'💵 كاش عند الاستلام':o.payment==='online'?'📲 أونلاين':o.payment||'';
 
+  // Delivery time calculation
+  let deliveryTimeStr='';
+  if(o.deliveredAt && o.timestamp){
+    const diffMin = Math.round((new Date(o.deliveredAt) - new Date(o.timestamp)) / 60000);
+    deliveryTimeStr=`<div class="tr"><span>⏱️ وقت التوصيل</span><span>${diffMin} دقيقة</span></div>`;
+  }
+
+  const mapLink = o.address ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.address)}` : null;
+  // لوكيشن العميل الحقيقي (لو بعته) — بيتحط جنب زر التليفون ويفتح على طول
+  let locLink=null;
+  if(o.location){
+    locLink = /^https?:\/\//i.test(o.location) ? o.location : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(o.location)}`;
+  } else if(o.lat && o.lng){
+    locLink = `https://www.google.com/maps/search/?api=1&query=${o.lat},${o.lng}`;
+  }
+
+  // Driver info display (admin only)
+  const driverInfo = o.driverName ? `<div class="row"><span class="ri">🛵</span><div><div class="rl">المندوب</div><div class="rv">${o.driverName}</div></div></div>` : '';
+
   div.innerHTML=`
   <div class="ch">
     <div><div class="oid">${o.orderNum||o._id}</div>${time?`<div class="tm">⏰ ${time}</div>`:''}</div>
     <div class="badge ${stCls[st]}">${stLbl[st]}</div>
   </div>
   <div class="cb">
+    ${driverInfo}
     <div class="row"><span class="ri">👤</span><div><div class="rl">اسم العميل</div><div class="rv">${o.name||'-'}</div></div></div>
     <div class="row"><span class="ri">📍</span><div><div class="rl">العنوان</div><div class="rv">${o.address||'-'}</div></div></div>
     ${ph?`<div class="row"><span class="ri">📞</span><div><div class="rl">الموبايل</div><div class="rv" style="direction:ltr">${ph}</div></div></div>`:''}
@@ -400,73 +1128,500 @@ function buildCard(o){
       <div class="tr"><span>إجمالي الطلب</span><span>${ot.toLocaleString('ar-EG')} ج.م</span></div>
       ${dv?`<div class="tr"><span>🛵 توصيل</span><span>${dv.toLocaleString('ar-EG')} ج.م</span></div>`:''}
       ${sv?`<div class="tr"><span>🔧 خدمة</span><span>${sv.toLocaleString('ar-EG')} ج.م</span></div>`:''}
+      ${deliveryTimeStr}
       <div class="tr fin"><span>💰 الإجمالي</span><span>${gt.toLocaleString('ar-EG')} ج.م</span></div>
       ${pay?`<div class="tr" style="margin-top:2px"><span>الدفع</span><span>${pay}</span></div>`:''}
     </div>
   </div>
   <div class="acts">
     ${ph?`<button class="btn-c" onclick="location.href='tel:${ph}'">📞</button>`:''}
+    ${locLink?`<button class="btn-c" onclick="window.open('${locLink}','_blank')">📍</button>`:''}
+    ${mapLink?`<button class="btn btn-map" onclick="window.open('${mapLink}','_blank')">🗺️ الخرائط</button>`:''}
     ${st==='pending'?`<button class="btn btn-r" onclick="upd('${o._id}','received')">📥 استلام</button>`:''}
     ${st==='received'?`<button class="btn btn-o" onclick="upd('${o._id}','preparing')">🍳 أخذت الطلب</button>`:''}
-    ${st==='preparing'?`<button class="btn btn-p" onclick="upd('${o._id}','on_way')">📦 استلمت الطلب من المطعم</button>`:''}
+    ${st==='preparing'?`<button class="btn btn-p" onclick="upd('${o._id}','on_way')">📦 استلمت من المطعم</button>`:''}
     ${st==='on_way'?`<button class="btn btn-d" onclick="upd('${o._id}','delivered')">✅ وصلت الطلب</button>`:''}
     ${st==='delivered'?`<button class="btn btn-dn" disabled>✅ تم التوصيل</button>`:''}
+    ${st!=='pending'&&st!=='delivered'?`<button class="btn btn-undo" onclick="undoStatus('${o._id}','${st}')">↩️ رجوع</button>`:''}
   </div>`;
+
+  addSwipeListener(div);
   return div;
 }
 
+function addSwipeListener(el){
+  let startX=0, currentX=0, isDragging=false;
+  el.addEventListener('touchstart', e=>{ startX=e.touches[0].clientX; isDragging=true; el.classList.add('swiping'); },{passive:true});
+  el.addEventListener('touchmove', e=>{
+    if(!isDragging) return;
+    currentX=e.touches[0].clientX;
+    const diff=currentX-startX;
+    if(diff>0) return;
+    el.style.setProperty('--swipe-x',Math.min(Math.max(diff,-160),0)+'px');
+  },{passive:true});
+  el.addEventListener('touchend',()=>{
+    isDragging=false;
+    el.style.setProperty('--swipe-x','0px');
+    el.classList.remove('swiping');
+    startX=0; currentX=0;
+  });
+}
+
+// ════════════════════════════════════════════
+// 🔄 UPDATE ORDER STATUS
+// ════════════════════════════════════════════
 function upd(id,status){
+  const btns=document.querySelectorAll(`#c-${id} .btn:not(.btn-dn):not(.btn-c):not(.btn-undo):not(.btn-wa):not(.btn-map)`);
+  btns.forEach(b=>b.disabled=true);
+
   const update={driverStatus:status};
   if(status==='received') update.receivedAt=new Date().toISOString();
   if(status==='preparing') update.preparingAt=new Date().toISOString();
   if(status==='on_way') update.onWayAt=new Date().toISOString();
   if(status==='delivered') update.deliveredAt=new Date().toISOString();
-  db.collection('orders').doc(id).update(update)
-    .catch(e=>{console.error(e);alert('حصل خطأ، حاول تاني');});
+
+  // If driver, also save driver info on the order
+  if(currentUser && currentUser.role==='driver'){
+    update.driverPhone=currentUser.phone;
+    update.driverName=currentUser.name;
+    update.driverId=currentUser.id||'';
+  }
+
+  const retry=(attempts=0)=>{
+    db.collection('orders').doc(id).update(update)
+      .then(()=>{
+          showToast(getStatusMsg(status));
+          if(status==='delivered' && navigator.vibrate) navigator.vibrate([200,100,200,100,200]);
+        })
+      .catch(e=>{
+        if(attempts<3) setTimeout(()=>retry(attempts+1), 2000*attempts);
+        else { showToast('❌ حصل خطأ في التحديث'); btns.forEach(b=>b.disabled=false); }
+    });
+  };
+  retry();
 }
 
-function counts(){
-  const p=activeOrders.filter(o=>(o.driverStatus||'pending')==='pending').length;
-  const k=activeOrders.filter(o=>['received','preparing','on_way'].includes(o.driverStatus)).length;
-  const d=activeOrders.filter(o=>o.driverStatus==='delivered').length;
-  document.getElementById('s1').textContent=p;
-  document.getElementById('s2').textContent=k;
-  document.getElementById('s3').textContent=d;
-  document.getElementById('t0').textContent=activeOrders.length;
-  document.getElementById('t1').textContent=p;
-  document.getElementById('t2').textContent=k;
-  document.getElementById('t3').textContent=d;
+function getStatusMsg(status){
+  const msgs={received:'📥 تم الاستلام',preparing:'🍳 الطلب بيتجهز',on_way:'📦 في الطريق للعميل',delivered:'✅ تم التوصيل بنجاح!'};
+  return msgs[status]||'تم التحديث';
 }
 
-function filt(f,btn){
-  curFilt=f;
-  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
+function undoStatus(id, currentStatus){
+  const prevStates={received:'pending',preparing:'received',on_way:'preparing'};
+  const prev=prevStates[currentStatus];
+  if(!prev) return;
+  const undoData={driverStatus:prev};
+  if(currentStatus==='received') undoData.receivedAt=null;
+  if(currentStatus==='preparing'){undoData.receivedAt=null;undoData.preparingAt=null;}
+  if(currentStatus==='on_way'){undoData.receivedAt=null;undoData.preparingAt=null;undoData.onWayAt=null;}
+  db.collection('orders').doc(id).update(undoData)
+    .then(()=>showToast('↩️ تم التراجع'))
+    .catch(e=>showToast('❌ فشل التراجع'));
+}
+
+// ════════════════════════════════════════════
+// ════════════════════════════════════════════
+// 🔍 SEARCH & FILTERS
+// ════════════════════════════════════════════
+function toggleSearch(){
+  const bar=document.getElementById('search-bar');
+  bar.classList.toggle('show');
+  if(bar.classList.contains('show')) document.getElementById('search-input').focus();
+}
+function onSearch(q){ searchQuery=q.trim(); render(); }
+
+function updateBrandFilter(){
+  const brands=[...new Set(activeOrders.map(o=>o.brand).filter(Boolean))];
+  const container=document.getElementById('brand-filter');
+  if(brands.length<=1){container.classList.remove('show');return;}
+  container.classList.add('show');
+  let html=`<button class="bf-btn${curBrand==='all'?' active':''}" onclick="setBrand('all',this)">الكل</button>`;
+  brands.forEach(b=>{html+=`<button class="bf-btn${curBrand===b?' active':''}" onclick="setBrand('${b}',this)">${b}</button>`;});
+  container.innerHTML=html;
+}
+function setBrand(brand,btn){
+  curBrand=brand;
+  document.querySelectorAll('.bf-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   render();
 }
 
+// ════════════════════════════════════════════
+// 📊 STATS
+// ════════════════════════════════════════════
+function renderStats(){
+  const container=document.getElementById('stats-content');
+  const totalDelivered=activeOrders.filter(o=>o.driverStatus==='delivered').length;
+  const totalActive=activeOrders.length;
+  const totalRevenue=activeOrders.reduce((s,o)=>s+(o.grandTotal||0),0);
+  const deliveredRevenue=activeOrders.filter(o=>o.driverStatus==='delivered').reduce((s,o)=>s+(o.grandTotal||0),0);
+
+  let avgDelivery=0, deliveryCount=0;
+  activeOrders.forEach(o=>{
+    if(o.deliveredAt && o.timestamp){
+      const diffMin=Math.round((new Date(o.deliveredAt)-new Date(o.timestamp))/60000);
+      avgDelivery+=diffMin; deliveryCount++;
+    }
+  });
+  if(deliveryCount>0) avgDelivery=Math.round(avgDelivery/deliveryCount);
+
+  // Delivery fees for delivered orders
+  const deliveredDeliveryFees = activeOrders
+    .filter(o=>o.driverStatus==='delivered')
+    .reduce((s,o)=>s+(o.delivery||0),0);
+
+  // Debt: every 100 EGP in delivery fees → 20 EGP owed
+  const totalDebt = Math.floor(deliveredDeliveryFees / 100) * 20;
+  const remainingForNextDebt = deliveredDeliveryFees % 100;
+
+  const statusCount={pending:0,received:0,preparing:0,on_way:0,delivered:0};
+  activeOrders.forEach(o=>{const st=o.driverStatus||'pending';if(statusCount[st]!==undefined)statusCount[st]++;});
+
+  const brandCount={};
+  activeOrders.forEach(o=>{if(o.brand){if(!brandCount[o.brand])brandCount[o.brand]={count:0,revenue:0};brandCount[o.brand].count++;brandCount[o.brand].revenue+=(o.grandTotal||0);}});
+
+  let brandHTML='';
+  Object.entries(brandCount).sort((a,b)=>b[1].count-a[1].count).forEach(([brand,data])=>{
+    brandHTML+=`<div class="stat-row"><span>🍕 ${brand}</span><span class="stat-val">${data.count} طلب — ${data.revenue.toLocaleString('ar-EG')} ج</span></div>`;
+  });
+
+  container.innerHTML=`
+    <div class="stat-card">
+      <div class="stat-title">📊 ملخص اليوم</div>
+      <div class="stat-row"><span>إجمالي الطلبات</span><span class="stat-val">${totalActive}</span></div>
+      <div class="stat-row"><span>تم التوصيل</span><span class="stat-val" style="color:var(--grn)">${totalDelivered}</span></div>
+      <div class="stat-row"><span>إجمالي الإيرادات</span><span class="stat-val">${totalRevenue.toLocaleString('ar-EG')} ج.م</span></div>
+      <div class="stat-row"><span>إيرادات التوصيل</span><span class="stat-val" style="color:var(--grn)">${deliveredRevenue.toLocaleString('ar-EG')} ج.م</span></div>
+      <div class="stat-row"><span>متوسط وقت التوصيل</span><span class="stat-val">${avgDelivery||'-'} دقيقة</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-title">💰 المديونية</div>
+      <div class="stat-row"><span>إجمالي رسوم التوصيل الموصلة</span><span class="stat-val" style="color:var(--grn)">${deliveredDeliveryFees.toLocaleString('ar-EG')} ج.م</span></div>
+      <div class="stat-row"><span>المديونية المستحقة (20 من كل 100)</span><span class="stat-val" style="color:var(--red);font-weight:900">${totalDebt.toLocaleString('ar-EG')} ج.م</span></div>
+      <div class="stat-row"><span>إجراء التوصيل حتى المديونية الجاية</span><span class="stat-val" style="color:var(--mut)">${100 - remainingForNextDebt} ج.م</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-title">📈 حسب الحالة</div>
+      <div class="stat-row"><span>⚪ جديدة</span><span class="stat-val" style="color:var(--acc)">${statusCount.pending}</span></div>
+      <div class="stat-row"><span>🟣 مستلمة</span><span class="stat-val" style="color:var(--pur)">${statusCount.received}</span></div>
+      <div class="stat-row"><span>🟠 بتتجهز</span><span class="stat-val" style="color:var(--pur)">${statusCount.preparing}</span></div>
+      <div class="stat-row"><span>🔵 في الطريق</span><span class="stat-val" style="color:var(--blu)">${statusCount.on_way}</span></div>
+      <div class="stat-row"><span>✅ تم التوصيل</span><span class="stat-val" style="color:var(--grn)">${statusCount.delivered}</span></div>
+    </div>
+    ${brandHTML?`<div class="stat-card"><div class="stat-title">🏪 حسب البراند</div>${brandHTML}</div>`:''}`;
+}
+
+// ════════════════════════════════════════════
+// 📊 ADMIN — DRIVER PERFORMANCE EVALUATION
+// ════════════════════════════════════════════
+function renderPerf(){
+  const container=document.getElementById('perf-content');
+  container.innerHTML='';
+
+  db.collection('drivers').get().then(dSnap=>{
+    db.collection('orders').get().then(oSnap=>{
+      const drivers=[];
+      dSnap.forEach(d=>{
+        const data=d.data();
+        if(!data.approved) return; // skip pending drivers
+
+        const driverOrders=oSnap.docs.filter(od=>{
+          const o=od.data();
+          return (o.driverPhone===data.phone || o.driverId===d.id) && o.deliveredAt;
+        });
+
+        const totalOrders=oSnap.docs.filter(od=>{
+          const o=od.data();
+          return o.driverPhone===data.phone || o.driverId===d.id;
+        }).length;
+
+        let totalDeliveryTime=0, deliveredCount=0;
+        driverOrders.forEach(od=>{
+          const o=od.data();
+          if(o.deliveredAt && o.timestamp){
+            const diffMin=(new Date(o.deliveredAt)-new Date(o.timestamp))/60000;
+            totalDeliveryTime+=diffMin;
+            deliveredCount++;
+          }
+        });
+
+        const avgTime=deliveredCount>0?Math.round(totalDeliveryTime/deliveredCount):null;
+        const totalRevenue=driverOrders.reduce((s,od)=>s+(od.data().grandTotal||0),0);
+        const totalDeliveryFees=driverOrders.reduce((s,od)=>s+(od.data().delivery||0),0);
+        const debt=Math.floor(totalDeliveryFees/100)*20;
+
+        // Evaluate performance
+        let grade='غير معروف', gradeClass='';
+        if(deliveredCount>=10){
+          if(avgTime<=25){ grade='ممتاز 🌟'; gradeClass='excellent'; }
+          else if(avgTime<=40){ grade='جيد 👍'; gradeClass='good'; }
+          else if(avgTime<=60){ grade='متوسط 😐'; gradeClass='average'; }
+          else { grade='ضعيف ⚠️'; gradeClass='poor'; }
+        } else if(deliveredCount>=5){
+          if(avgTime<=30){ grade='جيد 👍'; gradeClass='good'; }
+          else if(avgTime<=50){ grade='متوسط 😐'; gradeClass='average'; }
+          else { grade='ضعيف ⚠️'; gradeClass='poor'; }
+        } else if(deliveredCount>0){
+          if(avgTime<=35){ grade='جيد 👍'; gradeClass='good'; }
+          else { grade='متوسط 😐'; gradeClass='average'; }
+        } else {
+          grade='بدون بيانات'; gradeClass='';
+        }
+
+        drivers.push({
+          name:data.name, phone:data.phone,
+          totalOrders, deliveredCount, avgTime,
+          totalRevenue, totalDeliveryFees, debt,
+          grade, gradeClass
+        });
+      });
+
+      // Sort by performance (excellent first)
+      const gradeOrder={excellent:0,good:1,average:2,poor:3,'':4};
+      drivers.sort((a,b)=>gradeOrder[a.gradeClass]-gradeOrder[b.gradeClass]);
+
+      container.innerHTML=drivers.map(d=>`
+        <div class="perf-card">
+          <div class="perf-header">
+            <div class="perf-name">🛵 ${d.name}</div>
+            <div class="perf-grade ${d.gradeClass}">${d.grade}</div>
+          </div>
+          <div class="perf-stats">
+            <div class="perf-stat"><div class="perf-stat-val">${d.totalOrders}</div><div class="perf-stat-label">إجمالي الطلبات</div></div>
+            <div class="perf-stat"><div class="perf-stat-val">${d.deliveredCount}</div><div class="perf-stat-label">تم التوصيل</div></div>
+            <div class="perf-stat"><div class="perf-stat-val">${d.avgTime||'-'} د</div><div class="perf-stat-label">متوسط وقت التوصيل</div></div>
+            <div class="perf-stat"><div class="perf-stat-val" style="color:var(--grn)">${d.totalRevenue.toLocaleString('ar-EG')}</div><div class="perf-stat-label">إيرادات</div></div>
+            <div class="perf-stat"><div class="perf-stat-val" style="color:var(--red);font-weight:900">${d.debt.toLocaleString('ar-EG')} ج</div><div class="perf-stat-label">مديونية</div></div>
+          </div>
+          ${d.avgTime?`<div class="perf-time-bar">
+            <div class="perf-time-label"><span>وقت التوصيل</span><span>${d.avgTime} دقيقة</span></div>
+            <div class="perf-bar-bg"><div class="perf-bar-fill" style="width:${Math.min(100,d.avgTime)}%;background:${d.avgTime<=30?'var(--grn)':d.avgTime<=50?'var(--blu)':d.avgTime<=60?'var(--acc)':'var(--red)'}"></div></div>
+          </div>`:''}
+        </div>
+      `).join('') || '<div style="text-align:center;padding:40px;color:var(--mut)">مفيش بيانات لحد دلوقتي</div>';
+    });
+  });
+}
+
+// ════════════════════════════════════════════
+// 👥 ADMIN — DRIVER MANAGEMENT
+// ════════════════════════════════════════════
+function addDriver(){
+  const name=document.getElementById('new-drv-name').value.trim();
+  const phone=document.getElementById('new-drv-phone').value.trim().replace(/\D/g,'');
+  const pass=document.getElementById('new-drv-pass').value.trim();
+
+  if(!name||!phone||!pass){
+    showToast('❌ املأ كل الحقول');
+    return;
+  }
+
+  db.collection('drivers').where('phone','==',phone).limit(1).get().then(snap=>{
+    if(!snap.empty){
+      showToast('❌ الرقم ده مسجل قبل كده');
+      return;
+    }
+
+    db.collection('drivers').add({
+      name, phone, password: pass,
+      approved: true,
+      banned: false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      lastLogin: null
+    }).then(()=>{
+      showToast('✅ تم إضافة المندوب: ' + name);
+      document.getElementById('new-drv-name').value='';
+      document.getElementById('new-drv-phone').value='';
+      document.getElementById('new-drv-pass').value='';
+      renderDrivers();
+    });
+  });
+}
+
+function banDriver(id){
+  if(!confirm('متأكد عايز تحظر المندوب ده؟ مش هيقدر يفتح التطبيق تاني')) return;
+  db.collection('drivers').doc(id).update({banned:true})
+    .then(()=>showToast('🚫 تم حظر المندوب'));
+}
+
+function unbanDriver(id){
+  db.collection('drivers').doc(id).update({banned:false})
+    .then(()=>showToast('✅ تم إزالة الحظر'));
+}
+
+function deleteDriver(id){
+  if(!confirm('متأكد عايز تحذف المندوب ده نهائي؟')) return;
+  db.collection('drivers').doc(id).delete()
+    .then(()=>showToast('🗑️ تم حذف المندوب'));
+}
+
+// ════════════════════════════════════════════
+// 🔔 ADMIN — PENDING APPROVALS
+// ════════════════════════════════════════════
+function renderPendingDrivers(){
+  const section = document.getElementById('pending-section');
+  const container = document.getElementById('pending-drivers-list');
+  const badge = document.getElementById('pending-count-badge');
+
+  db.collection('drivers').get().then(snap=>{
+    const pending = snap.docs.filter(d=>{
+      const data = d.data();
+      return data.approved === false && !data.banned;
+    });
+    if(pending.length === 0){
+      section.style.display = 'none';
+      return;
+    }
+    section.style.display = 'block';
+    badge.textContent = pending.length;
+
+    container.innerHTML = pending.map(d=>{
+      const data = d.data();
+      const regDate = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString('ar-EG') : 'غير معروف';
+      return `<div class="pending-driver-row">
+        <div class="pending-driver-info">
+          <div class="pending-driver-name">${data.name}</div>
+          <div class="pending-driver-phone">📞 ${data.phone}</div>
+          <div class="pending-driver-date">📅 سجل في ${regDate}</div>
+        </div>
+        <div class="pending-driver-actions">
+          <button class="pd-btn approve" onclick="approveDriver('${d.id}','${data.name}')">✅ موافقة</button>
+          <button class="pd-btn reject" onclick="rejectDriver('${d.id}','${data.name}')">❌ رفض</button>
+        </div>
+      </div>`;
+    }).join('');
+  }).catch(e=>{
+    console.error('Error loading pending drivers:', e);
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:red">❌ خطأ في تحميل الطلبات: ' + e.message + '</div>';
+    section.style.display = 'block';
+  });
+}
+
+function approveDriver(id, name){
+  if(!confirm(`توافق على تسجيل ${name} كماندوب؟`)) return;
+  db.collection('drivers').doc(id).update({approved: true})
+    .then(()=>showToast(`✅ تم الموافقة على ${name} — دلوقتي يقدر يشتغل!`));
+}
+
+function rejectDriver(id, name){
+  if(!confirm(`تأكد عايز ترفض تسجيل ${name}؟ هيتحذف نهائي`)) return;
+  db.collection('drivers').doc(id).delete()
+    .then(()=>showToast(`❌ تم رفض تسجيل ${name}`));
+}
+
+// ════════════════════════════════════════════
+// 👥 ADMIN — RENDER APPROVED DRIVERS
+// ════════════════════════════════════════════
+function renderDrivers(){
+  const container=document.getElementById('drivers-list');
+  db.collection('drivers').get().then(snap=>{
+    const approved = snap.docs.filter(d=>d.data().approved === true);
+    approved.sort((a,b)=>{
+      const ta = a.data().createdAt ? a.data().createdAt.seconds : 0;
+      const tb = b.data().createdAt ? b.data().createdAt.seconds : 0;
+      return tb - ta;
+    });
+    document.getElementById('drv-count').textContent=approved.length;
+    container.innerHTML=approved.map(d=>{
+      const data=d.data();
+      const statusClass = data.banned ? 'banned' : 'active';
+      const statusText = data.banned ? 'محظور 🚫' : 'نشط ✅';
+      return `<div class="driver-row">
+        <div class="driver-info">
+          <div class="driver-name">${data.name}</div>
+          <div class="driver-phone">📞 ${data.phone} &nbsp;|&nbsp; <span class="driver-status ${statusClass}">${statusText}</span></div>
+        </div>
+        <div class="driver-actions">
+          ${data.banned
+            ? `<button class="driver-act-btn unban" onclick="unbanDriver('${d.id}')" title="إزالة الحظر">✅</button>`
+            : `<button class="driver-act-btn ban" onclick="banDriver('${d.id}')" title="حظر">🚫</button>`}
+          <button class="driver-act-btn delete" onclick="deleteDriver('${d.id}')" title="حذف">🗑️</button>
+        </div>
+      </div>`;
+    }).join('') || '<div style="text-align:center;padding:20px;color:var(--mut)">مفيش مندوبين لحد دلوقتي</div>';
+  }).catch(e=>{
+    console.error('Error loading drivers:', e);
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:red">❌ خطأ في تحميل المندوبين: ' + e.message + '</div>';
+  });
+}
+
+// ════════════════════════════════════════════
+// 📋 ADMIN — ALL ORDERS VIEW
+// ════════════════════════════════════════════
+function renderAdminOrders(){
+  const container=document.getElementById('admin-orders-list');
+  container.innerHTML='';
+  const shown=activeOrders.filter(o=>{
+    if(!searchQuery) return true;
+    const q=searchQuery.toLowerCase();
+    return (o.orderNum||'').toLowerCase().includes(q)
+        || (o.name||'').toLowerCase().includes(q)
+        || (o.address||'').toLowerCase().includes(q)
+        || (o.driverName||'').toLowerCase().includes(q);
+  });
+
+  // Update stats
+  document.getElementById('as1').textContent=activeOrders.length;
+  document.getElementById('as2').textContent=activeOrders.filter(o=>o.driverStatus==='delivered').length;
+  document.getElementById('as3').textContent=activeOrders.reduce((s,o)=>s+(o.grandTotal||0),0).toLocaleString('ar-EG');
+
+  if(shown.length===0){
+    container.innerHTML='<div class="empty show"><div class="ei">📋</div><div class="et">مفيش طلبات</div></div>';
+    return;
+  }
+  shown.forEach(o=>container.appendChild(buildCard(o)));
+}
+
+// ════════════════════════════════════════════
+// 📁 ARCHIVE
+// ════════════════════════════════════════════
 function switchMain(view,btn){
   mainView=view;
   document.querySelectorAll('.mtab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
+
+  document.getElementById('today-view').style.display='none';
+  document.getElementById('stats-view').style.display='none';
+  document.getElementById('archive-view').style.display='none';
+  document.getElementById('admin-view').style.display='none';
+  document.getElementById('admin-perf-view').style.display='none';
+  document.getElementById('admin-orders-view').style.display='none';
+  document.getElementById('search-bar').classList.remove('show');
+  document.getElementById('brand-filter').classList.remove('show');
+  document.getElementById('search-btn').style.display='none';
+
   if(view==='today'){
-    document.getElementById('today-view').classList.remove('hide');
-    document.getElementById('archive-view').classList.remove('show');
-  } else {
-    document.getElementById('today-view').classList.add('hide');
-    document.getElementById('archive-view').classList.add('show');
+    document.getElementById('today-view').style.display='block';
+    document.getElementById('search-bar').classList.add('show');
+    document.getElementById('search-btn').style.display='';
+    render();
+  } else if(view==='stats'){
+    document.getElementById('stats-view').style.display='block';
+    renderStats();
+  } else if(view==='archive'){
+    document.getElementById('archive-view').style.display='block';
     if(!archUnlocked){
       document.getElementById('pass-modal').classList.add('show');
       setTimeout(()=>document.getElementById('pass-input').focus(),300);
     } else {
       renderArchive();
     }
+  } else if(view==='admin'){
+    document.getElementById('admin-view').style.display='block';
+    renderDrivers();
+    renderPendingDrivers();
+  } else if(view==='admin-perf'){
+    document.getElementById('admin-perf-view').style.display='block';
+    renderPerf();
+  } else if(view==='admin-orders'){
+    document.getElementById('admin-orders-view').style.display='block';
+    renderAdminOrders();
   }
 }
 
 function checkPass(){
   const val=document.getElementById('pass-input').value;
-  if(val===ARCHIVE_PASS){
+  if(val===ARCHIVE_PASS_RAW){
     archUnlocked=true;
     document.getElementById('pass-modal').classList.remove('show');
     document.getElementById('pass-input').value='';
@@ -477,12 +1632,15 @@ function checkPass(){
     document.getElementById('pass-input').value='';
   }
 }
-
 function closePassModal(){
   document.getElementById('pass-modal').classList.remove('show');
   document.getElementById('pass-input').value='';
   document.getElementById('pass-err').style.display='none';
-  switchMain('today',document.querySelectorAll('.mtab')[0]);
+  if(currentUser && currentUser.role==='admin'){
+    switchMain('admin',document.querySelectorAll('.mtab')[0]);
+  } else {
+    switchMain('today',document.querySelectorAll('.mtab')[0]);
+  }
 }
 
 function renderArchive(){
@@ -502,10 +1660,9 @@ function renderArchive(){
     const ords=grouped[date];
     const total=ords.reduce((s,o)=>s+(o.grandTotal||0),0);
     const ordHtml=ords.map(o=>{
-      const items=o.items;
       let itemsStr='';
-      if(items){
-        const arr=Array.isArray(items)?items:Object.values(items);
+      if(o.items){
+        const arr=Array.isArray(o.items)?o.items:Object.values(o.items);
         itemsStr='<br/>🛒 '+arr.filter(Boolean).map(it=>`${it.n||it.name||''} (${it.q||it.quantity||1}×)`).join(' — ');
       }
       return `<div class="arch-order">
@@ -524,13 +1681,15 @@ function renderArchive(){
   }).join('');
 }
 
+// ════════════════════════════════════════════
+// 📦 END DAY
+// ════════════════════════════════════════════
 function confirmEndDay(){
   const cnt=activeOrders.length;
-  if(cnt===0){alert('مفيش طلبات عشان تأرشفها!');return;}
+  if(cnt===0){showToast('مفيش طلبات عشان تأرشفها!');return;}
   document.getElementById('confirm-sub').textContent=`عندك ${cnt} طلب — هيتأرشفوا ويبدأ يوم جديد`;
   document.getElementById('confirm-modal').classList.add('show');
 }
-
 async function doEndDay(){
   document.getElementById('confirm-modal').classList.remove('show');
   const today=new Date().toLocaleDateString('ar-EG');
@@ -540,10 +1699,14 @@ async function doEndDay(){
   });
   try{
     await batch.commit();
-    alert('✅ تم أرشفة الطلبات!\nيوم جديد يبدأ من صفر 🎉');
-  }catch(e){console.error(e);alert('حصل خطأ، حاول تاني');}
+    showToast('✅ تم أرشفة الطلبات! يوم جديد يبدأ من صفر 🎉');
+    if(navigator.vibrate) navigator.vibrate([100,50,100,50,100]);
+  }catch(e){showToast('❌ حصل خطأ، حاول تاني');}
 }
 
+// ════════════════════════════════════════════
+// 🔊 SOUND & NOTIFICATIONS
+// ════════════════════════════════════════════
 function beep(){
   try{
     if(!ctx) ctx=new(window.AudioContext||window.webkitAudioContext)();
@@ -559,56 +1722,85 @@ function beep(){
         o.start(t);o.stop(t+.5);
       });
     });
-  }catch(e){console.warn('Audio error:',e);}
+  }catch(e){}
 }
-
 function toggleSnd(){
   sndOn=!sndOn;
   document.getElementById('snd').classList.toggle('on',sndOn);
   document.getElementById('stx').textContent=sndOn?'الصوت شغال':'الصوت مكتوم';
+  localStorage.setItem('sndOn',sndOn.toString());
   if(sndOn) beep();
 }
-
 document.addEventListener('touchstart',()=>{
   if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();ctx.resume();}
 },{once:true});
-
 function askNotif(){
   Notification.requestPermission().then(p=>{
     document.getElementById('nb').classList.remove('show');
     if(p==='granted'){
       beep();
       setTimeout(()=>{
-        const title = '✅ الإشعارات شغالة!';
-        const body  = 'هتوصلك إشعار لكل طلب جديد 🛵';
-        const icon  = 'https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png';
-        if(navigator.serviceWorker.controller){
-          navigator.serviceWorker.controller.postMessage({type:'NEW_ORDER',title,body,icon,tag:'test'});
-        } else if(swReg){
-          swReg.showNotification(title,{body,icon});
-        } else {
-          try{new Notification(title,{body,icon});}catch(e){}
-        }
-      }, 1000);
-    } else {
-      alert('⚠️ الإشعارات مش مفعّلة!\nروح إعدادات المتصفح → الإشعارات → فعّل للموقع ده.');
-    }
+        const title='✅ الإشعارات شغالة!';
+        const body='هتوصلك إشعار لكل طلب جديد 🛵';
+        const icon='https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png';
+        if(navigator.serviceWorker.controller) navigator.serviceWorker.controller.postMessage({type:'NEW_ORDER',title,body,icon,tag:'test'});
+        else if(swReg) swReg.showNotification(title,{body,icon});
+        else try{new Notification(title,{body,icon});}catch(e){}
+      },1000);
+    } else { showToast('⚠️ فعّل الإشعارات من إعدادات المتصفح'); }
   });
 }
-
 if('Notification' in window){
   if(Notification.permission==='default'){
     document.getElementById('nb').classList.add('show');
   } else if(Notification.permission==='denied'){
-    document.getElementById('nb').innerHTML = '<span>⚠️ الإشعارات محجوبة — فعّلها من إعدادات المتصفح</span>';
+    document.getElementById('nb').innerHTML='<span>⚠️ الإشعارات محجوبة — فعّلها من إعدادات المتصفح</span>';
     document.getElementById('nb').classList.add('show');
   }
 }
 
+// ════════════════════════════════════════════
+// 🌙 THEME
+// ════════════════════════════════════════════
+function toggleTheme(){
+  const isLight=document.body.classList.contains('light');
+  applyTheme(isLight?'dark':'light');
+  localStorage.setItem('theme',isLight?'dark':'light');
+}
+function applyTheme(mode){
+  document.body.classList.toggle('light',mode==='light');
+  document.getElementById('theme-btn').textContent=mode==='light'?'☀️':'🌙';
+  document.querySelector('meta[name="theme-color"]').content=mode==='light'?'#f5f5f5':'#f5a623';
+}
+
+// ════════════════════════════════════════════
+// COUNTS & FILTER
+// ════════════════════════════════════════════
+function counts(){
+  const p=activeOrders.filter(o=>(o.driverStatus||'pending')==='pending').length;
+  const k=activeOrders.filter(o=>['received','preparing','on_way'].includes(o.driverStatus)).length;
+  const d=activeOrders.filter(o=>o.driverStatus==='delivered').length;
+  document.getElementById('s1').textContent=p;
+  document.getElementById('s2').textContent=k;
+  document.getElementById('s3').textContent=d;
+  document.getElementById('t0').textContent=activeOrders.length;
+  document.getElementById('t1').textContent=p;
+  document.getElementById('t2').textContent=k;
+  document.getElementById('t3').textContent=d;
+}
+function filt(f,btn){
+  curFilt=f;
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+// ════════════════════════════════════════════
+// 📲 PWA INSTALL
+// ════════════════════════════════════════════
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault();
-  deferredPrompt=e;
+  e.preventDefault(); deferredPrompt=e;
   document.getElementById('install-bar').classList.add('show');
 });
 function installApp(){
@@ -619,29 +1811,184 @@ function installApp(){
 }
 window.addEventListener('appinstalled',()=>document.getElementById('install-bar').classList.remove('show'));
 
-// ===== Service Worker =====
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js').catch(e=>console.error('SW err',e));
-}
-
-// ===== Notifications =====
-if('Notification' in window && Notification.permission==='default'){
-  setTimeout(()=>{
-    if(confirm('فعّل الإشعارات عشان تستقبل الطلبات الجديدة؟')){
-      Notification.requestPermission();
-    }
-  }, 2000);
-}
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.ready.then(reg=>{
-    window.swReg=reg;
-  });
-}
-
+// ════════════════════════════════════════════
+// 📡 ONLINE / OFFLINE
+// ════════════════════════════════════════════
 function online(on){
   document.getElementById('pill').classList.toggle('on',on);
   document.getElementById('ptx').textContent=on?'متصل':'غير متصل';
 }
+function checkOnline(){
+  if(!navigator.onLine) showToast('⚠️ مفيش اتصال بالإنترنت');
+}
+window.addEventListener('online',()=>{online(true);showToast('✅ النت رجع! جاري مزامنة...');});
+window.addEventListener('offline',()=>{online(false);showToast('⚠️ النت قطع!');});
+
+// ════════════════════════════════════════════
+// 🍞 TOAST
+// ════════════════════════════════════════════
+function showToast(msg){
+  const existing=document.querySelector('.toast');
+  if(existing) existing.remove();
+  const toast=document.createElement('div');
+  toast.className='toast';
+  toast.textContent=msg;
+  document.body.appendChild(toast);
+  setTimeout(()=>{toast.style.opacity='0';setTimeout(()=>toast.remove(),300);},2500);
+}
+
+// ════════════════════════════════════════════
+// BACKGROUND SYNC WITH SERVICE WORKER
+// ════════════════════════════════════════════
+setInterval(() => {
+  if(navigator.serviceWorker.controller && activeOrders.length > 0){
+    navigator.serviceWorker.controller.postMessage({
+      type: 'ORDERS_UPDATE',
+      orders: activeOrders.slice(0, 5) // Send latest 5 orders
+    });
+  }
+}, 30000);
+
+// ════════════════════════════════════════════
+// CACHE
+// ════════════════════════════════════════════
+function cacheOrders(){
+  try{localStorage.setItem('cached_orders',JSON.stringify({active:activeOrders.map(o=>o._id),timestamp:Date.now()}));}catch(e){}
+}
+setInterval(cacheOrders,30000);
+
+// ════════════════════════════════════════════
+// DRIVER REGISTRATION
+// ════════════════════════════════════════════
+function initializeDriver() {
+  const savedName = localStorage.getItem('driver_name');
+  const savedChatId = localStorage.getItem('driver_chat_id');
+  
+  if (!savedName || !savedChatId) {
+    showDriverRegistration();
+  }
+}
+
+function showDriverRegistration() {
+  const html = `
+  <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:Tajawal">
+    <div style="background:#1a1a1a;padding:40px;border-radius:16px;max-width:400px;text-align:center;border:1px solid #444">
+      <h2 style="color:#fff;margin:0 0 30px 0;font-size:24px">🛵 تسجيل المندوب</h2>
+      
+      <div style="margin-bottom:20px;text-align:right">
+        <label style="color:#aaa;display:block;margin-bottom:8px;font-weight:900">اسمك:</label>
+        <input type="text" id="driver_name_input" placeholder="مثلاً: محمد" style="width:100%;padding:12px;border:1px solid #444;border-radius:8px;background:#2a2a2a;color:#fff;font-family:Tajawal;font-size:16px;box-sizing:border-box">
+      </div>
+      
+      <div style="margin-bottom:30px;text-align:right">
+        <label style="color:#aaa;display:block;margin-bottom:8px;font-weight:900">Chat ID من Telegram:</label>
+        <input type="text" id="driver_chat_id_input" placeholder="8767256379" style="width:100%;padding:12px;border:1px solid #444;border-radius:8px;background:#2a2a2a;color:#fff;font-family:Tajawal;font-size:16px;box-sizing:border-box;direction:ltr;text-align:left">
+        <p style="color:#888;font-size:12px;margin:8px 0 0 0;text-align:right">
+          1️⃣ روح @userinfobot في Telegram<br/>
+          2️⃣ ابعت أي رسالة<br/>
+          3️⃣ انسخ الرقم (Chat ID)
+        </p>
+      </div>
+      
+      <button onclick="saveDriverInfo()" style="width:100%;padding:14px;background:#f5a623;color:#000;border:none;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;font-family:Tajawal">
+        💾 حفظ
+      </button>
+    </div>
+  </div>
+  `;
+  
+  document.body.innerHTML = html + document.body.innerHTML;
+}
+
+function saveDriverInfo() {
+  const name = document.getElementById('driver_name_input').value.trim();
+  const chatId = document.getElementById('driver_chat_id_input').value.trim();
+  
+  if (!name || !chatId) {
+    alert('أدخل الاسم و Chat ID');
+    return;
+  }
+  
+  localStorage.setItem('driver_name', name);
+  localStorage.setItem('driver_chat_id', chatId);
+  
+  alert(`✅ تم! أهلاً بك يا ${name}`);
+  location.reload();
+}
+
+// ════════════════════════════════════════════
+
+function getTelegramChatId(){
+  return localStorage.getItem('tg_chat_id');
+}
+
+function saveTelegramChatId(chatId){
+  localStorage.setItem('tg_chat_id', chatId.toString().trim());
+}
+
+async function sendTelegramNotification(title, message, orderId){
+  const chatId=getTelegramChatId();
+  if(!chatId) return;
+  
+  const appLink='https://tayyyar-app2.github.io/tyyyar/tayyar-driver.html';
+  const text=`🛵 <b>طلب جديد!</b>\n\n${message}\n\n📋 <b>الطلب:</b> ${orderId}\n\n<a href="${appLink}">👉 افتح التطبيق الآن</a>`;
+  const url=`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  
+  try{
+    await fetch(url,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:chatId, text:text, parse_mode:'HTML'})
+    });
+  } catch(e){
+    console.error('Telegram failed:', e);
+  }
+}
+
+function showTelegramSettings(){
+  const saved=getTelegramChatId();
+  const html=`
+  <div style="padding:20px;max-width:500px;margin:20px auto">
+    <div style="background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:24px">
+      <h2 style="margin-bottom:4px">ربط Telegram 📱</h2>
+      <p style="color:var(--mut);font-size:13px;margin-bottom:20px">استقبل إشعارات الطلبات الجديدة</p>
+      
+      <div style="background:var(--acc2);border:1px solid var(--acc);border-radius:12px;padding:16px;margin-bottom:20px;font-size:12px">
+        <strong>الخطوات:</strong><br/>
+        1️⃣ افتح: <strong>@tayyar_notifications_bot</strong><br/>
+        2️⃣ اكتب: <strong>/start</strong><br/>
+        3️⃣ انسخ الرقم<br/>
+        4️⃣ الصقه بتحت
+      </div>
+      
+      <input type="text" id="tg-chat-id-input" placeholder="Chat ID" value="${saved||''}" style="width:100%;padding:12px;border:1px solid var(--brd);border-radius:8px;background:var(--sur);color:#f0f0f0;margin-bottom:16px">
+      
+      <button onclick="saveTgSettings()" style="width:100%;padding:12px;background:var(--grn);color:#000;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:8px">💾 حفظ</button>
+      <button onclick="render()" style="width:100%;padding:12px;background:var(--brd);border:none;border-radius:8px;cursor:pointer">إغلاق</button>
+      
+      ${saved?`<p style="color:var(--grn);font-size:12px;margin-top:16px;text-align:center">✅ تم</p>`:''}
+    </div>
+  </div>
+  `;
+  document.body.innerHTML=html;
+}
+
+function saveTgSettings(){
+  const chatId=document.getElementById('tg-chat-id-input').value;
+  if(!chatId.trim()){
+    alert('أدخل Chat ID');
+    return;
+  }
+  saveTelegramChatId(chatId);
+  alert('تم! ستستقبل إشعارات Telegram');
+  render();
+}
+
+// ════════════════════════════════════════════
+// 🚀 INIT
+// ════════════════════════════════════════════
+autoLogin();
+
 </script>
 </body>
 </html>
