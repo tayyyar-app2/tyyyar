@@ -480,7 +480,7 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
 
   // بناء تفاصيل المنتجات
   const itemsText = Object.entries(byBrand).map(([b, ps]) => {
-    const lines = ps.map(i => `• ${i.n}${i.extras&&i.extras.length?`\n  🧁 ${i.extras.map(e=>e.n+' (+'+e.p+' ج.م)').join('، ')}`:''}\n  ${i.q} × ${i.p+(i.extrasSum||0)} ج.م = *${i.t} ج.م*`).join('\n');
+    const lines = ps.map(i => `• ${i.n}${i.extras&&i.extras.length?`\n  ➕ ${i.extras.map(e=>e.n+' (+'+e.p+' ج.م)').join('، ')}`:''}\n  ${i.q} × ${i.p+(i.extrasSum||0)} ج.م = *${i.t} ج.م*`).join('\n');
     return `\n${brandEmojis[b]} *${BL[b]}*\n─────────────\n${lines}`;
   }).join('\n');
 
