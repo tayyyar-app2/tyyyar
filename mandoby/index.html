@@ -850,11 +850,9 @@ function autoLogin(){
 
 function setupDriverListener(){
   if(window.unsubscribeOrders) window.unsubscribeOrders();
-  window.unsubscribeOrders = db.collection('orders')
-    .where('archived','==',false)
-    .onSnapshot(snap=>{
+  window.unsubscribeOrders = db.collection('orders').onSnapshot(snap=>{
       const oldLen = activeOrders.length;
-      activeOrders = snap.docs.map(d=>({_id:d.id, ...d.data()}));
+      activeOrders = snap.docs.map(d=>({_id:d.id, ...d.data()})).filter(o=>o.archived !== true);
       activeOrders.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
       
       // New order alert
@@ -874,10 +872,8 @@ function setupDriverListener(){
 
 function setupAdminListener(){
   if(window.unsubscribeOrders) window.unsubscribeOrders();
-  window.unsubscribeOrders = db.collection('orders')
-    .where('archived','==',false)
-    .onSnapshot(snap=>{
-      activeOrders = snap.docs.map(d=>({_id:d.id, ...d.data()}));
+  window.unsubscribeOrders = db.collection('orders').onSnapshot(snap=>{
+      activeOrders = snap.docs.map(d=>({_id:d.id, ...d.data()})).filter(o=>o.archived !== true);
       activeOrders.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
       render();
       counts();
