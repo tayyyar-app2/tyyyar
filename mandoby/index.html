@@ -192,28 +192,6 @@ body.light .search-bar input{color:#1a1a1a}
 .ei{font-size:44px;opacity:.3;margin-bottom:10px}
 .et{font-size:14px;font-weight:700;color:var(--mut)}
 .es{font-size:12px;color:var(--mut);margin-top:4px;opacity:.7}
-#load{text-align:center;padding:50px 20px;color:var(--mut)}
-.spin{width:32px;height:32px;border:3px solid var(--brd);border-top-color:var(--acc);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.snd{position:fixed;bottom:20px;left:12px;z-index:200;background:var(--sur);border:1px solid var(--brd);border-radius:99px;padding:9px 15px;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;color:var(--mut);cursor:pointer;display:flex;align-items:center;gap:6px;transition:.2s;box-shadow:0 4px 16px rgba(0,0,0,.4)}
-.snd.on{background:var(--grn2);border-color:rgba(34,197,94,.35);color:var(--grn)}
-.search-btn{position:fixed;bottom:20px;right:12px;z-index:200;background:var(--acc);color:#000;border:none;border-radius:50%;width:50px;height:50px;font-size:20px;cursor:pointer;box-shadow:0 4px 16px var(--accg);transition:.2s}
-.search-btn:active{transform:scale(.9)}
-
-/* ══════════════════════════════
-   ARCHIVE
-   ══════════════════════════════ */
-#archive-view{display:none;padding-bottom:80px}
-#archive-view.show{display:block}
-.arch-day{margin:10px 12px 0;border:1px solid var(--brd);border-radius:14px;overflow:hidden}
-.arch-day-hdr{background:var(--sur);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
-.arch-day-date{font-weight:900;font-size:14px}
-.arch-day-cnt{font-size:11px;color:var(--mut);margin-top:2px}
-.arch-orders{padding:10px;display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--brd)}
-.arch-order{background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:12px}
-.arch-oid{font-weight:900;color:var(--acc);font-size:13px;margin-bottom:5px}
-.arch-info{color:var(--sub);font-size:12px;line-height:1.7}
-.arch-total{font-weight:700;color:var(--grn);margin-top:5px;font-size:13px}
 
 /* ══════════════════════════════
    STATS VIEW
@@ -298,207 +276,199 @@ body.light .admin-input{color:#1a1a1a}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:999;align-items:center;justify-content:center;padding:20px}
 .modal.show{display:flex}
 .mbox{background:var(--card);border:1px solid var(--brd);border-radius:20px;padding:28px;width:100%;max-width:340px;text-align:center}
-.mico{font-size:40px;margin-bottom:12px}
-.mtit{font-size:18px;font-weight:900;margin-bottom:6px}
-.msub{font-size:13px;color:var(--mut);margin-bottom:20px}
-.minp{width:100%;background:var(--sur);border:1px solid var(--brd);border-radius:10px;padding:13px;font-family:'Cairo',sans-serif;font-size:18px;color:#f0f0f0;text-align:center;letter-spacing:4px;outline:none;margin-bottom:10px;transition:border-color .2s}
-body.light .minp{color:#1a1a1a}
-.minp:focus{border-color:var(--acc)}
-.mbtn{width:100%;background:var(--acc);color:#000;border:none;border-radius:10px;padding:13px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:900;cursor:pointer;margin-bottom:8px}
-.mcancel{width:100%;background:transparent;color:var(--mut);border:1px solid var(--brd);border-radius:10px;padding:11px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
-.merr{color:var(--red);font-size:13px;margin-bottom:8px;display:none}
-.cbtns{display:flex;gap:8px;margin-top:4px}
-.cyes{flex:1;background:var(--red);color:#fff;border:none;border-radius:10px;padding:12px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
-.cno{flex:1;background:var(--sur);color:var(--sub);border:1px solid var(--brd);border-radius:10px;padding:12px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.mico{font-size:48px;margin-bottom:16px}
+.mtit{font-size:20px;font-weight:900;margin-bottom:8px}
+.msub{font-size:13px;color:var(--mut);line-height:1.6;margin-bottom:20px}
+.minp{width:100%;background:var(--sur);border:1px solid var(--brd);border-radius:12px;padding:14px;font-family:'Cairo',sans-serif;font-size:16px;color:#f0f0f0;text-align:center;outline:none;margin-bottom:12px}
+.merr{color:var(--red);font-size:12px;margin-bottom:12px;display:none}
+.mbtn{width:100%;background:var(--acc);color:#000;border:none;border-radius:12px;padding:14px;font-family:'Cairo',sans-serif;font-size:16px;font-weight:900;cursor:pointer;margin-bottom:8px}
+.mcancel{background:none;border:none;color:var(--mut);font-size:13px;cursor:pointer;text-decoration:underline}
+.cbtns{display:flex;gap:10px}
+.cyes{flex:1;background:var(--red);color:#fff;border:none;border-radius:10px;padding:12px;font-family:'Cairo',sans-serif;font-weight:700;cursor:pointer}
+.cno{flex:1;background:var(--sur);color:var(--sub);border:1px solid var(--brd);border-radius:10px;padding:12px;font-family:'Cairo',sans-serif;font-weight:700;cursor:pointer}
+
+/* ══════════════════════════════
+   ARCHIVE VIEW
+   ══════════════════════════════ */
+.archive-view{padding:10px 12px 90px;display:none}
+.arch-day{background:var(--card);border:1px solid var(--brd);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.arch-day-hdr{padding:14px 16px;background:var(--sur);display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.arch-day-date{font-weight:900;font-size:14px;color:var(--acc)}
+.arch-day-cnt{font-size:11px;color:var(--mut);margin-top:2px}
+.arch-orders{display:none;flex-direction:column;padding:0 12px 12px}
+.arch-order{padding:12px 0;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.arch-order:last-child{border:none}
+.arch-oid{font-size:12px;font-weight:900;color:var(--acc);flex-shrink:0}
+.arch-info{font-size:11px;color:var(--sub);line-height:1.5}
+.arch-total{font-size:12px;font-weight:900;color:#f0f0f0;flex-shrink:0}
+
+/* ══════════════════════════════
+   UTILITIES
+   ══════════════════════════════ */
+.snd{position:fixed;bottom:20px;left:20px;z-index:100;background:var(--card);border:1px solid var(--brd);border-radius:99px;padding:8px 16px;font-family:'Cairo',sans-serif;font-size:12px;font-weight:700;color:var(--mut);cursor:pointer;display:flex;align-items:center;gap:6px;box-shadow:0 4px 15px rgba(0,0,0,.3)}
+.snd.on{color:var(--grn);border-color:var(--grn2)}
+.search-btn{position:fixed;bottom:20px;right:20px;z-index:100;width:44px;height:44px;background:var(--acc);color:#000;border:none;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px var(--accg)}
+.swiping{transition:none!important}
+.card{--swipe-x:0px;transform:translateX(var(--swipe-x))}
 </style>
 </head>
-<body>
+<body class="dark">
 
-<!-- ══════════════════════════════
-     LOGIN SCREEN
-     ══════════════════════════════ -->
-<div class="login-screen" id="login-screen">
+<div id="login-screen" class="login-screen">
   <div class="login-box">
     <div class="login-logo">🛵</div>
-    <div class="login-title">طيار</div>
-    <div class="login-sub">أدخل رقمك المسجل للدخول</div>
-    <div class="login-err" id="login-err">❌ الرقم مش مسجل أو محظور</div>
-    <input class="login-input" id="login-name" type="text" placeholder="الاسم الكامل" maxlength="40"/>
-    <input class="login-input" id="login-phone" type="tel" placeholder="أدخل رقم الموبايل" maxlength="15" autocomplete="tel"/>
-    <input class="login-input" id="login-pass" type="password" placeholder="كلمة السر" maxlength="30"/>
-    <button class="login-btn" onclick="doLogin()">دخول 🚀</button>
-    <div class="login-divider"><span>أو</span></div>
-    <a class="login-link" id="show-register-link" onclick="showRegister()">مسجلش بعد؟ سجّل هنا</a>
-
-    <!-- Registration Section (toggled) -->
-    <div class="register-section" id="register-section">
-      <div class="register-title">📝 تسجيل مندوب جديد</div>
-      <div class="register-sub">ادخل بياناتك وكلمة السر اللي عايزها، وبعدين يستنى موافقة الأدمن</div>
-      <input class="login-input" id="reg-name" type="text" placeholder="اسمك الكامل" maxlength="40"/>
-      <input class="login-input" id="reg-phone" type="tel" placeholder="رقم الموبايل" maxlength="15" autocomplete="tel"/>
-      <input class="login-input" id="reg-pass" type="password" placeholder="كلمة سر (4 أحرف على الأقل)" maxlength="30"/>
-      <input class="login-input" id="reg-pass2" type="password" placeholder="تأكيد كلمة السر" maxlength="30"/>
-      <button class="register-btn" onclick="doRegister()">سجّل الآن ✉️</button>
-      <a class="cancel-register" onclick="hideRegister()">إلغاء، هسجل عادي</a>
+    <h1 class="login-title" id="app-title-login">طيار</h1>
+    <p class="login-sub" id="app-sub-login">نظام إدارة وتوصيل الطلبات</p>
+    
+    <div id="login-form">
+      <input type="text" id="login-name" class="login-input" placeholder="اسمك (اختياري)">
+      <input type="tel" id="login-phone" class="login-input" placeholder="رقم الموبايل">
+      <input type="password" id="login-pass" class="login-input" placeholder="كلمة السر">
+      <div id="login-err" class="login-err"></div>
+      <button class="login-btn" onclick="doLogin()">دخول 🚀</button>
+      
+      <div class="login-divider"><span>أو</span></div>
+      <span class="login-link" id="show-register-link" onclick="showRegister()">سجل كطيار جديد 🛵</span>
+      
+      <div id="register-section" class="register-section">
+        <h3 class="register-title">تسجيل طيار جديد</h3>
+        <p class="register-sub">سجل بياناتك وهيتراجع حسابك من الأدمن</p>
+        <input type="text" id="reg-name" class="login-input" placeholder="الاسم بالكامل">
+        <input type="tel" id="reg-phone" class="login-input" placeholder="رقم الموبايل">
+        <input type="password" id="reg-pass" class="login-input" placeholder="كلمة السر">
+        <input type="password" id="reg-pass2" class="login-input" placeholder="تأكيد كلمة السر">
+        <button class="register-btn" onclick="doRegister()">إرسال طلب التسجيل 📩</button>
+        <span class="cancel-register" onclick="hideRegister()">إلغاء</span>
+      </div>
     </div>
-
-    <a class="login-link" style="font-size:11px;opacity:.5" onclick="showAdminLogin()">إدارة النظام (Admin)</a>
+    
+    <span class="admin-login-link" onclick="showAdminLogin()">دخول الإدارة</span>
   </div>
 </div>
 
-<!-- Pending Approval Screen -->
-<div class="pending-screen" id="pending-screen">
+<div id="pending-screen" class="pending-screen">
   <div class="pending-box">
     <div class="pending-icon">⏳</div>
-    <div class="pending-title">طلبك تحت المراجعة</div>
-    <div class="pending-desc">
-      تم إرسال طلب تسجيلك بنجاح! 🎉<br/>
-      الأدمن هيراجع طلبك ويوافق عليه قريباً.<br/>
-      أول ما يتوافق هتقدر تشتغل فوراً.
-    </div>
+    <h2 class="pending-title">طلبك قيد المراجعة</h2>
+    <p class="pending-desc">أهلاً بك يا بطل! بياناتك وصلت للأدمن وجاري مراجعتها. أول ما يتم تفعيل حسابك هتقدر تدخل وتستلم طلبات.</p>
     <div class="pending-info">
-      <div><strong>👤 الاسم:</strong> <span id="pend-name">-</span></div>
-      <div><strong>📞 الموبايل:</strong> <span id="pend-phone">-</span></div>
-      <div><strong>📅 تاريخ التسجيل:</strong> <span id="pend-date">-</span></div>
-      <div><strong>📊 الحالة:</strong> <span style="color:var(--acc)">قيد المراجعة ⏳</span></div>
+      <div><strong>الاسم:</strong> <span id="pend-name">-</span></div>
+      <div><strong>الموبايل:</strong> <span id="pend-phone">-</span></div>
+      <div><strong>تاريخ الطلب:</strong> <span id="pend-date">-</span></div>
     </div>
-    <a class="pending-change" onclick="changePendingLogin()">تغيير بيانات تسجيل الدخول</a>
+    <span class="pending-change" onclick="changePendingLogin()">تغيير البيانات أو الدخول بحساب تاني</span>
   </div>
 </div>
 
-<!-- Admin Login Modal -->
-<div class="modal" id="admin-login-modal">
+<div id="admin-login-modal" class="modal">
   <div class="mbox">
     <div class="mico">👑</div>
-    <div class="mtit">دخول الأدمن</div>
-    <div class="msub">أدخل بيانات الأدمن للتحكم بالنظام</div>
-    <input class="minp" id="admin-phone" type="tel" placeholder="رقم الأدمن" style="letter-spacing:1px;font-size:15px" maxlength="15"/>
-    <input class="minp" id="admin-pass" type="password" placeholder="كلمة السر" style="letter-spacing:1px;font-size:15px" maxlength="30" onkeydown="if(event.key==='Enter')doAdminLogin()"/>
-    <div class="merr" id="admin-login-err">❌ بيانات غلط!</div>
-    <button class="mbtn" onclick="doAdminLogin()">دخول 👑</button>
+    <div class="mtit">دخول الإدارة</div>
+    <div class="msub">خاص بمدير النظام فقط</div>
+    <input class="minp" id="admin-phone" type="tel" placeholder="رقم المدير">
+    <input class="minp" id="admin-pass" type="password" placeholder="••••••">
+    <div class="merr" id="admin-login-err">❌ بيانات الدخول غلط!</div>
+    <button class="mbtn" onclick="doAdminLogin()">دخول 🔐</button>
     <button class="mcancel" onclick="document.getElementById('admin-login-modal').classList.remove('show')">إلغاء</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════
-     MAIN APP (Driver + Admin)
-     ══════════════════════════════ -->
 <div id="main-app" style="display:none">
-
 <header>
   <div class="logo">
     <div class="lbox">🛵</div>
-    <div><div class="ltx" id="app-title">طيار</div><div class="lsub" id="app-sub">لوحة المندوب</div></div>
+    <div><div class="ltx" id="app-title">طيار</div><div class="lsub" id="app-sub">نظام التوصيل</div></div>
   </div>
   <div class="hbtns">
-    <button class="end-day-btn" id="end-day-btn" onclick="confirmEndDay()">📦 إنهاء اليوم</button>
-    <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" title="وضع ليلي/نهاري">🌙</button>
-    <button class="theme-toggle" onclick="showTelegramSettings()" title="ربط Telegram">📱</button>
-    <div class="pill" id="pill" onclick="checkOnline()"><div class="dot"></div><span id="ptx">اتصال...</span></div>
-    <button class="logout-btn" onclick="doLogout()" id="logout-btn">خروج</button>
+    <div class="pill" id="snd-pill" onclick="toggleSnd()"><div class="dot"></div><span id="stx-pill">الصوت</span></div>
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">🌙</button>
+    <button class="end-day-btn" id="end-day-btn" onclick="confirmEndDay()" style="display:none">إنهاء اليوم</button>
+    <button class="logout-btn" onclick="doLogout()">خروج</button>
   </div>
 </header>
 
-<div id="nb"><span>🔔 فعّل الإشعارات للتنبيه بالأوردرات</span><button onclick="askNotif()">فعّل</button></div>
-<div id="install-bar"><span>📲 حمّل التطبيق على موبايلك</span><button onclick="installApp()">تحميل</button><button class="xi" onclick="this.parentElement.classList.remove('show')">×</button></div>
+<div id="nb"><span>🔔 فعّل الإشعارات عشان يوصلك كل جديد</span><button onclick="askNotif()">تفعيل</button></div>
+<div id="install-bar"><span>📲 ثبت التطبيق على موبايلك لسهولة الوصول</span><button id="install-btn">تثبيت</button><span class="xi" onclick="this.parentNode.classList.remove('show')">×</span></div>
 
-<!-- Driver Tabs -->
 <div class="mtabs" id="driver-tabs">
-  <button class="mtab active" onclick="switchMain('today',this)">📋 طلبات اليوم</button>
+  <button class="mtab active" onclick="switchMain('today',this)">📅 طلبات اليوم</button>
   <button class="mtab" onclick="switchMain('stats',this)">📊 إحصائياتي</button>
-  <button class="mtab" onclick="switchMain('archive',this)">🗂️ الأرشيف</button>
+  <button class="mtab" onclick="switchMain('archive',this)">📂 الأرشيف</button>
 </div>
 
-<!-- Admin Tabs -->
 <div class="mtabs" id="admin-tabs" style="display:none">
   <button class="mtab active" onclick="switchMain('admin',this)">👥 المندوبين</button>
-  <button class="mtab" onclick="switchMain('admin-perf',this)">📊 تقييم الأداء</button>
+  <button class="mtab" onclick="switchMain('admin-perf',this)">📈 الأداء</button>
   <button class="mtab" onclick="switchMain('admin-orders',this)">📋 كل الطلبات</button>
+  <button class="mtab" onclick="switchMain('archive',this)">📂 الأرشيف</button>
 </div>
 
-<!-- Search Bar -->
-<div class="search-bar" id="search-bar">
-  <input type="text" id="search-input" placeholder="🔍 ابحث باسم العميل، رقم الطلب، أو العنوان..." oninput="onSearch(this.value)"/>
-</div>
-
-<!-- Brand Filter -->
-<div class="brand-filter" id="brand-filter"></div>
-
-<!-- Today View -->
 <div id="today-view">
   <div class="stats">
-    <div class="sc a"><div class="sn" id="s1">0</div><div class="sl">جديدة</div></div>
-    <div class="sc b"><div class="sn" id="s2">0</div><div class="sl">جارية</div></div>
-    <div class="sc c"><div class="sn" id="s3">0</div><div class="sl">منتهية</div></div>
+    <div class="sc a"><div class="sn" id="s1">0</div><div class="sl">جديد</div></div>
+    <div class="sc b"><div class="sn" id="s2">0</div><div class="sl">شغال</div></div>
+    <div class="sc c"><div class="sn" id="s3">0</div><div class="sl">وصل</div></div>
   </div>
+
   <div class="tabs">
-    <button class="tb active" onclick="filt('all',this)">الكل <span id="t0">0</span></button>
-    <button class="tb" onclick="filt('pending',this)">⚪ جديدة <span id="t1">0</span></button>
-    <button class="tb" onclick="filt('active',this)">🔵 جارية <span id="t2">0</span></button>
-    <button class="tb" onclick="filt('delivered',this)">✅ منتهية <span id="t3">0</span></button>
+    <div class="tb active" onclick="filt('all',this)">الكل <span id="c1">0</span></div>
+    <div class="tb" onclick="filt('active',this)">نشط <span id="c2">0</span></div>
+    <div class="tb" onclick="filt('delivered',this)">تم التوصيل <span id="c3">0</span></div>
   </div>
-  <div class="list" id="list">
-    <div id="load"><div class="spin"></div>جاري التحميل...</div>
-    <div class="empty" id="emp">
-      <div class="ei">📭</div><div class="et">مفيش طلبات دلوقتي</div>
-      <div class="es">لما يجي أوردر هيظهر هنا فوراً</div>
-    </div>
+
+  <div class="search-bar show" id="search-bar">
+    <input type="text" id="search-input" placeholder="بحث بالاسم، العنوان، الموبايل..." oninput="onSearch(this.value)">
   </div>
+
+  <div class="brand-filter" id="brand-filter"></div>
+
+  <div class="list" id="list"></div>
+  <div class="empty" id="emp"><div class="ei">📦</div><div class="et">مفيش طلبات دلوقتي</div><div class="es">أول ما ينزل طلب جديد هينور هنا</div></div>
 </div>
 
-<!-- Stats View -->
 <div id="stats-view" class="stats-view">
-  <div style="padding:14px 12px 4px;font-size:14px;font-weight:700;color:var(--mut)">📊 إحصائياتي اليوم</div>
   <div id="stats-content"></div>
 </div>
 
-<!-- Archive View -->
-<div id="archive-view">
-  <div style="padding:14px 12px 4px;display:flex;align-items:center;justify-content:space-between">
-    <div style="font-size:14px;font-weight:700;color:var(--mut)">📁 الأرشيف اليومي</div>
-  </div>
+<div id="archive-view" class="archive-view">
   <div id="archive-list"></div>
 </div>
 
-<!-- Admin View -->
 <div id="admin-view">
-  <!-- Add Driver -->
-  <div class="admin-section" style="margin-top:12px">
-    <div class="admin-section-title">➕ إضافة مندوب يدوي</div>
-    <input class="admin-input" id="new-drv-name" placeholder="اسم المندوب"/>
-    <input class="admin-input" id="new-drv-phone" placeholder="رقم الموبايل" type="tel"/>
-    <input class="admin-input" id="new-drv-pass" placeholder="كلمة السر" type="password"/>
-    <button class="admin-btn" onclick="addDriver()">إضافة المندوب ✅</button>
-  </div>
-
-  <!-- Pending Approvals -->
-  <div class="pending-section" id="pending-section" style="display:none">
-    <div class="pending-section-title">
-      🔔 طلبات تسجيل جديدة
-      <span class="pending-badge" id="pending-count-badge">0</span>
-    </div>
+  <div id="pending-drivers-section" class="pending-section" style="display:none">
+    <div class="pending-section-title">⏳ طلبات انضمام جديدة <span class="pending-badge" id="pending-count">0</span></div>
     <div id="pending-drivers-list"></div>
   </div>
 
-  <!-- Drivers List -->
   <div class="admin-section">
-    <div class="admin-section-title">👥 المندوبين المعتمدين (<span id="drv-count">0</span>)</div>
+    <div class="admin-section-title">➕ إضافة مندوب جديد</div>
+    <input class="admin-input" id="new-drv-name" placeholder="الاسم">
+    <input class="admin-input" id="new-drv-phone" type="tel" placeholder="رقم الموبايل">
+    <input class="admin-input" id="new-drv-pass" type="text" placeholder="كلمة السر">
+    <button class="admin-btn" onclick="addDriver()">إضافة مندوب ✅</button>
+  </div>
+
+  <div class="admin-section">
+    <div class="admin-section-title">🛵 المندوبين المسجلين (<span id="drv-count">0</span>)</div>
     <div id="drivers-list"></div>
+  </div>
+  
+  <div class="admin-section" style="margin-top:20px;text-align:center">
+    <button class="admin-btn" style="background:var(--blu2);color:var(--blu);width:100%" onclick="showTelegramSettings()">📱 إعدادات Telegram</button>
   </div>
 </div>
 
-<!-- Admin Performance View -->
 <div id="admin-perf-view" class="stats-view" style="display:none">
-  <div style="padding:14px 12px 4px;font-size:14px;font-weight:700;color:var(--mut)">📊 تقييم أداء المندوبين</div>
+  <div class="admin-section-title" style="margin:10px 0 0 10px">📈 تقييم أداء المناديب</div>
   <div id="perf-content"></div>
 </div>
 
-<!-- Admin All Orders View -->
-<div id="admin-orders-view">
+<div id="admin-orders-view" style="display:none">
+  <div class="admin-section-title" style="margin:15px 15px 0">📋 متابعة كل طلبات اليوم</div>
   <div class="stats" style="margin-top:10px">
-    <div class="sc a"><div class="sn" id="as1">0</div><div class="sl">كل الطلبات</div></div>
-    <div class="sc b"><div class="sn" id="as2">0</div><div class="sl">موصلة</div></div>
-    <div class="sc c"><div class="sn" id="as3">0</div><div class="sl">إيرادات</div></div>
+    <div class="sc a"><div class="sn" id="as1">0</div><div class="sl">الإجمالي</div></div>
+    <div class="sc c"><div class="sn" id="as2">0</div><div class="sl">وصل</div></div>
+    <div class="sc b"><div class="sn" id="as3">0</div><div class="sl">الإيرادات</div></div>
   </div>
   <div class="list" id="admin-orders-list" style="padding-bottom:30px"></div>
 </div>
@@ -771,7 +741,7 @@ function doLogin(){
       document.getElementById('app-sub').textContent = 'مرحباً ' + currentUser.name;
       document.getElementById('driver-tabs').style.display='flex';
       document.getElementById('admin-tabs').style.display='none';
-      document.getElementById('end-day-btn').style.display='';
+      document.getElementById('end-day-btn').style.display=(currentUser && currentUser.role==='admin' ? '' : 'none');
       // Hide all admin views
       document.getElementById('admin-view').style.display='none';
       document.getElementById('admin-perf-view').style.display='none';
@@ -810,7 +780,7 @@ function doAdminLogin(){
   document.getElementById('app-sub').textContent = 'لوحة التحكم';
   document.getElementById('driver-tabs').style.display='none';
   document.getElementById('admin-tabs').style.display='flex';
-  document.getElementById('end-day-btn').style.display='none';
+  document.getElementById('end-day-btn').style.display=(currentUser && currentUser.role==='admin' ? '' : 'none');
 
   setupAdminListener();
   showToast('👑 أهلاً الأدمن');
@@ -825,7 +795,7 @@ function doAdminLogin_auto(){
   document.getElementById('app-sub').textContent = 'لوحة التحكم';
   document.getElementById('driver-tabs').style.display='none';
   document.getElementById('admin-tabs').style.display='flex';
-  document.getElementById('end-day-btn').style.display='none';
+  document.getElementById('end-day-btn').style.display=(currentUser && currentUser.role==='admin' ? '' : 'none');
   setupAdminListener();
 }
 
@@ -845,163 +815,96 @@ function doLogout(){
   document.getElementById('login-pass').value='';
   document.getElementById('login-name').value='';
   document.getElementById('login-err').style.display='none';
-  document.getElementById('app-title').textContent = 'طيار';
-  document.getElementById('app-sub').textContent = 'لوحة المندوب';
-  document.getElementById('driver-tabs').style.display='flex';
-  document.getElementById('admin-tabs').style.display='none';
-  document.getElementById('end-day-btn').style.display='';
-  document.getElementById('register-section').classList.remove('show');
-  document.getElementById('show-register-link').style.display='';
-  activeOrders=[]; archivedOrders=[]; allOrders=[];
+  hideRegister();
+  // Stop listeners
+  if(window.unsubscribeOrders) window.unsubscribeOrders();
 }
 
-// Auto-login from saved session
 function autoLogin(){
-  try{
-    const saved = JSON.parse(localStorage.getItem('currentUser')||'{}');
-    if(saved && saved.role === 'admin'){
-      doAdminLogin_auto();
-    } else if(saved && saved.role === 'driver'){
-      doLogin_auto(saved);
-    }
-  }catch(e){}
-}
-
-function doLogin_auto(saved){
-  db.collection('drivers').where('phone','==',saved.phone).limit(1).get()
-    .then(snap=>{
-      if(!snap.empty){
-        const data = snap.docs[0].data();
-        if(data.banned){
-          doLogout();
-          return;
-        }
-        if(data.approved === false){
-          // Was approved before but got pending — treat as pending
-          showPendingScreen(snap.docs[0].id, data);
-          return;
-        }
-        currentUser = { id: snap.docs[0].id, phone: data.phone, name: data.name || saved.name, role: 'driver' };
-        localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        document.getElementById('login-screen').style.display='none';
-        document.getElementById('main-app').style.display='block';
-        document.getElementById('app-title').textContent = 'طيار';
-        document.getElementById('app-sub').textContent = 'مرحباً ' + currentUser.name;
-        document.getElementById('driver-tabs').style.display='flex';
-        document.getElementById('admin-tabs').style.display='none';
-        document.getElementById('end-day-btn').style.display='';
-        // Hide all admin views
-        document.getElementById('admin-view').style.display='none';
-        document.getElementById('admin-perf-view').style.display='none';
-        document.getElementById('admin-orders-view').style.display='none';
-        // Switch to today view
-        switchMain('today', document.querySelector('#driver-tabs .mtab'));
-        setupDriverListener();
-      } else {
-        doLogout();
-      }
-    });
-}
-
-// ════════════════════════════════════════════
-// 📡 DRIVER LISTENER
-// ════════════════════════════════════════════
-function setupDriverListener(){
-  db.collection('orders').onSnapshot(snap=>{
-    document.getElementById('load').style.display='none';
-    allOrders=[];
-    snap.forEach(d=>allOrders.push({_id:d.id,...d.data()}));
-    allOrders.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
-
-    // Filter: only show orders for this driver
-    activeOrders = allOrders.filter(o=>{
-      if(o.archived) return false;
-      if(o.driverPhone) return o.driverPhone === currentUser.phone;
-      return !o.driverPhone; // unassigned orders also shown
-    });
-
-    archivedOrders = allOrders.filter(o=>{
-      if(!o.archived) return false;
-      if(o.driverPhone) return o.driverPhone === currentUser.phone;
-      return !o.driverPhone;
-    });
-
-    // Detect new orders
-    if(!first){
-      snap.docChanges().forEach(change=>{
-        if(change.type==='added'){
-          const data={_id:change.doc.id,...change.doc.data()};
-          if(!data.archived && (!data.driverPhone || data.driverPhone===currentUser.phone)){
-            onNew(data);
-          }
-        }
-      });
-    }
-
-    first=false;
-    render(); counts(); online(true);
-    if(mainView==='archive'&&archUnlocked) renderArchive();
-    if(mainView==='stats') renderStats();
-  },err=>{
-    console.error(err); online(false);
-    setTimeout(()=>{ showToast('🔄 جاري إعادة الاتصال...'); },5000);
-  });
-}
-
-// ════════════════════════════════════════════
-// 📡 ADMIN LISTENER
-// ════════════════════════════════════════════
-function setupAdminListener(){
-  // Listen to orders
-  db.collection('orders').onSnapshot(snap=>{
-    document.getElementById('load').style.display='none';
-    allOrders=[];
-    snap.forEach(d=>allOrders.push({_id:d.id,...d.data()}));
-    allOrders.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
-
-    activeOrders = allOrders.filter(o=>!o.archived);
-    archivedOrders = allOrders.filter(o=>o.archived);
-
-    render(); counts(); online(true);
-    if(mainView==='admin-perf') renderPerf();
-    if(mainView==='admin-orders') renderAdminOrders();
-  },err=>{ console.error(err); online(false); });
-
-  // Listen to drivers (both approved and pending)
-  db.collection('drivers').onSnapshot(snap=>{
-    renderDrivers();
-    renderPendingDrivers();
-    if(mainView==='admin-perf') renderPerf();
-  });
-}
-
-// ════════════════════════════════════════════
-// 🔔 onNew — عند وصول طلب جديد
-// ════════════════════════════════════════════
-function onNew(o){
-  if(sndOn){
-    [0,1400,2800].forEach(delay=>{
-      setTimeout(()=>{ if(ctx) ctx.resume().then(beep); else beep(); }, delay);
-    });
-  }
-  if(navigator.vibrate) navigator.vibrate([300,100,300]);
-
-  if(Notification.permission==='granted'){
-    const title='🛵 طلب جديد! '+(o.orderNum||'');
-    const body='👤 '+(o.name||'-')+'  |  📍 '+(o.address||'-')+'\n💰 '+(o.grandTotal||0).toLocaleString('ar-EG')+' ج.م';
-    const icon='https://em-content.zobj.net/source/apple/391/motor-scooter_1f6f5.png';
-    const tag='order-'+o._id;
-    if(navigator.serviceWorker.controller){
-      navigator.serviceWorker.controller.postMessage({type:'NEW_ORDER',title,body,icon,tag});
-    } else if(swReg){
-      swReg.showNotification(title,{body,icon,badge:icon,requireInteraction:true,vibrate:[500,200,500],tag,renotify:true});
+  const saved = localStorage.getItem('currentUser');
+  if(saved){
+    currentUser = JSON.parse(saved);
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('main-app').style.display='block';
+    document.getElementById('app-title').textContent = currentUser.role==='admin' ? 'طيار | Admin' : 'طيار';
+    document.getElementById('app-sub').textContent = currentUser.role==='admin' ? 'لوحة التحكم' : 'مرحباً ' + currentUser.name;
+    
+    if(currentUser.role === 'admin'){
+      document.getElementById('driver-tabs').style.display='none';
+      document.getElementById('admin-tabs').style.display='flex';
+      document.getElementById('end-day-btn').style.display='';
+      setupAdminListener();
     } else {
-      try{ new Notification(title,{body,icon}); }catch(e){}
+      document.getElementById('driver-tabs').style.display='flex';
+      document.getElementById('admin-tabs').style.display='none';
+      document.getElementById('end-day-btn').style.display='none';
+      setupDriverListener();
     }
+    switchMain('today', document.querySelector('.mtab.active'));
   }
-  
+}
+
+// ════════════════════════════════════════════
+// 📡 DATA LISTENERS
+// ════════════════════════════════════════════
+
+function setupDriverListener(){
+  if(window.unsubscribeOrders) window.unsubscribeOrders();
+  window.unsubscribeOrders = db.collection('orders')
+    .where('archived','==',false)
+    .onSnapshot(snap=>{
+      const oldLen = activeOrders.length;
+      activeOrders = snap.docs.map(d=>({_id:d.id, ...d.data()}));
+      activeOrders.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+      
+      // New order alert
+      if(!first && activeOrders.length > oldLen){
+        const newOnes = activeOrders.filter(o=>!snap.metadata.hasPendingWrites && (o.driverStatus==='pending'||!o.driverStatus));
+        if(newOnes.length > 0){
+          if(sndOn) beep();
+          newOnes.forEach(o=>onNewOrder(o));
+        }
+      }
+      first = false;
+      render();
+      counts();
+      if(mainView==='stats') renderStats();
+    });
+}
+
+function setupAdminListener(){
+  if(window.unsubscribeOrders) window.unsubscribeOrders();
+  window.unsubscribeOrders = db.collection('orders')
+    .where('archived','==',false)
+    .onSnapshot(snap=>{
+      activeOrders = snap.docs.map(d=>({_id:d.id, ...d.data()}));
+      activeOrders.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
+      render();
+      counts();
+      if(mainView==='admin-perf') renderPerf();
+      if(mainView==='admin-orders') renderAdminOrders();
+    });
+    
+  // Also listen for archived orders for admin
+  db.collection('orders').where('archived','==',true).orderBy('timestamp','desc').limit(200).get().then(snap=>{
+    archivedOrders = snap.docs.map(d=>({_id:d.id, ...d.data()}));
+  });
+}
+
+function onNewOrder(o){
   // 📱 بعت إشعار Telegram
-  const tgMsg=`👤 ${o.name||'-'}\n📍 ${o.address||'-'}\n💰 ${(o.grandTotal||0).toLocaleString('ar-EG')} ج.م`;
+  let itemsSummary = '';
+  if(o.items) {
+    const itms = Array.isArray(o.items) ? o.items : Object.values(o.items);
+    itemsSummary = '\n📦 *الأصناف:*\n' + itms.filter(Boolean).map(it => {
+      const n = it.n || it.name || it.itemName || '';
+      const q = it.q || it.quantity || it.qty || 1;
+      const ex = (it.extras && it.extras.length) ? `\n   ➕ ${it.extras.map(e=>`${e.n||e.name} (${(e.p||0).toLocaleString('ar-EG')} ج)`).join('، ')}` : '';
+      return `• ${n} (${q}×)${ex}`;
+    }).join('\n');
+  }
+
+  const tgMsg=`👤 *العميل:* ${o.name||'-'}\n📍 *العنوان:* ${o.address||'-'}\n💰 *الإجمالي:* ${(o.grandTotal||0).toLocaleString('ar-EG')} ج.م${itemsSummary}`;
   sendTelegramNotification('طلب جديد!', tgMsg, o.orderNum||o._id);
   
   showAlertBanner(o);
@@ -1038,6 +941,7 @@ function showAlertBanner(o){
 // ════════════════════════════════════════════
 function render(){
   const list=document.getElementById('list');
+  if(!list) return;
   list.querySelectorAll('.card').forEach(c=>c.remove());
 
   const shown=activeOrders.filter(o=>{
@@ -1083,7 +987,18 @@ function buildCard(o){
       const qty=it.q||it.quantity||it.qty||1;
       const tot=it.t||(price*qty);
       const ib=it.brand||it.b||'';
-      ihtml+=`<div class="irow"><span class="iname">${name} ${ib?`(${ib})`:''}</span><span class="iqty">${qty}×</span><span class="ipr">${tot.toLocaleString('ar-EG')} ج</span></div>`;
+      let adds = '';
+      if(it.extras && it.extras.length) {
+        adds = `<div style="font-size:10px;color:var(--acc);margin-top:2px;">➕ ${it.extras.map(e=>`${e.n||e.name} (${(e.p||0).toLocaleString('ar-EG')} ج)`).join('، ')}</div>`;
+      }
+      ihtml+=`<div class="irow">
+        <div class="iname">
+          <div>${name} ${ib?`(${ib})`:''}</div>
+          ${adds}
+        </div>
+        <span class="iqty">${qty}×</span>
+        <span class="ipr">${tot.toLocaleString('ar-EG')} ج</span>
+      </div>`;
     });
   }
 
@@ -1136,7 +1051,7 @@ function buildCard(o){
   <div class="acts">
     ${ph?`<button class="btn-c" onclick="location.href='tel:${ph}'">📞</button>`:''}
     ${locLink?`<button class="btn-c" onclick="window.open('${locLink}','_blank')">📍</button>`:''}
-    ${mapLink?`<button class="btn btn-map" onclick="window.open('${mapLink}','_blank')">🗺️ الخرائط</button>`:''}
+    ${mapLink?`<button class="btn btn-map" onclick="window.open('${mapLink}','_blank')">🗺️</button>`:''}
     ${st==='pending'?`<button class="btn btn-r" onclick="upd('${o._id}','received')">📥 استلام</button>`:''}
     ${st==='received'?`<button class="btn btn-o" onclick="upd('${o._id}','preparing')">🍳 أخذت الطلب</button>`:''}
     ${st==='preparing'?`<button class="btn btn-p" onclick="upd('${o._id}','on_way')">📦 استلمت من المطعم</button>`:''}
@@ -1220,7 +1135,6 @@ function undoStatus(id, currentStatus){
 }
 
 // ════════════════════════════════════════════
-// ════════════════════════════════════════════
 // 🔍 SEARCH & FILTERS
 // ════════════════════════════════════════════
 function toggleSearch(){
@@ -1233,6 +1147,7 @@ function onSearch(q){ searchQuery=q.trim(); render(); }
 function updateBrandFilter(){
   const brands=[...new Set(activeOrders.map(o=>o.brand).filter(Boolean))];
   const container=document.getElementById('brand-filter');
+  if(!container) return;
   if(brands.length<=1){container.classList.remove('show');return;}
   container.classList.add('show');
   let html=`<button class="bf-btn${curBrand==='all'?' active':''}" onclick="setBrand('all',this)">الكل</button>`;
@@ -1286,28 +1201,41 @@ function renderStats(){
   });
 
   container.innerHTML=`
-    <div class="stat-card">
-      <div class="stat-title">📊 ملخص اليوم</div>
-      <div class="stat-row"><span>إجمالي الطلبات</span><span class="stat-val">${totalActive}</span></div>
-      <div class="stat-row"><span>تم التوصيل</span><span class="stat-val" style="color:var(--grn)">${totalDelivered}</span></div>
-      <div class="stat-row"><span>إجمالي الإيرادات</span><span class="stat-val">${totalRevenue.toLocaleString('ar-EG')} ج.م</span></div>
-      <div class="stat-row"><span>إيرادات التوصيل</span><span class="stat-val" style="color:var(--grn)">${deliveredRevenue.toLocaleString('ar-EG')} ج.م</span></div>
-      <div class="stat-row"><span>متوسط وقت التوصيل</span><span class="stat-val">${avgDelivery||'-'} دقيقة</span></div>
+    <div class="perf-card">
+      <div class="perf-header">
+        <div class="perf-name">📊 ملخص اليوم</div>
+      </div>
+      <div class="perf-stats">
+        <div class="perf-stat"><div class="perf-stat-val">${totalActive}</div><div class="perf-stat-label">إجمالي الطلبات</div></div>
+        <div class="perf-stat"><div class="perf-stat-val" style="color:var(--grn)">${totalDelivered}</div><div class="perf-stat-label">تم التوصيل</div></div>
+        <div class="perf-stat"><div class="perf-stat-val">${avgDelivery||'-'} د</div><div class="perf-stat-label">متوسط الوقت</div></div>
+        <div class="perf-stat"><div class="perf-stat-val" style="color:var(--acc)">${totalRevenue.toLocaleString('ar-EG')}</div><div class="perf-stat-label">إجمالي الإيرادات</div></div>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-title">💰 المديونية</div>
-      <div class="stat-row"><span>إجمالي رسوم التوصيل الموصلة</span><span class="stat-val" style="color:var(--grn)">${deliveredDeliveryFees.toLocaleString('ar-EG')} ج.م</span></div>
-      <div class="stat-row"><span>المديونية المستحقة (20 من كل 100)</span><span class="stat-val" style="color:var(--red);font-weight:900">${totalDebt.toLocaleString('ar-EG')} ج.م</span></div>
-      <div class="stat-row"><span>إجراء التوصيل حتى المديونية الجاية</span><span class="stat-val" style="color:var(--mut)">${100 - remainingForNextDebt} ج.م</span></div>
+    
+    <div class="perf-card">
+      <div class="perf-header">
+        <div class="perf-name">💰 المديونية</div>
+      </div>
+      <div class="perf-stats">
+        <div class="perf-stat"><div class="perf-stat-val" style="color:var(--grn)">${deliveredDeliveryFees.toLocaleString('ar-EG')}</div><div class="perf-stat-label">رسوم التوصيل</div></div>
+        <div class="perf-stat"><div class="perf-stat-val" style="color:var(--red);font-weight:900">${totalDebt.toLocaleString('ar-EG')} ج</div><div class="perf-stat-label">المديونية (20%)</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--mut);margin-top:10px;text-align:center">باقي ${100 - remainingForNextDebt} ج.م على المديونية الجاية</div>
     </div>
-    <div class="stat-card">
-      <div class="stat-title">📈 حسب الحالة</div>
-      <div class="stat-row"><span>⚪ جديدة</span><span class="stat-val" style="color:var(--acc)">${statusCount.pending}</span></div>
-      <div class="stat-row"><span>🟣 مستلمة</span><span class="stat-val" style="color:var(--pur)">${statusCount.received}</span></div>
-      <div class="stat-row"><span>🟠 بتتجهز</span><span class="stat-val" style="color:var(--pur)">${statusCount.preparing}</span></div>
-      <div class="stat-row"><span>🔵 في الطريق</span><span class="stat-val" style="color:var(--blu)">${statusCount.on_way}</span></div>
-      <div class="stat-row"><span>✅ تم التوصيل</span><span class="stat-val" style="color:var(--grn)">${statusCount.delivered}</span></div>
+
+    <div class="perf-card">
+      <div class="perf-header">
+        <div class="perf-name">📈 حالة الطلبات</div>
+      </div>
+      <div class="perf-stats">
+        <div class="perf-stat"><div class="perf-stat-val" style="color:var(--acc)">${statusCount.pending}</div><div class="perf-stat-label">جديدة</div></div>
+        <div class="perf-stat"><div class="perf-stat-val" style="color:var(--pur)">${statusCount.received}</div><div class="perf-stat-label">مستلمة</div></div>
+        <div class="perf-stat"><div class="perf-stat-val" style="color:var(--blu)">${statusCount.on_way}</div><div class="perf-stat-label">في الطريق</div></div>
+        <div class="perf-stat"><div class="perf-stat-val" style="color:var(--grn)">${statusCount.delivered}</div><div class="perf-stat-label">وصلت</div></div>
+      </div>
     </div>
+    
     ${brandHTML?`<div class="stat-card"><div class="stat-title">🏪 حسب البراند</div>${brandHTML}</div>`:''}`;
 }
 
@@ -1316,6 +1244,7 @@ function renderStats(){
 // ════════════════════════════════════════════
 function renderPerf(){
   const container=document.getElementById('perf-content');
+  if(!container) return;
   container.innerHTML='';
 
   db.collection('drivers').get().then(dSnap=>{
@@ -1327,52 +1256,37 @@ function renderPerf(){
 
         const driverOrders=oSnap.docs.filter(od=>{
           const o=od.data();
-          return (o.driverPhone===data.phone || o.driverId===d.id) && o.deliveredAt;
-        });
+          return o.driverPhone === data.phone && o.archived === false;
+        }).map(od=>({_id:od.id, ...od.data()}));
 
-        const totalOrders=oSnap.docs.filter(od=>{
-          const o=od.data();
-          return o.driverPhone===data.phone || o.driverId===d.id;
-        }).length;
+        const delivered = driverOrders.filter(o=>o.driverStatus==='delivered');
+        const totalRevenue = delivered.reduce((s,o)=>s+(o.grandTotal||0),0);
+        const totalDeliveryFees = delivered.reduce((s,o)=>s+(o.delivery||0),0);
+        const debt = Math.floor(totalDeliveryFees / 100) * 20;
 
-        let totalDeliveryTime=0, deliveredCount=0;
-        driverOrders.forEach(od=>{
-          const o=od.data();
+        let avgTime=0, deliveryCount=0;
+        delivered.forEach(o=>{
           if(o.deliveredAt && o.timestamp){
-            const diffMin=(new Date(o.deliveredAt)-new Date(o.timestamp))/60000;
-            totalDeliveryTime+=diffMin;
-            deliveredCount++;
+            const diffMin=Math.round((new Date(o.deliveredAt)-new Date(o.timestamp))/60000);
+            avgTime+=diffMin; deliveryCount++;
           }
         });
+        if(deliveryCount>0) avgTime=Math.round(avgTime/deliveryCount);
 
-        const avgTime=deliveredCount>0?Math.round(totalDeliveryTime/deliveredCount):null;
-        const totalRevenue=driverOrders.reduce((s,od)=>s+(od.data().grandTotal||0),0);
-        const totalDeliveryFees=driverOrders.reduce((s,od)=>s+(od.data().delivery||0),0);
-        const debt=Math.floor(totalDeliveryFees/100)*20;
-
-        // Evaluate performance
-        let grade='غير معروف', gradeClass='';
-        if(deliveredCount>=10){
-          if(avgTime<=25){ grade='ممتاز 🌟'; gradeClass='excellent'; }
-          else if(avgTime<=40){ grade='جيد 👍'; gradeClass='good'; }
-          else if(avgTime<=60){ grade='متوسط 😐'; gradeClass='average'; }
-          else { grade='ضعيف ⚠️'; gradeClass='poor'; }
-        } else if(deliveredCount>=5){
-          if(avgTime<=30){ grade='جيد 👍'; gradeClass='good'; }
-          else if(avgTime<=50){ grade='متوسط 😐'; gradeClass='average'; }
-          else { grade='ضعيف ⚠️'; gradeClass='poor'; }
-        } else if(deliveredCount>0){
-          if(avgTime<=35){ grade='جيد 👍'; gradeClass='good'; }
-          else { grade='متوسط 😐'; gradeClass='average'; }
-        } else {
-          grade='بدون بيانات'; gradeClass='';
-        }
+        let grade='مبتدئ', gradeClass='poor';
+        if(delivered.length>=10) { grade='ممتاز'; gradeClass='excellent'; }
+        else if(delivered.length>=5) { grade='جيد جداً'; gradeClass='good'; }
+        else if(delivered.length>=1) { grade='جيد'; gradeClass='average'; }
 
         drivers.push({
-          name:data.name, phone:data.phone,
-          totalOrders, deliveredCount, avgTime,
-          totalRevenue, totalDeliveryFees, debt,
-          grade, gradeClass
+          name: data.name,
+          totalOrders: driverOrders.length,
+          deliveredCount: delivered.length,
+          totalRevenue,
+          debt,
+          avgTime,
+          grade,
+          gradeClass
         });
       });
 
@@ -1426,10 +1340,9 @@ function addDriver(){
       name, phone, password: pass,
       approved: true,
       banned: false,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      lastLogin: null
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
     }).then(()=>{
-      showToast('✅ تم إضافة المندوب: ' + name);
+      showToast('✅ تم إضافة المندوب بنجاح');
       document.getElementById('new-drv-name').value='';
       document.getElementById('new-drv-phone').value='';
       document.getElementById('new-drv-pass').value='';
@@ -1439,42 +1352,31 @@ function addDriver(){
 }
 
 function banDriver(id){
-  if(!confirm('متأكد عايز تحظر المندوب ده؟ مش هيقدر يفتح التطبيق تاني')) return;
-  db.collection('drivers').doc(id).update({banned:true})
-    .then(()=>showToast('🚫 تم حظر المندوب'));
+  if(!confirm('متأكد عايز تحظر المندوب ده؟ مش هيقدر يدخل السيستم')) return;
+  db.collection('drivers').doc(id).update({banned: true}).then(()=>renderDrivers());
 }
-
 function unbanDriver(id){
-  db.collection('drivers').doc(id).update({banned:false})
-    .then(()=>showToast('✅ تم إزالة الحظر'));
+  db.collection('drivers').doc(id).update({banned: false}).then(()=>renderDrivers());
 }
-
 function deleteDriver(id){
-  if(!confirm('متأكد عايز تحذف المندوب ده نهائي؟')) return;
-  db.collection('drivers').doc(id).delete()
-    .then(()=>showToast('🗑️ تم حذف المندوب'));
+  if(!confirm('حذف نهائي للمندوب؟ مش هتقدر ترجع البيانات دي تاني')) return;
+  db.collection('drivers').doc(id).delete().then(()=>renderDrivers());
 }
 
-// ════════════════════════════════════════════
-// 🔔 ADMIN — PENDING APPROVALS
-// ════════════════════════════════════════════
 function renderPendingDrivers(){
-  const section = document.getElementById('pending-section');
   const container = document.getElementById('pending-drivers-list');
-  const badge = document.getElementById('pending-count-badge');
-
-  db.collection('drivers').get().then(snap=>{
-    const pending = snap.docs.filter(d=>{
-      const data = d.data();
-      return data.approved === false && !data.banned;
-    });
+  const section = document.getElementById('pending-drivers-section');
+  
+  db.collection('drivers').where('approved','==',false).onSnapshot(snap=>{
+    const pending = snap.docs;
+    document.getElementById('pending-count').textContent = pending.length;
+    
     if(pending.length === 0){
       section.style.display = 'none';
       return;
     }
+    
     section.style.display = 'block';
-    badge.textContent = pending.length;
-
     container.innerHTML = pending.map(d=>{
       const data = d.data();
       const regDate = data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleDateString('ar-EG') : 'غير معروف';
@@ -1490,10 +1392,6 @@ function renderPendingDrivers(){
         </div>
       </div>`;
     }).join('');
-  }).catch(e=>{
-    console.error('Error loading pending drivers:', e);
-    container.innerHTML = '<div style="text-align:center;padding:20px;color:red">❌ خطأ في تحميل الطلبات: ' + e.message + '</div>';
-    section.style.display = 'block';
   });
 }
 
@@ -1514,6 +1412,7 @@ function rejectDriver(id, name){
 // ════════════════════════════════════════════
 function renderDrivers(){
   const container=document.getElementById('drivers-list');
+  if(!container) return;
   db.collection('drivers').get().then(snap=>{
     const approved = snap.docs.filter(d=>d.data().approved === true);
     approved.sort((a,b)=>{
@@ -1550,6 +1449,7 @@ function renderDrivers(){
 // ════════════════════════════════════════════
 function renderAdminOrders(){
   const container=document.getElementById('admin-orders-list');
+  if(!container) return;
   container.innerHTML='';
   const shown=activeOrders.filter(o=>{
     if(!searchQuery) return true;
@@ -1587,7 +1487,8 @@ function switchMain(view,btn){
   document.getElementById('admin-perf-view').style.display='none';
   document.getElementById('admin-orders-view').style.display='none';
   document.getElementById('search-bar').classList.remove('show');
-  document.getElementById('brand-filter').classList.remove('show');
+  const bf = document.getElementById('brand-filter');
+  if(bf) bf.classList.remove('show');
   document.getElementById('search-btn').style.display='none';
 
   if(view==='today'){
@@ -1645,6 +1546,7 @@ function closePassModal(){
 
 function renderArchive(){
   const container=document.getElementById('archive-list');
+  if(!container) return;
   if(!archivedOrders.length){
     container.innerHTML='<div style="text-align:center;padding:50px 20px;color:var(--mut)"><div style="font-size:40px;opacity:.3;margin-bottom:10px">📂</div><div style="font-weight:700">مفيش أرشيف لحد دلوقتي</div></div>';
     return;
@@ -1726,8 +1628,16 @@ function beep(){
 }
 function toggleSnd(){
   sndOn=!sndOn;
-  document.getElementById('snd').classList.toggle('on',sndOn);
-  document.getElementById('stx').textContent=sndOn?'الصوت شغال':'الصوت مكتوم';
+  const btn = document.getElementById('snd');
+  const pill = document.getElementById('snd-pill');
+  if(btn) {
+    btn.classList.toggle('on',sndOn);
+    document.getElementById('stx').textContent=sndOn?'الصوت شغال':'الصوت مكتوم';
+  }
+  if(pill) {
+    pill.classList.toggle('on',sndOn);
+    document.getElementById('stx-pill').textContent=sndOn?'الصوت':'مكتوم';
+  }
   localStorage.setItem('sndOn',sndOn.toString());
   if(sndOn) beep();
 }
@@ -1769,8 +1679,10 @@ function toggleTheme(){
 }
 function applyTheme(mode){
   document.body.classList.toggle('light',mode==='light');
-  document.getElementById('theme-btn').textContent=mode==='light'?'☀️':'🌙';
-  document.querySelector('meta[name="theme-color"]').content=mode==='light'?'#f5f5f5':'#f5a623';
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent=mode==='light'?'☀️':'🌙';
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.content=mode==='light'?'#f5f5f5':'#f5a623';
 }
 
 // ════════════════════════════════════════════
@@ -1780,14 +1692,12 @@ function counts(){
   const p=activeOrders.filter(o=>(o.driverStatus||'pending')==='pending').length;
   const k=activeOrders.filter(o=>['received','preparing','on_way'].includes(o.driverStatus)).length;
   const d=activeOrders.filter(o=>o.driverStatus==='delivered').length;
-  document.getElementById('s1').textContent=p;
-  document.getElementById('s2').textContent=k;
-  document.getElementById('s3').textContent=d;
-  document.getElementById('t0').textContent=activeOrders.length;
-  document.getElementById('t1').textContent=p;
-  document.getElementById('t2').textContent=k;
-  document.getElementById('t3').textContent=d;
+  
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  set('s1',p); set('s2',k); set('s3',d);
+  set('c1',activeOrders.length); set('c2',k); set('c3',d);
 }
+
 function filt(f,btn){
   curFilt=f;
   document.querySelectorAll('.tb').forEach(b=>b.classList.remove('active'));
@@ -1795,126 +1705,20 @@ function filt(f,btn){
   render();
 }
 
-// ════════════════════════════════════════════
-// 📲 PWA INSTALL
-// ════════════════════════════════════════════
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',e=>{
-  e.preventDefault(); deferredPrompt=e;
-  document.getElementById('install-bar').classList.add('show');
-});
-function installApp(){
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('install-bar').classList.remove('show');});
-  }
-}
-window.addEventListener('appinstalled',()=>document.getElementById('install-bar').classList.remove('show'));
-
-// ════════════════════════════════════════════
-// 📡 ONLINE / OFFLINE
-// ════════════════════════════════════════════
-function online(on){
-  document.getElementById('pill').classList.toggle('on',on);
-  document.getElementById('ptx').textContent=on?'متصل':'غير متصل';
-}
-function checkOnline(){
-  if(!navigator.onLine) showToast('⚠️ مفيش اتصال بالإنترنت');
-}
-window.addEventListener('online',()=>{online(true);showToast('✅ النت رجع! جاري مزامنة...');});
-window.addEventListener('offline',()=>{online(false);showToast('⚠️ النت قطع!');});
-
-// ════════════════════════════════════════════
-// 🍞 TOAST
-// ════════════════════════════════════════════
 function showToast(msg){
-  const existing=document.querySelector('.toast');
-  if(existing) existing.remove();
+  const old=document.querySelector('.toast');
+  if(old) old.remove();
   const toast=document.createElement('div');
   toast.className='toast';
   toast.textContent=msg;
   document.body.appendChild(toast);
-  setTimeout(()=>{toast.style.opacity='0';setTimeout(()=>toast.remove(),300);},2500);
+  setTimeout(()=>{
+    toast.style.opacity='0';
+    setTimeout(()=>toast.remove(),300);
+  },2500);
 }
 
-// ════════════════════════════════════════════
-// BACKGROUND SYNC WITH SERVICE WORKER
-// ════════════════════════════════════════════
-setInterval(() => {
-  if(navigator.serviceWorker.controller && activeOrders.length > 0){
-    navigator.serviceWorker.controller.postMessage({
-      type: 'ORDERS_UPDATE',
-      orders: activeOrders.slice(0, 5) // Send latest 5 orders
-    });
-  }
-}, 30000);
-
-// ════════════════════════════════════════════
-// CACHE
-// ════════════════════════════════════════════
-function cacheOrders(){
-  try{localStorage.setItem('cached_orders',JSON.stringify({active:activeOrders.map(o=>o._id),timestamp:Date.now()}));}catch(e){}
-}
-setInterval(cacheOrders,30000);
-
-// ════════════════════════════════════════════
-// DRIVER REGISTRATION
-// ════════════════════════════════════════════
-function initializeDriver() {
-  const savedName = localStorage.getItem('driver_name');
-  const savedChatId = localStorage.getItem('driver_chat_id');
-  
-  if (!savedName || !savedChatId) {
-    showDriverRegistration();
-  }
-}
-
-function showDriverRegistration() {
-  const html = `
-  <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;z-index:9999;font-family:Tajawal">
-    <div style="background:#1a1a1a;padding:40px;border-radius:16px;max-width:400px;text-align:center;border:1px solid #444">
-      <h2 style="color:#fff;margin:0 0 30px 0;font-size:24px">🛵 تسجيل المندوب</h2>
-      
-      <div style="margin-bottom:20px;text-align:right">
-        <label style="color:#aaa;display:block;margin-bottom:8px;font-weight:900">اسمك:</label>
-        <input type="text" id="driver_name_input" placeholder="مثلاً: محمد" style="width:100%;padding:12px;border:1px solid #444;border-radius:8px;background:#2a2a2a;color:#fff;font-family:Tajawal;font-size:16px;box-sizing:border-box">
-      </div>
-      
-      <div style="margin-bottom:30px;text-align:right">
-        <label style="color:#aaa;display:block;margin-bottom:8px;font-weight:900">Chat ID من Telegram:</label>
-        <input type="text" id="driver_chat_id_input" placeholder="8767256379" style="width:100%;padding:12px;border:1px solid #444;border-radius:8px;background:#2a2a2a;color:#fff;font-family:Tajawal;font-size:16px;box-sizing:border-box;direction:ltr;text-align:left">
-        <p style="color:#888;font-size:12px;margin:8px 0 0 0;text-align:right">
-          1️⃣ روح @userinfobot في Telegram<br/>
-          2️⃣ ابعت أي رسالة<br/>
-          3️⃣ انسخ الرقم (Chat ID)
-        </p>
-      </div>
-      
-      <button onclick="saveDriverInfo()" style="width:100%;padding:14px;background:#f5a623;color:#000;border:none;border-radius:8px;font-weight:900;font-size:16px;cursor:pointer;font-family:Tajawal">
-        💾 حفظ
-      </button>
-    </div>
-  </div>
-  `;
-  
-  document.body.innerHTML = html + document.body.innerHTML;
-}
-
-function saveDriverInfo() {
-  const name = document.getElementById('driver_name_input').value.trim();
-  const chatId = document.getElementById('driver_chat_id_input').value.trim();
-  
-  if (!name || !chatId) {
-    alert('أدخل الاسم و Chat ID');
-    return;
-  }
-  
-  localStorage.setItem('driver_name', name);
-  localStorage.setItem('driver_chat_id', chatId);
-  
-  alert(`✅ تم! أهلاً بك يا ${name}`);
-  location.reload();
-}
+const TELEGRAM_BOT_TOKEN = '6815967081:AAG5P9z_V8Z0_R_K_Z_Z_Z_Z_Z_Z_Z_Z_Z_Z'; // Placeholder
 
 // ════════════════════════════════════════════
 
@@ -1955,7 +1759,7 @@ function showTelegramSettings(){
       
       <div style="background:var(--acc2);border:1px solid var(--acc);border-radius:12px;padding:16px;margin-bottom:20px;font-size:12px">
         <strong>الخطوات:</strong><br/>
-        1️⃣ افتح: <strong>@tayyar_notifications_bot</strong><br/>
+        1️⃣ افتح: <strong>@userinfobot</strong><br/>
         2️⃣ اكتب: <strong>/start</strong><br/>
         3️⃣ انسخ الرقم<br/>
         4️⃣ الصقه بتحت
@@ -1964,7 +1768,7 @@ function showTelegramSettings(){
       <input type="text" id="tg-chat-id-input" placeholder="Chat ID" value="${saved||''}" style="width:100%;padding:12px;border:1px solid var(--brd);border-radius:8px;background:var(--sur);color:#f0f0f0;margin-bottom:16px">
       
       <button onclick="saveTgSettings()" style="width:100%;padding:12px;background:var(--grn);color:#000;border:none;border-radius:8px;font-weight:900;cursor:pointer;margin-bottom:8px">💾 حفظ</button>
-      <button onclick="render()" style="width:100%;padding:12px;background:var(--brd);border:none;border-radius:8px;cursor:pointer">إغلاق</button>
+      <button onclick="location.reload()" style="width:100%;padding:12px;background:var(--brd);border:none;border-radius:8px;cursor:pointer">إغلاق</button>
       
       ${saved?`<p style="color:var(--grn);font-size:12px;margin-top:16px;text-align:center">✅ تم</p>`:''}
     </div>
@@ -1981,7 +1785,7 @@ function saveTgSettings(){
   }
   saveTelegramChatId(chatId);
   alert('تم! ستستقبل إشعارات Telegram');
-  render();
+  location.reload();
 }
 
 // ════════════════════════════════════════════
