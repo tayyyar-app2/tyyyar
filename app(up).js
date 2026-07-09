@@ -440,11 +440,6 @@ function getDeliveryFee(address) {
   if (ad.includes('دار مصر') || ad.includes('دار مصر')) return 40 ;
   if (ad.includes('حي الياسمين') || ad.includes('حي الياسمين')) return 40;
 
-
-
-
-
-
   // 2. استخراج نوع المنطقة والرقم من النص
   // يدعم: حي، الحي، مجاورة، مجاوره (مع أو بدون مسافة قبل الرقم)
   const match = ad.match(/(?:الحي|حي|المجاورة|مجاورة|المجاوره|مجاوره|العاشر من رمضان |الحي الثاني عشر|الحي الخامس  عشر|)\s*(\d+)/);
@@ -664,7 +659,10 @@ function showSuccess(oid){
   document.getElementById('timing-badge').textContent='⏱️ طلبك سيكون جاهز خلال 25 - 45 دقيقة';
   localStorage.setItem('tyr_last_order', oid);
   const orderId = oid || localStorage.getItem('tyr_last_order');
-  if(orderId) startOrderTracking(orderId);
+  if(orderId) {
+  startOrderTracking(orderId);
+  if(typeof updateDriverTracking==='function') updateDriverTracking(orderId, {driverStatus:'pending'});
+}
 }
 // function showSuccess(nm){
 //   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -1128,7 +1126,3 @@ function startOrderTracking(oid){
   poll();
   trackingInterval=setInterval(poll, 1000);
 }
- 
- 
- 
- 

@@ -877,7 +877,7 @@ function setupAdminListener(){
       activeOrders.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));
       render();
       counts();
-      if(mainView==='admin-perf') renderPerf();
+      if(mainView==='admin-perf' || mainView==='admin') renderPerf();
       if(mainView==='admin-orders') renderAdminOrders();
     });
     
@@ -1252,7 +1252,9 @@ function renderPerf(){
 
         const driverOrders=oSnap.docs.filter(od=>{
           const o=od.data();
-          return o.driverPhone === data.phone && o.archived === false;
+          // Check for archived: true explicitly, or archived missing/false
+          const isArchived = o.archived === true;
+          return o.driverPhone === data.phone && !isArchived;
         }).map(od=>({_id:od.id, ...od.data()}));
 
         const delivered = driverOrders.filter(o=>o.driverStatus==='delivered');
@@ -1417,23 +1419,37 @@ function renderDrivers(){
       return tb - ta;
     });
     document.getElementById('drv-count').textContent=approved.length;
-    container.innerHTML=approved.map(d=>{
-      const data=d.data();
-      const statusClass = data.banned ? 'banned' : 'active';
-      const statusText = data.banned ? 'محظور 🚫' : 'نشط ✅';
-      return `<div class="driver-row">
-        <div class="driver-info">
-          <div class="driver-name">${data.name}</div>
-          <div class="driver-phone">📞 ${data.phone} &nbsp;|&nbsp; <span class="driver-status ${statusClass}">${statusText}</span></div>
-        </div>
-        <div class="driver-actions">
-          ${data.banned
-            ? `<button class="driver-act-btn unban" onclick="unbanDriver('${d.id}')" title="إزالة الحظر">✅</button>`
-            : `<button class="driver-act-btn ban" onclick="banDriver('${d.id}')" title="حظر">🚫</button>`}
-          <button class="driver-act-btn delete" onclick="deleteDriver('${d.id}')" title="حذف">🗑️</button>
-        </div>
-      </div>`;
-    }).join('') || '<div style="text-align:center;padding:20px;color:var(--mut)">مفيش مندوبين لحد دلوقتي</div>';
+    
+    // Get all orders to calculate debt for each driver
+    db.collection('orders').where('archived','==',false).get().then(oSnap => {
+      const allOrders = oSnap.docs.map(doc => doc.data());
+      
+      container.innerHTML=approved.map(d=>{
+        const data=d.data();
+        
+        // Calculate debt for this specific driver
+        const driverDelivered = allOrders.filter(o => o.driverPhone === data.phone && o.driverStatus === 'delivered');
+        const fees = driverDelivered.reduce((s, o) => s + (o.delivery || 0), 0);
+        const debt = Math.floor(fees / 100) * 20;
+        const debtText = debt > 0 ? `💰 المديونية: ${debt.toLocaleString('ar-EG')} ج` : '';
+        
+        const statusClass = data.banned ? 'banned' : 'active';
+        const statusText = data.banned ? 'محظور 🚫' : 'نشط ✅';
+        return `<div class="driver-row">
+          <div class="driver-info">
+            <div class="driver-name">${data.name}</div>
+            <div class="driver-phone">📞 ${data.phone} &nbsp;|&nbsp; <span class="driver-status ${statusClass}">${statusText}</span></div>
+            <div style="font-size:11px;color:var(--red);font-weight:700;margin-top:4px">${debtText}</div>
+          </div>
+          <div class="driver-actions">
+            ${data.banned
+              ? `<button class="driver-act-btn unban" onclick="unbanDriver('${d.id}')" title="إزالة الحظر">✅</button>`
+              : `<button class="driver-act-btn ban" onclick="banDriver('${d.id}')" title="حظر">🚫</button>`}
+            <button class="driver-act-btn delete" onclick="deleteDriver('${d.id}')" title="حذف">🗑️</button>
+          </div>
+        </div>`;
+      }).join('') || '<div style="text-align:center;padding:20px;color:var(--mut)">مفيش مندوبين لحد دلوقتي</div>';
+    });
   }).catch(e=>{
     console.error('Error loading drivers:', e);
     container.innerHTML = '<div style="text-align:center;padding:20px;color:red">❌ خطأ في تحميل المندوبين: ' + e.message + '</div>';
