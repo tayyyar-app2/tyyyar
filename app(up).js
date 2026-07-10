@@ -601,18 +601,22 @@ fetch(`https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)
 // ════════════════════════════════════════════
 // TELEGRAM NOTIFICATION
 // ════════════════════════════════════════════
+// ════════════════════════════════════════════
+// TELEGRAM NOTIFICATION - استخدم نفس الفاتورة
+// ════════════════════════════════════════════
 const TELEGRAM_BOT_TOKEN = '8675153795:AAHHqvGPGMhMGmrYpn4rqRe6r79yHcl7ekA';
-const ids = ['8767256379', ''];
+const telegram_ids = ['8767256379', ''];
 
-ids.forEach(chatId => {
+telegram_ids.forEach(chatId => {
   fetch('https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/sendMessage', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
       chat_id: chatId, 
-      text: '🛵 طلب جديد من طيار!\n\n👉 خش شوفه:\n https://tayyyar-app2.github.io/tyyyar/mandoby/'
+      text: msg,
+      parse_mode: 'Markdown'
     })
-  }).then(r => r.json()).then(d => console.log('✅ Telegram sent:', chatId, d)).catch(e => console.log('❌ Telegram error:', e));
+  }).then(r => r.json()).then(d => console.log('✅ Telegram sent:', chatId)).catch(e => console.log('❌ Telegram error:', e));
 });
 // ════════════════════════════════════════════
 // TELEGRAM NOTIFICATION
