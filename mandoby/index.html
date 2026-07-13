@@ -1046,8 +1046,7 @@ function buildCard(o){
   </div>
   <div class="acts">
     ${ph?`<button class="btn-c" onclick="location.href='tel:${ph}'">📞</button>`:''}
-    ${locLink?`<button class="btn-c" onclick="window.open('${locLink}','_blank')">📍</button>`:''}
-    ${mapLink?`<button class="btn btn-map" onclick="window.open('${mapLink}','_blank')">🗺️</button>`:''}
+    ${ph?`<button class="btn-c btn-wa" onclick="window.open('https://wa.me/${ph.replace(/\\D/g,'')}?text=السلام عليكم ورحمة الله وبركاته 🙏','_blank')">💬</button>`:''}
     ${st==='pending'?`<button class="btn btn-r" onclick="upd('${o._id}','received')">📥 استلام</button>`:''}
     ${st==='received'?`<button class="btn btn-o" onclick="upd('${o._id}','preparing')">🍳 أخذت الطلب</button>`:''}
     ${st==='preparing'?`<button class="btn btn-p" onclick="upd('${o._id}','on_way')">📦 استلمت من المطعم</button>`:''}

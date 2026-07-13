@@ -590,17 +590,11 @@ const doc = {
 
 const fields={};
 Object.entries(doc).forEach(([k,v])=>{fields[k]=toFV(v);});
-fetch(`https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders?documentId=${oid}&key=AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8`, {
-  method:'POST',
+fetch(`https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders/${oid}?key=AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8`, {
+  method:'PATCH',
   headers:{'Content-Type':'application/json'},
   body:JSON.stringify({fields})
 }).then(r=>r.json()).then(r=>console.log('✅ Order saved:',r)).catch(e=>console.error('❌',e));
-// ════════════════════════════════════════════
-// TELEGRAM NOTIFICATION
-// ════════════════════════════════════════════
-// ════════════════════════════════════════════
-// TELEGRAM NOTIFICATION
-// ════════════════════════════════════════════
 // ════════════════════════════════════════════
 // TELEGRAM NOTIFICATION - استخدم نفس الفاتورة
 // ════════════════════════════════════════════
@@ -636,16 +630,7 @@ function toFirestoreValue(val) {
   return { nullValue: null };
 }
 
-const firestoreFields = {};
-Object.entries(orderData).forEach(([k,v]) => { firestoreFields[k] = toFirestoreValue(v); });
-
-fetch('https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ fields: firestoreFields })
-}).catch(e => console.error('Firestore error:', e));
-
-showSuccess(oid);
+// ✅ الكود الأساسي أعلاه يكفي - لا نحتاج تكرار
   
 }
 
@@ -665,7 +650,7 @@ function showSuccess(oid){
   const orderId = oid || localStorage.getItem('tyr_last_order');
   if(orderId) {
   startOrderTracking(orderId);
-  if(typeof updateDriverTracking==='function') updateDriverTracking(orderId, {driverStatus:'pending'});
+  // if(typeof updateDriverTracking==='function') updateDriverTracking(orderId, {driverStatus:'pending'});
 }
 }
 // function showSuccess(nm){
