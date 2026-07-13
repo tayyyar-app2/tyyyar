@@ -1031,7 +1031,7 @@ function buildCard(o){
     ${driverInfo}
     <div class="row"><span class="ri">👤</span><div><div class="rl">اسم العميل</div><div class="rv">${o.name||'-'}</div></div></div>
     <div class="row"><span class="ri">📍</span><div><div class="rl">العنوان</div><div class="rv">${o.address||'-'}</div></div></div>
-    ${ph?`<div class="row"><span class="ri">📞</span><div><div class="rl">الموبايل</div><div class="rv" style="direction:ltr">${ph}</div></div></div>`:''}
+    ${ph?`<div class="row"><span class="ri">📞</span><div><div class="rl">الموبايل</div><div class="rv" style="direction:ltr;cursor:pointer;color:var(--blu);font-weight:600" onclick="openWhatsApp('${ph}')" title="اضغط لفتح WhatsApp">${ph}</div></div></div>`:''}
     ${o.brand?`<div class="row"><span class="ri">🍕</span><div><div class="rl">البراند</div><div class="rv">${o.brand}</div></div></div>`:''}
     ${o.notes?`<div class="row"><span class="ri">📝</span><div><div class="rl">ملاحظات</div><div class="rv">${o.notes}</div></div></div>`:''}
     <div class="ibox"><div class="itit">🛒 الأصناف</div>${ihtml||'<div style="color:var(--mut);font-size:12px">لا يوجد تفاصيل</div>'}</div>
@@ -1797,6 +1797,62 @@ function saveTgSettings(){
   saveTelegramChatId(chatId);
   alert('تم! ستستقبل إشعارات Telegram');
   location.reload();
+}
+
+// ════════════════════════════════════════════
+// 💬 WhatsApp Integration
+// ════════════════════════════════════════════
+function openWhatsApp(phoneNumber) {
+  if(!phoneNumber || phoneNumber.trim() === '') {
+    showToast('⚠️ رقم الهاتف غير متوفر');
+    return;
+  }
+  
+  // تنظيف رقم الهاتف (إزالة المسافات والرموز)
+  let cleanPhone = phoneNumber.replace(/\D/g, '');
+  
+  // إذا كان الرقم يبدأ بـ 0، استبدله بـ 20 (كود مصر)
+  if(cleanPhone.startsWith('0')) {
+    cleanPhone = '20' + cleanPhone.substring(1);
+  }
+  
+  // إذا لم يبدأ بـ +، أضفه
+  if(!cleanPhone.startsWith('+')) {
+    cleanPhone = '+' + cleanPhone;
+  }
+  
+  // رابط WhatsApp
+  const whatsappUrl = `https://wa.me/${cleanPhone}`;
+  
+  // فتح في نافذة جديدة
+  window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+}
+
+// إضافة زر WhatsApp لقائمة الجهات
+function addWhatsAppButton(phoneNumber) {
+  return `
+    <button onclick="openWhatsApp('${phoneNumber}')" 
+            style="
+              background:#25d366; 
+              color:#fff; 
+              border:none; 
+              border-radius:50%; 
+              width:44px; 
+              height:44px; 
+              display:flex; 
+              align-items:center; 
+              justify-content:center; 
+              cursor:pointer; 
+              font-size:20px;
+              transition:0.2s;
+              flex-shrink:0;
+            "
+            onmouseover="this.style.background='#20ba58'"
+            onmouseout="this.style.background='#25d366'"
+            title="فتح WhatsApp">
+      📱
+    </button>
+  `;
 }
 
 // ════════════════════════════════════════════
