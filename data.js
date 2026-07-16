@@ -724,3 +724,12 @@ const KOSHARI_KHODEIRY_EXTRAS = [
   { id: 'ex_sauce',     n: 'صلصة',      p: 10 },
 ];
 MENU.filter(p => p.brand === 'Koshary Al Khedewy').forEach(p => { p.extras = KOSHARI_KHODEIRY_EXTRAS; });
+CATEGORIES = {
+  baked: "🍞 مخبوزات",
+  dairy: "🥛 ألبان",
+  groceries: "🛍️ بقالة",
+  vegetables: "🥬 خضروات",
+  fruits: "🍎 فواكه",
+  drinks: "🧃 مشروبات"
+}
+

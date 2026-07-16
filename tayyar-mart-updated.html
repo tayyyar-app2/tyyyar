@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>طيار مارت - تسوق قوتك</title>
+  <link rel="icon" href="./img/logo.jpeg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#e8742a">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8"></script>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="طيار مارت">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    /* ===== Home Page (Landing) ===== */
+    .mart-home {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e8742a 0%, #f59e42 100%);
+      text-align: center;
+      padding: 20px;
+    }
+
+    .mart-logo-container {
+      animation: slideDown 0.6s ease-out;
+    }
+
+    .mart-logo {
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .mart-title {
+      font-size: 48px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .mart-subtitle {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 50px;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 15px;
+      margin-bottom: 50px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .category-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+      background: white;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .category-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .category-button:active {
+      transform: scale(0.95);
+    }
+
+    .category-icon {
+      font-size: 40px;
+    }
+
+    .category-button span {
+      font-size: 12px;
+    }
+
+    .start-button {
+      padding: 15px 40px;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 30px;
+      background: white;
+      color: #e8742a;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .start-button:hover {
+      transform: scale(1.05);
+    }
+
+    /* ===== Category Page ===== */
+    .mart-category {
+      display: none;
+    }
+
+    .mart-category.active {
+      display: block;
+    }
+
+    .mart-review {
+      display: none;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #f5f5f5;
+    }
+
+    .mart-review.active {
+      display: flex;
+    }
+
+    .header-bar {
+      background: #e8742a;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .category-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .search-bar {
+      padding: 15px 20px;
+      background: white;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 14px;
+    }
+
+    .products-container {
+      padding: 15px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      transform: translateY(-3px);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 120px;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-info {
+      padding: 12px;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 13px;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .product-price {
+      color: #e8742a;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 5px;
+    }
+
+    .qty-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #e8742a;
+      background: white;
+      color: #e8742a;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .qty-btn:hover {
+      background: #e8742a;
+      color: white;
+    }
+
+    .qty-display {
+      flex: 1;
+      text-align: center;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .checkout-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 2px solid #e8742a;
+      padding: 15px 20px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+    }
+
+    .checkout-bar.active {
+      display: flex;
+    }
+
+    .cart-total {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .cart-count {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .cart-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #e8742a;
+    }
+
+    .checkout-btn {
+      padding: 12px 30px;
+      background: #e8742a;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .checkout-btn:hover {
+      background: #d65a1a;
+      transform: scale(1.05);
+    }
+
+    .no-results {
+      padding: 40px 20px;
+      text-align: center;
+      color: #999;
+      font-size: 16px;
+    }
+
+    /* ===== REVIEW PAGE STYLES ===== */
+    .review-container {
+      flex: 1;
+      padding: 20px;
+      padding-bottom: 100px;
+      background: #f5f5f5;
+    }
+
+    .review-section {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #e8742a;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .review-product-item {
+      display: flex;
+      gap: 15px;
+      padding: 15px;
+      background: #f9f9f9;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      align-items: flex-start;
+    }
+
+    .review-product-image {
+      width: 80px;
+      height: 80px;
+      background: #f0f0f0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+
+    .review-product-details {
+      flex: 1;
+    }
+
+    .review-product-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .review-product-category {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 8px;
+    }
+
+    .review-product-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: #e8742a;
+      margin-bottom: 10px;
+    }
+
+    .review-qty-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      border-radius: 6px;
+      padding: 5px;
+      width: fit-content;
+    }
+
+    .review-qty-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #ddd;
+      background: white;
+      color: #e8742a;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .review-qty-btn:hover {
+      background: #e8742a;
+      color: white;
+    }
+
+    .review-qty-display {
+      width: 30px;
+      text-align: center;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .review-summary {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .review-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+    }
+
+    .review-row:last-child {
+      border-bottom: none;
+    }
+
+    .review-row.total {
+      border-bottom: 2px solid #e8742a;
+      padding-top: 15px;
+      padding-bottom: 15px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #e8742a;
+    }
+
+    .review-customer-info {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .review-info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      font-size: 13px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .review-info-row:last-child {
+      border-bottom: none;
+    }
+
+    .review-info-label {
+      font-weight: 600;
+      color: #666;
+    }
+
+    .review-info-value {
+      color: #333;
+      text-align: left;
+      word-break: break-word;
+    }
+
+    .review-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 2px solid #e8742a;
+      padding: 15px 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 50;
+    }
+
+    .review-footer-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .review-confirm-btn {
+      background: #e8742a;
+      color: white;
+    }
+
+    .review-confirm-btn:hover {
+      background: #d65a1a;
+      transform: scale(1.02);
+    }
+
+    .review-back-btn {
+      background: #ddd;
+      color: #333;
+    }
+
+    .review-back-btn:hover {
+      background: #ccc;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .mart-title {
+        font-size: 36px;
+      }
+
+      .products-container {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      }
+
+      .categories-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .review-product-item {
+        flex-direction: column;
+      }
+
+      .review-product-image {
+        width: 100%;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HOME PAGE ===== -->
+<div id="martHome" class="mart-home">
+  <div class="mart-logo-container">
+    <div class="mart-logo">🛒</div>
+  </div>
+  <h1 class="mart-title">طيار مارت</h1>
+  <p class="mart-subtitle">تسوق احتياجاتك اليومية بكل سهولة</p>
+  
+  <div class="categories-grid">
+    <button class="category-button" onclick="selectCategory('baked', '🍞 مخبوزات')">
+      <div class="category-icon">🍞</div>
+      <span>مخبوزات</span>
+    </button>
+    <button class="category-button" onclick="selectCategory('dairy', '🥛 ألبان')">
+      <div class="category-icon">🥛</div>
+      <span>ألبان</span>
+    </button>
+    <button class="category-button" onclick="selectCategory('groceries', '🛍️ بقالة')">
+      <div class="category-icon">🛍️</div>
+      <span>بقالة</span>
+    </button>
+    <button class="category-button" onclick="selectCategory('vegetables', '🥬 خضروات')">
+      <div class="category-icon">🥬</div>
+      <span>خضروات</span>
+    </button>
+    <button class="category-button" onclick="selectCategory('fruits', '🍎 فواكه')">
+      <div class="category-icon">🍎</div>
+      <span>فواكه</span>
+    </button>
+    <button class="category-button" onclick="selectCategory('drinks', '🧃 مشروبات')">
+      <div class="category-icon">🧃</div>
+      <span>مشروبات</span>
+    </button>
+  </div>
+
+  <button class="start-button" onclick="goToCategory('dairy', '🥛 ألبان')">ابدأ التسوق الآن</button>
+</div>
+
+<!-- ===== CATEGORY PAGES ===== -->
+<div id="martCategory" class="mart-category">
+  <div class="header-bar">
+    <button class="back-button" onclick="backToHome()">←</button>
+    <h2 class="category-title" id="categoryTitle"></h2>
+    <div style="width: 24px;"></div> <!-- Spacer -->
+  </div>
+
+  <div class="search-bar">
+    <input type="text" class="search-input" id="categorySearch" placeholder="ابحث عن المنتجات..." onkeyup="searchCategory(this.value)">
+  </div>
+
+  <div class="products-container" id="categoryProducts"></div>
+  <div class="no-results" id="noResults" style="display: none;">لا توجد منتجات في هذه الفئة</div>
+
+  <!-- ===== BOTTOM CHECKOUT BAR ===== -->
+  <div class="checkout-bar" id="checkoutBar">
+    <div class="cart-total">
+      <span class="cart-count" id="cartCount">0 منتج</span>
+      <span class="cart-price" id="cartPrice">0 ج.م</span>
+    </div>
+    <button class="checkout-btn" onclick="proceedToCheckout()">إتمام الطلب</button>
+  </div>
+</div>
+
+<!-- ===== REVIEW PAGE ===== -->
+<div id="martReview" class="mart-review">
+  <div class="header-bar">
+    <button class="back-button" onclick="backToCheckout()">←</button>
+    <h2 class="category-title">مراجعة الطلب</h2>
+    <div style="width: 24px;"></div>
+  </div>
+
+  <div class="review-container">
+    <!-- Customer Information -->
+    <div class="review-customer-info">
+      <div class="review-section-title">👤 بيانات العميل</div>
+      <div class="review-info-row">
+        <span class="review-info-label">الاسم:</span>
+        <span class="review-info-value" id="reviewName"></span>
+      </div>
+      <div class="review-info-row">
+        <span class="review-info-label">الهاتف:</span>
+        <span class="review-info-value" id="reviewPhone"></span>
+      </div>
+      <div class="review-info-row">
+        <span class="review-info-label">العنوان:</span>
+        <span class="review-info-value" id="reviewAddress"></span>
+      </div>
+      <div class="review-info-row">
+        <span class="review-info-label">الموقع:</span>
+        <span class="review-info-value" id="reviewLocation"></span>
+      </div>
+    </div>
+
+    <!-- Products -->
+    <div class="review-section">
+      <div class="review-section-title">🛒 المنتجات</div>
+      <div id="reviewProductsList"></div>
+    </div>
+
+    <!-- Summary -->
+    <div class="review-summary">
+      <div class="review-section-title">📊 ملخص الطلب</div>
+      <div class="review-row">
+        <span>إجمالي المنتجات:</span>
+        <span style="font-weight: 700;" id="reviewSubtotal">0 ج.م</span>
+      </div>
+      <div class="review-row">
+        <span>رسوم الخدمة :</span>
+        <span style="font-weight: 700; color: #ff6b6b;" id="reviewServiceFee">0 ج.م</span>
+      </div>
+      <div class="review-row">
+        <span>رسوم التوصيل:</span>
+        <span style="font-weight: 700; color: #ff6b6b;" id="reviewDeliveryFee">0 ج.م</span>
+      </div>
+      <div class="review-row total">
+        <span>الإجمالي النهائي:</span>
+        <span id="reviewTotal">0 ج.م</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Buttons -->
+  <div class="review-footer">
+    <button class="review-footer-btn review-back-btn" onclick="backToCheckout()">عودة</button>
+    <button class="review-footer-btn review-confirm-btn" onclick="confirmAndSendOrder()">تأكيد الطلب</button>
+  </div>
+</div>
+
+<!-- ===== CHECKOUT MODAL ===== -->
+<div id="checkoutModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:2000; align-items:center; justify-content:center;">
+  <div style="background:white; border-radius:20px; padding:30px; max-width:500px; width:90%; max-height:90vh; overflow-y:auto;">
+    <h2 style="text-align:right; margin-bottom:20px; color:#e8742a;">إتمام الطلب</h2>
+    
+    <form id="checkoutForm" onsubmit="submitCheckout(event)">
+      <div style="margin-bottom:15px;">
+        <label style="display:block; margin-bottom:5px; font-weight:600;">الاسم:</label>
+        <input type="text" id="customer-name" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-family: Tajawal;">
+      </div>
+      
+      <div style="margin-bottom:15px;">
+        <label style="display:block; margin-bottom:5px; font-weight:600;">الهاتف:</label>
+        <input type="tel" id="customer-phone" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-family: Tajawal;">
+      </div>
+      
+      <div style="margin-bottom:15px;">
+        <label style="display:block; margin-bottom:5px; font-weight:600;">العنوان:</label>
+        <input type="text" id="customer-address" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-family: Tajawal;">
+      </div>
+
+      <div style="margin-bottom:15px;">
+        <label style="display:block; margin-bottom:5px; font-weight:600;">الموقع (اختياري):</label>
+        <input type="text" id="customer-location" placeholder="مثال: بجانب المسجد" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-family: Tajawal;">
+      </div>
+      
+      <div style="margin-bottom:20px;">
+        <label style="display:block; margin-bottom:5px; font-weight:600;">طريقة الدفع:</label>
+        <label style="display:flex; align-items:center; margin-bottom:10px;">
+          <input type="radio" name="payment" value="cash" checked>
+          <span style="margin-right:10px;">💰 الدفع عند الاستلام</span>
+        </label>
+        <label style="display:flex; align-items:center;">
+          <input type="radio" name="payment" value="card">
+          <span style="margin-right:10px;">💳 بطاقة ائتمان</span>
+        </label>
+      </div>
+      
+      <div style="background:#f5f5f5; padding:15px; border-radius:10px; margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+          <span>الإجمالي:</span>
+          <span id="checkoutTotal" style="font-weight:700; color:#e8742a;">0 ج.م</span>
+        </div>
+      </div>
+      
+      <button type="submit" style="width:100%; padding:12px; background:#e8742a; color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:16px;">المراجعة والتأكيد</button>
+    </form>
+    
+    <button onclick="closeCheckoutModal()" style="width:100%; padding:12px; margin-top:10px; background:#ddd; color:#333; border:none; border-radius:10px; font-weight:700; cursor:pointer;">إلغاء</button>
+  </div>
+</div>
+
+<!-- ===== SUCCESS MODAL ===== -->
+<div id="successModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:3000; align-items:center; justify-content:center;">
+  <div style="background:white; border-radius:20px; padding:30px; max-width:400px; width:90%; text-align:center;">
+    <div style="font-size: 60px; margin-bottom: 20px;">✅</div>
+    <h2 style="color: #e8742a; margin-bottom: 10px;">تم استقبال طلبك بنجاح</h2>
+    <p style="margin-bottom: 15px; color: #666; font-size: 14px;">شكراً لاختيارك طيار مارت</p>
+    <p style="margin-bottom: 20px; color: #999; font-size: 13px;">تم إرسال تفاصيل طلبك عبر واتس أب</p>
+    <button onclick="resetCheckout()" style="width:100%; padding:12px; background:#e8742a; color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer;">العودة للرئيسية</button>
+  </div>
+</div>
+
+<script>
+  // ===== DATA LAYER =====
+  const CATEGORIES = {
+    baked: "🍞 مخبوزات",
+    dairy: "🥛 ألبان",
+    groceries: "🛍️ بقالة",
+    vegetables: "🥬 خضروات",
+    fruits: "🍎 فواكه",
+    drinks: "🧃 مشروبات"
+  };
+
+  const MENU = [
+    { id: 1, n: "عيش", d: "🍞 مخبوزات", p: 25, e: "🍞", cat: "baked" },
+    { id: 2, n: "حليب", d: "🥛 ألبان", p: 15, e: "🥛", cat: "dairy" },
+    { id: 3, n: "جبنة", d: "🥛 ألبان", p: 20, e: "🧀", cat: "dairy" },
+    { id: 4, n: "زيت", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id: 5, n: "طماطم", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 6, n: "تفاح", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+    { id: 7, n: "عصير", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 8, n: "كيك", d: "🍞 مخبوزات", p: 30, e: "🎂", cat: "baked" },
+    { id: 9, n: "زبادي", d: "🥛 ألبان", p: 8, e: "🥣", cat: "dairy" },
+    { id: 10, n: "أرز", d: "🛍️ بقالة", p: 20, e: "🍚", cat: "groceries" }
+  ];
+
+  const SERVICE_FEE_PERCENT = 4;
+  const DELIVERY_FEE = 10;
+  const WHATSAPP_NUMBER = '201277092892'; // رقم واتساب بدون رموز
+
+  let currentCategory = null;
+  let currentSearchQuery = '';
+  let martyrtCart = {};
+  let currentSource = 'regular';
+  let checkoutData = null;
+
+  const MART_CATEGORIES = {
+    baked: {
+      name: '🍞 مخبوزات',
+      keywords: ['خبز', 'كيك', 'معجنات', 'فطيرة', 'بسكويت', 'كعك'],
+    },
+    dairy: {
+      name: '🥛 ألبان',
+      keywords: ['لبن', 'جبنة', 'زبادي', 'حليب', 'قشطة', 'ألبان'],
+    },
+    groceries: {
+      name: '🛍️ بقالة',
+      keywords: ['زيت', 'سكر', 'دقيق', 'أرز', 'ملح', 'معكرونة', 'أملاح', 'بهارات'],
+    },
+    vegetables: {
+      name: '🥬 خضروات',
+      keywords: ['خضار', 'طماطم', 'خيار', 'بصل', 'ثوم', 'فلفل', 'كرنب', 'كوسة'],
+    },
+    fruits: {
+      name: '🍎 فواكه',
+      keywords: ['فاكهة', 'تفاح', 'برتقال', 'موز', 'عنب', 'ليمون', 'مانجو'],
+    },
+    drinks: {
+      name: '🧃 مشروبات',
+      keywords: ['عصير', 'شراب', 'ماء', 'قهوة', 'شاي', 'حليب', 'مشروب'],
+    },
+  };
+
+  // ===== SESSION STORAGE =====
+  function saveMartSession() {
+    sessionStorage.setItem('tayyar_mart_source', currentSource);
+    sessionStorage.setItem('tayyar_mart_category', currentCategory);
+    sessionStorage.setItem('tayyar_mart_cart', JSON.stringify(martyrtCart));
+  }
+
+  function loadMartSession() {
+    currentSource = sessionStorage.getItem('tayyar_mart_source') || 'regular';
+    currentCategory = sessionStorage.getItem('tayyar_mart_category');
+    const saved = sessionStorage.getItem('tayyar_mart_cart');
+    if (saved) {
+      martyrtCart = JSON.parse(saved);
+    }
+  }
+
+  // ===== NAVIGATION =====
+  function selectCategory(catId, catName) {
+    goToCategory(catId, catName);
+  }
+
+  function goToCategory(catId, catName) {
+    currentCategory = catId;
+    currentSource = 'tayyar-mart';
+    currentSearchQuery = '';
+    
+    document.getElementById('martHome').style.display = 'none';
+    document.getElementById('martCategory').classList.add('active');
+    document.getElementById('martReview').classList.remove('active');
+    
+    document.getElementById('categoryTitle').textContent = catName;
+    document.getElementById('categorySearch').value = '';
+    
+    renderCategoryProducts(catId);
+    
+    saveMartSession();
+  }
+
+  function backToHome() {
+    currentCategory = null;
+    currentSource = 'regular';
+    currentSearchQuery = '';
+    
+    document.getElementById('martHome').style.display = 'flex';
+    document.getElementById('martCategory').classList.remove('active');
+    document.getElementById('martReview').classList.remove('active');
+    
+    saveMartSession();
+  }
+
+  // ===== PRODUCT FILTERING =====
+  function filterProductsByCategory(categoryId) {
+    const categoryKeywords = MART_CATEGORIES[categoryId]?.keywords || [];
+    
+    return MENU.filter(product => {
+      const productName = (product.n || '').toLowerCase();
+      const productDesc = (product.d || '').toLowerCase();
+      
+      return categoryKeywords.some(keyword => 
+        productName.includes(keyword) || productDesc.includes(keyword)
+      );
+    });
+  }
+
+  function renderCategoryProducts(categoryId) {
+    let products = filterProductsByCategory(categoryId);
+    const container = document.getElementById('categoryProducts');
+    const noResults = document.getElementById('noResults');
+    
+    if (currentSearchQuery) {
+      const q = currentSearchQuery.toLowerCase();
+      products = products.filter(p => 
+        (p.n || '').toLowerCase().includes(q) || 
+        (p.d || '').toLowerCase().includes(q)
+      );
+    }
+    
+    if (products.length === 0) {
+      container.innerHTML = '';
+      noResults.style.display = 'block';
+      return;
+    }
+    
+    noResults.style.display = 'none';
+    container.innerHTML = products.map(p => {
+      const qty = martyrtCart[p.id] || 0;
+      const emoji = p.e || '🍔';
+      
+      return `
+        <div class="product-card" id="martProd${p.id}">
+          <div class="product-image">
+            ${p.img ? `<img src="${p.img}" style="width:100%; height:100%; object-fit:cover;">` : emoji}
+          </div>
+          <div class="product-info">
+            <div class="product-name">${p.n}</div>
+            <div class="product-price">${p.p} ج.م</div>
+            <div class="quantity-control">
+              <button class="qty-btn" onclick="changeMartQty(${p.id}, -1)">−</button>
+              <span class="qty-display" id="martQty${p.id}">${qty}</span>
+              <button class="qty-btn" onclick="changeMartQty(${p.id}, 1)">+</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    
+    updateCheckoutBar();
+  }
+
+  // ===== QUANTITY MANAGEMENT =====
+  function changeMartQty(productId, change) {
+    const product = MENU.find(p => p.id === productId);
+    if (!product) return;
+    
+    const currentQty = martyrtCart[productId] || 0;
+    const newQty = Math.max(0, currentQty + change);
+    
+    if (newQty === 0) {
+      delete martyrtCart[productId];
+    } else {
+      martyrtCart[productId] = newQty;
+    }
+    
+    document.getElementById(`martQty${productId}`).textContent = newQty;
+    renderCategoryProducts(currentCategory);
+    saveMartSession();
+  }
+
+  function changeReviewQty(productId, change) {
+    const currentQty = martyrtCart[productId] || 0;
+    const newQty = Math.max(0, currentQty + change);
+    
+    if (newQty === 0) {
+      delete martyrtCart[productId];
+    } else {
+      martyrtCart[productId] = newQty;
+    }
+    
+    saveMartSession();
+    renderReviewPage();
+  }
+
+  // ===== CHECKOUT BAR =====
+  function updateCheckoutBar() {
+    const total = calculateCartTotal();
+    const count = Object.values(martyrtCart).reduce((sum, qty) => sum + qty, 0);
+    const bar = document.getElementById('checkoutBar');
+    
+    if (count === 0) {
+      bar.classList.remove('active');
+    } else {
+      bar.classList.add('active');
+      document.getElementById('cartCount').textContent = `${count} منتج`;
+      document.getElementById('cartPrice').textContent = `${total} ج.م`;
+    }
+  }
+
+  function calculateCartTotal() {
+    return Object.entries(martyrtCart).reduce((sum, [id, qty]) => {
+      const product = MENU.find(p => p.id === parseInt(id));
+      return sum + (product ? product.p * qty : 0);
+    }, 0);
+  }
+
+  // ===== SEARCH =====
+  function searchCategory(query) {
+    currentSearchQuery = query.trim();
+    renderCategoryProducts(currentCategory);
+  }
+
+  // ===== CHECKOUT MODAL =====
+  function proceedToCheckout() {
+    updateCheckoutTotal();
+    document.getElementById('checkoutModal').style.display = 'flex';
+  }
+
+  function closeCheckoutModal() {
+    document.getElementById('checkoutModal').style.display = 'none';
+  }
+
+  function updateCheckoutTotal() {
+    const subtotal = calculateCartTotal();
+    const serviceFee = Math.round(subtotal * SERVICE_FEE_PERCENT / 100);
+    const total = subtotal + serviceFee + DELIVERY_FEE;
+    
+    document.getElementById('checkoutTotal').textContent = `${total} ج.م`;
+  }
+
+  function submitCheckout(event) {
+    event.preventDefault();
+    
+    const checkoutDataNew = {
+      name: document.getElementById('customer-name').value,
+      phone: document.getElementById('customer-phone').value,
+      address: document.getElementById('customer-address').value,
+      location: document.getElementById('customer-location').value,
+      cart: { ...martyrtCart },
+      paymentMethod: document.querySelector('input[name="payment"]:checked').value,
+      timestamp: Date.now(),
+    };
+    
+    checkoutData = checkoutDataNew;
+    closeCheckoutModal();
+    renderReviewPage();
+  }
+
+  // ===== REVIEW PAGE =====
+  function renderReviewPage() {
+    if (!checkoutData) return;
+
+    document.getElementById('martCategory').classList.remove('active');
+    document.getElementById('martReview').classList.add('active');
+
+    // Customer Info
+    document.getElementById('reviewName').textContent = checkoutData.name;
+    document.getElementById('reviewPhone').textContent = checkoutData.phone;
+    document.getElementById('reviewAddress').textContent = checkoutData.address;
+    document.getElementById('reviewLocation').textContent = checkoutData.location || 'لم يتم تحديده';
+
+    // Products List
+    const productsList = Object.entries(checkoutData.cart).map(([id, qty]) => {
+      const product = MENU.find(p => p.id === parseInt(id));
+      if (!product) return '';
+      
+      const itemTotal = product.p * qty;
+      const emoji = product.e || '🍔';
+      
+      return `
+        <div class="review-product-item">
+          <div class="review-product-image">${emoji}</div>
+          <div class="review-product-details">
+            <div class="review-product-name">${product.n}</div>
+            <div class="review-product-category">${CATEGORIES[product.cat] || product.cat}</div>
+            <div class="review-product-price">${product.p} ج.م × ${qty} = ${itemTotal} ج.م</div>
+            <div class="review-qty-control">
+              <button class="review-qty-btn" onclick="changeReviewQty(${product.id}, -1)">−</button>
+              <span class="review-qty-display">${qty}</span>
+              <button class="review-qty-btn" onclick="changeReviewQty(${product.id}, 1)">+</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    document.getElementById('reviewProductsList').innerHTML = productsList;
+
+    // Summary
+    const subtotal = calculateCartTotal();
+    const serviceFee = Math.round(subtotal * SERVICE_FEE_PERCENT / 100);
+    const total = subtotal + serviceFee + DELIVERY_FEE;
+
+    document.getElementById('reviewSubtotal').textContent = `${subtotal} ج.م`;
+    document.getElementById('reviewServiceFee').textContent = `${serviceFee} ج.م`;
+    document.getElementById('reviewDeliveryFee').textContent = `${DELIVERY_FEE} ج.م`;
+    document.getElementById('reviewTotal').textContent = `${total} ج.م`;
+  }
+
+  function backToCheckout() {
+    document.getElementById('martReview').classList.remove('active');
+    document.getElementById('martCategory').classList.add('active');
+  }
+
+  function confirmAndSendOrder() {
+    if (!checkoutData) return;
+
+    const subtotal = calculateCartTotal();
+    const serviceFee = Math.round(subtotal * SERVICE_FEE_PERCENT / 100);
+    const total = subtotal + serviceFee + DELIVERY_FEE;
+
+    // بناء رسالة WhatsApp
+    const productsList = Object.entries(checkoutData.cart)
+      .map(([id, qty]) => {
+        const product = MENU.find(p => p.id === parseInt(id));
+        return product ? `${product.n} × ${qty} = ${product.p * qty} ج.م` : '';
+      })
+      .filter(Boolean)
+      .join('%0A');
+      
+const now = new Date();
+
+const date = now.toLocaleDateString('ar-EG'); // مثال: 16‏/7‏/2026
+const time = now.toLocaleTimeString('ar-EG', {
+  hour: '2-digit',
+  minute: '2-digit'
+});
+
+const message = `
+🛒 *طلب جديد - طيار مارت*
+
+━━━━━━━━━━━━━━━━━━
+📅 *تاريخ الطلب:* ${date}
+🕒 *وقت الطلب:* ${time}
+
+━━━━━━━━━━━━━━━━━━
+👤 *بيانات العميل*
+👤 الاسم: ${checkoutData.name}
+📞 الهاتف: ${checkoutData.phone}
+📍 العنوان: ${checkoutData.address}
+🌍 الموقع: ${checkoutData.location || 'لم يتم تحديده'}
+
+━━━━━━━━━━━━━━━━━━
+🛍️ *المنتجات المطلوبة*
+
+${productsList.replace(/%0A/g, '\n')}
+
+━━━━━━━━━━━━━━━━━━
+💰 *ملخص الفاتورة*
+
+🧾 إجمالي المنتجات: ${subtotal} ج.م
+💳 رسوم الخدمة : ${serviceFee} ج.م
+🚚 رسوم التوصيل: ${DELIVERY_FEE} ج.م
+💵 *الإجمالي النهائي: ${total} ج.م*
+━━━━━━━━━━━━━━━━━━
+💳 *طريقة الدفع:*
+${checkoutData.paymentMethod === 'cash'
+  ? '💵 الدفع عند الاستلام'
+  : '💳 بطاقة ائتمان'}
+
+━━━━━━━━━━━━━━━━━━
+✅  شكراً لاختيارك *طيار*❤️
+`;
+    // إرسال على WhatsApp
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+
+    // عرض نافذة النجاح
+    setTimeout(() => {
+      document.getElementById('martReview').classList.remove('active');
+      document.getElementById('successModal').style.display = 'flex';
+    }, 500);
+  }
+
+  function resetCheckout() {
+    martyrtCart = {};
+    currentCategory = null;
+    currentSource = 'regular';
+    checkoutData = null;
+    sessionStorage.removeItem('tayyar_mart_cart');
+    sessionStorage.removeItem('tayyar_mart_category');
+    document.getElementById('successModal').style.display = 'none';
+    backToHome();
+  }
+
+  // ===== INITIALIZATION =====
+  document.addEventListener('DOMContentLoaded', function() {
+    loadMartSession();
+    
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('status') === 'success') {
+      alert('✅ تم استقبال طلبك بنجاح!');
+      resetCheckout();
+    }
+  });
+
+  window.addEventListener('beforeunload', saveMartSession);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && currentCategory) {
+      backToHome();
+    }
+    if (e.key === 'Escape') {
+      closeCheckoutModal();
+    }
+  });
+
+  document.getElementById('checkoutModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeCheckoutModal();
+    }
+  });
+</script>
+
+</body>
+</html>
