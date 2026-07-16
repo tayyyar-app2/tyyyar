@@ -618,6 +618,10 @@
       <div class="category-icon">🧃</div>
       <span>مشروبات</span>
     </button>
+    <button class="category-button" onclick="selectCategory('smoking', '🚬 دخان')">
+      <div class="category-icon">🚬</div>
+      <span>دخان</span>
+    </button>
   </div>
 
   <button class="start-button" onclick="goToCategory('dairy', '🥛 ألبان')">ابدأ التسوق الآن</button>
@@ -628,7 +632,7 @@
   <div class="header-bar">
     <button class="back-button" onclick="backToHome()">←</button>
     <h2 class="category-title" id="categoryTitle"></h2>
-    <div style="width: 24px;"></div> <!-- Spacer -->
+    <div style="width: 24px;"></div>
   </div>
 
   <div class="search-bar">
@@ -638,7 +642,6 @@
   <div class="products-container" id="categoryProducts"></div>
   <div class="no-results" id="noResults" style="display: none;">لا توجد منتجات في هذه الفئة</div>
 
-  <!-- ===== BOTTOM CHECKOUT BAR ===== -->
   <div class="checkout-bar" id="checkoutBar">
     <div class="cart-total">
       <span class="cart-count" id="cartCount">0 منتج</span>
@@ -673,7 +676,7 @@
         <span class="review-info-value" id="reviewAddress"></span>
       </div>
       <div class="review-info-row">
-        <span class="review-info-label">الموقع:</span>
+        <span class="review-info-label">📍 الموقع:</span>
         <span class="review-info-value" id="reviewLocation"></span>
       </div>
     </div>
@@ -697,7 +700,7 @@
       </div>
       <div class="review-row">
         <span>رسوم التوصيل:</span>
-        <span style="font-weight: 700; color: #ff6b6b;" id="reviewDeliveryFee">0 ج.م</span>
+        <span style="font-weight: 700; color: #27ae60;" id="reviewDeliveryFee">0 ج.م</span>
       </div>
       <div class="review-row total">
         <span>الإجمالي النهائي:</span>
@@ -735,8 +738,10 @@
       </div>
 
       <div style="margin-bottom:15px;">
-        <label style="display:block; margin-bottom:5px; font-weight:600;">الموقع (اختياري):</label>
-        <input type="text" id="customer-location" placeholder="مثال: بجانب المسجد" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; font-family: Tajawal;">
+        <label style="display:block; margin-bottom:8px; font-weight:600;">📍 تحديد الموقع:</label>
+        <button type="button" onclick="getGPSLocation()" style="width:100%; padding:10px; background:#e8742a; color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer; font-family:Tajawal;">📍 تحديد موقعي الحالي</button>
+        <div id="gps-status" style="font-size:12px; color:#999; text-align:center; margin-top:8px;"></div>
+        <div id="location-result" style="font-size:13px; color:#27ae60; text-align:center; margin-top:5px; font-weight:600;"></div>
       </div>
       
       <div style="margin-bottom:20px;">
@@ -749,13 +754,6 @@
           <input type="radio" name="payment" value="card">
           <span style="margin-right:10px;">💳 بطاقة ائتمان</span>
         </label>
-      </div>
-      
-      <div style="background:#f5f5f5; padding:15px; border-radius:10px; margin-bottom:20px;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-          <span>الإجمالي:</span>
-          <span id="checkoutTotal" style="font-weight:700; color:#e8742a;">0 ج.م</span>
-        </div>
       </div>
       
       <button type="submit" style="width:100%; padding:12px; background:#e8742a; color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:16px;">المراجعة والتأكيد</button>
@@ -784,7 +782,8 @@
     groceries: "🛍️ بقالة",
     vegetables: "🥬 خضروات",
     fruits: "🍎 فواكه",
-    drinks: "🧃 مشروبات"
+    drinks: "🧃 مشروبات",
+    smoking:"🚬 دخان"
   };
 
   const MENU = [
@@ -797,18 +796,54 @@
     { id: 7, n: "عصير", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
     { id: 8, n: "كيك", d: "🍞 مخبوزات", p: 30, e: "🎂", cat: "baked" },
     { id: 9, n: "زبادي", d: "🥛 ألبان", p: 8, e: "🥣", cat: "dairy" },
-    { id: 10, n: "أرز", d: "🛍️ بقالة", p: 20, e: "🍚", cat: "groceries" }
+    { id: 10, n: "أرز", d: "🛍️ بقالة", p: 20, e: "🍚", cat: "groceries" },
+    { id: 11, n: "LM", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" },
+    { id: 12, n: "أرز طويل", d: "🛍️ بقالة", p: 20, e: "🍚", cat: "groceries" },
   ];
 
   const SERVICE_FEE_PERCENT = 4;
-  const DELIVERY_FEE = 10;
-  const WHATSAPP_NUMBER = '201277092892'; // رقم واتساب بدون رموز
+  
+  // ===== DELIVERY FEE CALCULATION =====
+  function calculateDeliveryFee(address) {
+    if (!address) return 45;
+    
+    const ad = address.toLowerCase().trim();
+    
+    // المناطق المحددة بأسماء خاصة
+    if (ad.includes('الاندلس') || ad.includes('اندلس')) return 70;
+    if (ad.includes('الاردنيه') || ad.includes('الاردنية')) return 25;
+    if (ad.includes('صيدناوي') || ad.includes('صيدناوى')) return 30;
+    if (ad.includes('الحي33') || ad.includes('الحي 33')) return 85;
+    if (ad.includes('الحي 28') || ad.includes('الحي28')) return 70;
+    if (ad.includes('دار مصر')) return 40;
+    if (ad.includes('حي الياسمين') || ad.includes('الياسمين')) return 40;
+    
+    // استخراج نوع المنطقة والرقم
+    const match = ad.match(/(?:الحي|حي|المجاورة|مجاورة|المجاوره|مجاوره|العاشر)\s*(\d+)/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      const isMajawara = match[0].includes('مجاور');
+      
+      if (isMajawara) {
+        if (num >= 66 && num <= 79) return 45;
+        if (num >= 30 && num < 66)  return 40;
+        if (num >= 1  && num < 30)  return 35;
+      } else {
+        if (num >= 10 && num <= 20) return 45;
+      }
+    }
+    
+    return 50;
+  }
+
+  const WHATSAPP_NUMBER = '201277092892';
 
   let currentCategory = null;
   let currentSearchQuery = '';
   let martyrtCart = {};
   let currentSource = 'regular';
   let checkoutData = null;
+  let userLocationCoordinates = null; // لتخزين الإحداثيات
 
   const MART_CATEGORIES = {
     baked: {
@@ -835,6 +870,10 @@
       name: '🧃 مشروبات',
       keywords: ['عصير', 'شراب', 'ماء', 'قهوة', 'شاي', 'حليب', 'مشروب'],
     },
+    smoking : {
+      name: '🚬 دخان',
+      keywords: ['دخان', 'سجائر', 'تبغ'],
+    },
   };
 
   // ===== SESSION STORAGE =====
@@ -842,6 +881,13 @@
     sessionStorage.setItem('tayyar_mart_source', currentSource);
     sessionStorage.setItem('tayyar_mart_category', currentCategory);
     sessionStorage.setItem('tayyar_mart_cart', JSON.stringify(martyrtCart));
+    
+    const formData = {
+      name: document.getElementById('customer-name')?.value || '',
+      phone: document.getElementById('customer-phone')?.value || '',
+      address: document.getElementById('customer-address')?.value || ''
+    };
+    localStorage.setItem('tayyar_mart_customer', JSON.stringify(formData));
   }
 
   function loadMartSession() {
@@ -851,6 +897,23 @@
     if (saved) {
       martyrtCart = JSON.parse(saved);
     }
+    
+    const savedCustomer = localStorage.getItem('tayyar_mart_customer');
+    if (savedCustomer) {
+      try {
+        const customerData = JSON.parse(savedCustomer);
+        setTimeout(() => {
+          const nameField = document.getElementById('customer-name');
+          if (nameField) {
+            document.getElementById('customer-name').value = customerData.name || '';
+            document.getElementById('customer-phone').value = customerData.phone || '';
+            document.getElementById('customer-address').value = customerData.address || '';
+          }
+        }, 100);
+      } catch (e) {
+        console.log('خطأ في تحميل بيانات العميل');
+      }
+    }
   }
 
   // ===== NAVIGATION =====
@@ -859,6 +922,20 @@
   }
 
   function goToCategory(catId, catName) {
+    if (currentCategory && currentCategory !== catId && Object.keys(martyrtCart).length > 0) {
+      const currentCatName = CATEGORIES[currentCategory] || currentCategory;
+      const confirm = window.confirm(
+        `⚠️ عندك سلة من قسم "${currentCatName}"\n\nهتنقل القسم وتفقد السلة دي؟`
+      );
+      
+      if (!confirm) {
+        return;
+      }
+      
+      martyrtCart = {};
+      sessionStorage.removeItem('tayyar_mart_cart');
+    }
+    
     currentCategory = catId;
     currentSource = 'tayyar-mart';
     currentSearchQuery = '';
@@ -946,6 +1023,73 @@
     updateCheckoutBar();
   }
 
+  // ===== GPS LOCATION =====
+  function getGPSLocation() {
+    const statusDiv = document.getElementById('gps-status');
+    const resultDiv = document.getElementById('location-result');
+    
+    if (!navigator.geolocation) {
+      statusDiv.textContent = '❌ الجهاز لا يدعم تحديد الموقع';
+      statusDiv.style.color = '#e74c3c';
+      return;
+    }
+    
+    statusDiv.textContent = '⏳ جارٍ تحديد الموقع...';
+    statusDiv.style.color = '#666';
+    resultDiv.textContent = '';
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        try {
+          const lat = position.coords.latitude.toFixed(6);
+          const lng = position.coords.longitude.toFixed(6);
+          
+          // حفظ الإحداثيات
+          userLocationCoordinates = { lat, lng };
+          
+          // عرض رسالة النجاح
+          statusDiv.textContent = '✅ تم تحديد الموقع بنجاح!';
+          statusDiv.style.color = '#27ae60';
+          
+          // عرض الإحداثيات
+          resultDiv.textContent = `📍 ${lat}, ${lng}`;
+          
+          // فتح الخريطة
+          const googleMapsLink = `https://maps.google.com/?q=${lat},${lng}`;
+          window.open(googleMapsLink, '_blank');
+          
+        } catch (e) {
+          statusDiv.textContent = '❌ خطأ في معالجة الموقع';
+          statusDiv.style.color = '#e74c3c';
+        }
+      },
+      (error) => {
+        let errorMsg = '';
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            errorMsg = '❌ تم رفض الوصول للموقع\nفعّل الموقع في الإعدادات';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMsg = '❌ الموقع غير متاح حالياً';
+            break;
+          case error.TIMEOUT:
+            errorMsg = '⏱️ انتهت مهلة البحث';
+            break;
+          default:
+            errorMsg = '❌ خطأ في تحديد الموقع';
+        }
+        statusDiv.innerHTML = errorMsg.replace(/\n/g, '<br/>');
+        statusDiv.style.color = '#e74c3c';
+        statusDiv.style.fontSize = '12px';
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 8000,
+        maximumAge: 60000
+      }
+    );
+  }
+
   // ===== QUANTITY MANAGEMENT =====
   function changeMartQty(productId, change) {
     const product = MENU.find(p => p.id === productId);
@@ -1009,7 +1153,6 @@
 
   // ===== CHECKOUT MODAL =====
   function proceedToCheckout() {
-    updateCheckoutTotal();
     document.getElementById('checkoutModal').style.display = 'flex';
   }
 
@@ -1017,22 +1160,20 @@
     document.getElementById('checkoutModal').style.display = 'none';
   }
 
-  function updateCheckoutTotal() {
-    const subtotal = calculateCartTotal();
-    const serviceFee = Math.round(subtotal * SERVICE_FEE_PERCENT / 100);
-    const total = subtotal + serviceFee + DELIVERY_FEE;
-    
-    document.getElementById('checkoutTotal').textContent = `${total} ج.م`;
-  }
-
   function submitCheckout(event) {
     event.preventDefault();
+    
+    let locationDisplay = 'لم يتم تحديد الموقع';
+    if (userLocationCoordinates) {
+      locationDisplay = `📍 ${userLocationCoordinates.lat}, ${userLocationCoordinates.lng}`;
+    }
     
     const checkoutDataNew = {
       name: document.getElementById('customer-name').value,
       phone: document.getElementById('customer-phone').value,
       address: document.getElementById('customer-address').value,
-      location: document.getElementById('customer-location').value,
+      location: locationDisplay,
+      coordinates: userLocationCoordinates,
       cart: { ...martyrtCart },
       paymentMethod: document.querySelector('input[name="payment"]:checked').value,
       timestamp: Date.now(),
@@ -1054,7 +1195,7 @@
     document.getElementById('reviewName').textContent = checkoutData.name;
     document.getElementById('reviewPhone').textContent = checkoutData.phone;
     document.getElementById('reviewAddress').textContent = checkoutData.address;
-    document.getElementById('reviewLocation').textContent = checkoutData.location || 'لم يتم تحديده';
+    document.getElementById('reviewLocation').textContent = checkoutData.location;
 
     // Products List
     const productsList = Object.entries(checkoutData.cart).map(([id, qty]) => {
@@ -1072,9 +1213,9 @@
             <div class="review-product-category">${CATEGORIES[product.cat] || product.cat}</div>
             <div class="review-product-price">${product.p} ج.م × ${qty} = ${itemTotal} ج.م</div>
             <div class="review-qty-control">
-              <button class="review-qty-btn" onclick="changeReviewQty(${product.id}, -1)">−</button>
-              <span class="review-qty-display">${qty}</span>
-              <button class="review-qty-btn" onclick="changeReviewQty(${product.id}, 1)">+</button>
+              <button type="button" class="review-qty-btn" onclick="changeReviewQty(${product.id}, -1)">−</button>
+              <span class="review-qty-display" id="reviewQty${product.id}">${qty}</span>
+              <button type="button" class="review-qty-btn" onclick="changeReviewQty(${product.id}, 1)">+</button>
             </div>
           </div>
         </div>
@@ -1083,14 +1224,15 @@
 
     document.getElementById('reviewProductsList').innerHTML = productsList;
 
-    // Summary
+    // Summary with Dynamic Delivery Fee
     const subtotal = calculateCartTotal();
+    const deliveryFee = calculateDeliveryFee(checkoutData.address);
     const serviceFee = Math.round(subtotal * SERVICE_FEE_PERCENT / 100);
-    const total = subtotal + serviceFee + DELIVERY_FEE;
+    const total = subtotal + serviceFee + deliveryFee;
 
     document.getElementById('reviewSubtotal').textContent = `${subtotal} ج.م`;
     document.getElementById('reviewServiceFee').textContent = `${serviceFee} ج.م`;
-    document.getElementById('reviewDeliveryFee').textContent = `${DELIVERY_FEE} ج.م`;
+    document.getElementById('reviewDeliveryFee').textContent = `${deliveryFee} ج.م`;
     document.getElementById('reviewTotal').textContent = `${total} ج.م`;
   }
 
@@ -1103,10 +1245,10 @@
     if (!checkoutData) return;
 
     const subtotal = calculateCartTotal();
+    const deliveryFee = calculateDeliveryFee(checkoutData.address);
     const serviceFee = Math.round(subtotal * SERVICE_FEE_PERCENT / 100);
-    const total = subtotal + serviceFee + DELIVERY_FEE;
+    const total = subtotal + serviceFee + deliveryFee;
 
-    // بناء رسالة WhatsApp
     const productsList = Object.entries(checkoutData.cart)
       .map(([id, qty]) => {
         const product = MENU.find(p => p.id === parseInt(id));
@@ -1115,15 +1257,14 @@
       .filter(Boolean)
       .join('%0A');
       
-const now = new Date();
+    const now = new Date();
+    const date = now.toLocaleDateString('ar-EG');
+    const time = now.toLocaleTimeString('ar-EG', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
 
-const date = now.toLocaleDateString('ar-EG'); // مثال: 16‏/7‏/2026
-const time = now.toLocaleTimeString('ar-EG', {
-  hour: '2-digit',
-  minute: '2-digit'
-});
-
-const message = `
+    const message = `
 🛒 *طلب جديد - طيار مارت*
 
 ━━━━━━━━━━━━━━━━━━
@@ -1135,7 +1276,7 @@ const message = `
 👤 الاسم: ${checkoutData.name}
 📞 الهاتف: ${checkoutData.phone}
 📍 العنوان: ${checkoutData.address}
-🌍 الموقع: ${checkoutData.location || 'لم يتم تحديده'}
+🌍 الموقع: ${checkoutData.location}
 
 ━━━━━━━━━━━━━━━━━━
 🛍️ *المنتجات المطلوبة*
@@ -1147,7 +1288,7 @@ ${productsList.replace(/%0A/g, '\n')}
 
 🧾 إجمالي المنتجات: ${subtotal} ج.م
 💳 رسوم الخدمة : ${serviceFee} ج.م
-🚚 رسوم التوصيل: ${DELIVERY_FEE} ج.م
+🚚 رسوم التوصيل: ${deliveryFee} ج.م
 💵 *الإجمالي النهائي: ${total} ج.م*
 ━━━━━━━━━━━━━━━━━━
 💳 *طريقة الدفع:*
@@ -1156,13 +1297,12 @@ ${checkoutData.paymentMethod === 'cash'
   : '💳 بطاقة ائتمان'}
 
 ━━━━━━━━━━━━━━━━━━
-✅  شكراً لاختيارك *طيار*❤️
+✅ شكراً لاختيارك *طيار*❤️
 `;
-    // إرسال على WhatsApp
+    
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
-    // عرض نافذة النجاح
     setTimeout(() => {
       document.getElementById('martReview').classList.remove('active');
       document.getElementById('successModal').style.display = 'flex';
@@ -1174,9 +1314,12 @@ ${checkoutData.paymentMethod === 'cash'
     currentCategory = null;
     currentSource = 'regular';
     checkoutData = null;
+    userLocationCoordinates = null;
     sessionStorage.removeItem('tayyar_mart_cart');
     sessionStorage.removeItem('tayyar_mart_category');
     document.getElementById('successModal').style.display = 'none';
+    document.getElementById('gps-status').textContent = '';
+    document.getElementById('location-result').textContent = '';
     backToHome();
   }
 
