@@ -192,6 +192,7 @@
 
     .products-container {
       padding: 15px;
+      padding-bottom: 120px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 15px;
@@ -622,6 +623,10 @@
       <div class="category-icon">🚬</div>
       <span>دخان</span>
     </button>
+        <button class="category-button" onclick="selectCategory('HagatHelwa',  '🧁 حاجات حلوه')">
+      <div class="category-icon">🧁</div>
+      <span>حاجات حلوه</span>
+    </button>
   </div>
 
   <button class="start-button" onclick="goToCategory('dairy', '🥛 ألبان')">ابدأ التسوق الآن</button>
@@ -675,9 +680,9 @@
         <span class="review-info-label">العنوان:</span>
         <span class="review-info-value" id="reviewAddress"></span>
       </div>
-      <div class="review-info-row">
+      <div class="review-info-row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
         <span class="review-info-label">📍 الموقع:</span>
-        <span class="review-info-value" id="reviewLocation"></span>
+        <span class="review-info-value" id="reviewLocation" style="white-space: pre-line;"></span>
       </div>
     </div>
 
@@ -750,10 +755,18 @@
           <input type="radio" name="payment" value="cash" checked>
           <span style="margin-right:10px;">💰 الدفع عند الاستلام</span>
         </label>
-        <label style="display:flex; align-items:center;">
-          <input type="radio" name="payment" value="card">
-          <span style="margin-right:10px;">💳 بطاقة ائتمان</span>
+        <label style="display:flex; align-items:center; margin-bottom:10px;">
+          <input type="radio" name="payment" value="vodafone">
+          <span style="margin-right:10px;">📱 فودافون كاش</span>
         </label>
+        <label style="display:flex; align-items:center;">
+          <input type="radio" name="payment" value="instapay">
+          <span style="margin-right:10px;">💳 انستا بي</span>
+        </label>
+      </div>
+
+      <div id="paymentNote" style="display:none; margin-bottom:20px; padding:12px; background:#fff3cd; border:1px solid #ffc107; border-radius:8px; font-size:13px; color:#856404;">
+        <strong>⚠️ تنبيه مهم:</strong> بعد التحويل، يرجى إرسال صورة من التحويل عبر الواتس على <strong>01024130987</strong> مع تحديد رقم الطلب
       </div>
       
       <button type="submit" style="width:100%; padding:12px; background:#e8742a; color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:16px;">المراجعة والتأكيد</button>
@@ -783,22 +796,127 @@
     vegetables: "🥬 خضروات",
     fruits: "🍎 فواكه",
     drinks: "🧃 مشروبات",
-    smoking:"🚬 دخان"
+    smoking:"🚬 دخان",
+    HagatHelwa:"🧁 حاجات حلوه",
   };
 
   const MENU = [
-    { id: 1, n: "عيش", d: "🍞 مخبوزات", p: 25, e: "🍞", cat: "baked" },
-    { id: 2, n: "حليب", d: "🥛 ألبان", p: 15, e: "🥛", cat: "dairy" },
-    { id: 3, n: "جبنة", d: "🥛 ألبان", p: 20, e: "🧀", cat: "dairy" },
-    { id: 4, n: "زيت", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
-    { id: 5, n: "طماطم", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
-    { id: 6, n: "تفاح", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
-    { id: 7, n: "عصير", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
-    { id: 8, n: "كيك", d: "🍞 مخبوزات", p: 30, e: "🎂", cat: "baked" },
-    { id: 9, n: "زبادي", d: "🥛 ألبان", p: 8, e: "🥣", cat: "dairy" },
-    { id: 10, n: "أرز", d: "🛍️ بقالة", p: 20, e: "🍚", cat: "groceries" },
-    { id: 11, n: "LM", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" },
-    { id: 12, n: "أرز طويل", d: "🛍️ بقالة", p: 20, e: "🍚", cat: "groceries" },
+    // ❌ لا تستخدم آي دي مكرر! كل منتج يجب يكون عنده رقم فريد
+    // ✅ الصيغة الصحيحة لإضافة منتج جديد:
+    // { id: رقم_فريد, n: "اسم_المنتج", d: "الوصف", p: السعر, e: "الإيموجي", cat: "القسم" }
+    //
+    // الأقسام المتاحة:
+    // - groceries: بقالة
+    // - vegetables: خضروات
+    // - fruits: فواكه
+    // - drinks: مشروبات
+    // - smoking: دخان
+    // - HagatHelwa: حاجات حلوه
+    
+    // بقاله
+    { id: 1, n: "ارز", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id: 2, n: "مكرونه الملكه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id: 3, n: "سكر 1ك", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:4 , n: "ملح", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id: 5, n: "دقيق 1ك", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:6 , n: "زيت", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id: 7, n: "سمنه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id: 8, n: "صلصه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id: 9, n: "كاتشب", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id: 10, n: "خل", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id: 11, n: "مايونيز", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    // بقوليات
+    { id: 11, n: "فول", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:12, n: "عدس", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:13, n: "لوبيا", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:14, n: "فاصوليا", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:15, n: "شعريه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:16, n: "مكرونه قلم", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:17, n: "مكرونه اسبكتي", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:18, n: "فلفل اسود", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:19, n: "الكمون", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:20, n: "القرفه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:21, n: "الكزبرة", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:22, n: "القرنفل", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:23, n: "جوزة الطيب", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+    { id:24, n: "شطه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" },
+   // بقاله انتهاء
+    //  خضروات
+    { id: 25, n: "طماطم", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 26, n: "بطاطس", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 27, n: "خيار", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 28, n: "بصل احمر", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 29, n: "بصل ابيض", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 30, n: "ثوم", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 31, n: "جزر", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 32, n: "فلفل رومي احمر", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 33, n: "فلفل شطة", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 34, n: "كوسه", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 35, n: "باذنجان اسود", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 36, n: "فلفل رومي اخضر", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 37, n: "باذنجان ابيض", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 38, n: "كوم خضروات مشكله", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 39, n: "كوم خضار محشي مشكل مقور ", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 40, n: "كابوتشا احمر", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+    { id: 41, n: "كابوتشا اخضر", d: "🥬 خضروات", p: 10, e: "🍅", cat: "vegetables" },
+   // خضروات انتهاء
+//  فاكه\
+  { id: 42, n: "تفاح", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 43, n: "موز", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 44, n: "مانجو", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 45, n: "عنب بناتي اجمر", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 46, n: "عنب بناتي ابيض", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 47, n: "بطيخ", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 48, n: "خوخ", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 49, n: "برقوق", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 50, n: "مشمش", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 51, n: "شمام", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },      { id: 6, n: "تفاح", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 52, n: "تفاح اخضر", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 53, n: "بطياخ", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 54, n: "مانجو صديق", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+  { id: 55, n: "مانجوعويس", d: "🍎 فواكه", p: 15, e: "🍎", cat: "fruits" },
+// فاكه اخرظ---
+// مشروبات---
+    { id: 56, n: "بيبسي 1 لتر", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 57, n: "بيبسي 1.5 لتر", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 58, n: "بيبسي 2.5 لتر", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 59, n: "ببسي ", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 60, n: "ستينج", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 61, n: "شويبس", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 62, n: "كوكا كولا", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 63, n: "ريد بل ", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 64, n: "فيوري", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 65, n: "تويست", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 66, n: "عصير المرعي", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 67, n: "نسكافيه ايس", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 68, n: "مونستر", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 69, n: "", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 70, n: "", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+    { id: 71, n: "", d: "🧃 مشروبات", p: 12, e: "🧃", cat: "drinks" },
+
+    //  اخر مشروبات----
+     //  مخبوزات----
+    { id: 72, n: "عيش بلدي 5 قطع", d: "🍞 مخبوزات", p: 10, e: "🎂", cat: "baked" },
+    { id: 72, n: " عيش ابيض 5 قطع", d: "🍞 مخبوزات", p: 10, e: "🎂", cat: "baked" },
+    { id: 72, n: "رتش بيك برجر  4 قطع", d: "🍞 مخبوزات", p: 30, e: "🎂", cat: "baked" },
+    { id: 72, n: "ريتش بيك توست 500 جم", d: "🍞 مخبوزات ", p: 57, e: "🎂", cat: "baked" },
+    { id: 72, n: "ريتش بيك توست بالرده 500 جم", d: "🍞 مخبوزات", p: 57, e: "🎂", cat: "baked" },
+    { id: 72, n: "مولتو ماجنوم بالشوكولاته 80 جرام", d: "🍞 مخبوزات", p: 15, e: "🎂", cat: "baked" },
+    { id: 72, n: "ريتش بيك بيتى بان 6 قطع", d: "🍞 مخبوزات", p: 30, e: "🎂", cat: "baked" },
+
+    //  اخر مخبوزات ----
+    { id: 73, n: "زبادي", d: "🥛 ألبان", p: 8, e: "🥣", cat: "dairy" },
+    { id: 74, n: "أرز", d: "🛍️ بقالة", p: 20, e: "🍚", cat: "groceries" },
+    { id: 75, n: "LM احمر", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" },
+    { id: 76, n: "LM  ازرق", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" },
+    { id: 77, n: "LM  ابيض", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" },
+   { id: 78, n: "شوكولاته", d: "🧁 حاجات حلوه", p: 90, e: "🧁", cat: "HagatHelwa" },
+  // حاجات حلوه
+{ id: 79, n: "شوكولاته", d: "🧁 حاجات حلوه", p: 90, e: "🧁", cat: "HagatHelwa" },
+{ id: 80, n: "كنافة", d: "🧁 حاجات حلوه", p: 75, e: "🧁", cat: "HagatHelwa" },
+{ id: 81, n: "بسبوسة", d: "🧁 حاجات حلوه", p: 60, e: "🧁", cat: "HagatHelwa" },
+{ id: 82, n: "كريم كراميل", d: "🧁 حاجات حلوه", p: 50, e: "🍮", cat: "HagatHelwa" },
+{ id: 83, n: "حلويات مشكلة", d: "🧁 حاجات حلوه", p: 80, e: "🧁", cat: "HagatHelwa" },
   ];
 
   const SERVICE_FEE_PERCENT = 4;
@@ -874,6 +992,10 @@
       name: '🚬 دخان',
       keywords: ['دخان', 'سجائر', 'تبغ'],
     },
+     HagatHelwa : {
+   name: '🧁 حاجات حلوه',
+   keywords: ['شوكولاتة', 'شبسي', 'ايس كريم'],
+ },
   };
 
   // ===== SESSION STORAGE =====
@@ -966,16 +1088,9 @@
 
   // ===== PRODUCT FILTERING =====
   function filterProductsByCategory(categoryId) {
-    const categoryKeywords = MART_CATEGORIES[categoryId]?.keywords || [];
-    
-    return MENU.filter(product => {
-      const productName = (product.n || '').toLowerCase();
-      const productDesc = (product.d || '').toLowerCase();
-      
-      return categoryKeywords.some(keyword => 
-        productName.includes(keyword) || productDesc.includes(keyword)
-      );
-    });
+    // الحل الصحيح: فلترة المنتجات حسب خاصية cat بشكل مباشر
+    // كل منتج عنده خاصية cat قيمتها = اسم القسم
+    return MENU.filter(product => product.cat === categoryId);
   }
 
   function renderCategoryProducts(categoryId) {
@@ -1160,12 +1275,33 @@
     document.getElementById('checkoutModal').style.display = 'none';
   }
 
+  // Show/hide payment note based on payment method
+  document.addEventListener('DOMContentLoaded', function() {
+    const paymentRadios = document.querySelectorAll('input[name="payment"]');
+    const paymentNote = document.getElementById('paymentNote');
+    
+    function updatePaymentNote() {
+      const selectedMethod = document.querySelector('input[name="payment"]:checked').value;
+      if (selectedMethod === 'vodafone' || selectedMethod === 'instapay') {
+        paymentNote.style.display = 'block';
+      } else {
+        paymentNote.style.display = 'none';
+      }
+    }
+    
+    paymentRadios.forEach(radio => {
+      radio.addEventListener('change', updatePaymentNote);
+    });
+  });
+
   function submitCheckout(event) {
     event.preventDefault();
     
-    let locationDisplay = 'لم يتم تحديد الموقع';
+    let locationDisplay = '❌ لم يتم تحديد الموقع';
     if (userLocationCoordinates) {
-      locationDisplay = `📍 ${userLocationCoordinates.lat}, ${userLocationCoordinates.lng}`;
+      const lat = userLocationCoordinates.lat.toFixed(4);
+      const lng = userLocationCoordinates.lng.toFixed(4);
+      locationDisplay = `📍 خط العرض: ${lat}\n📍 خط الطول: ${lng}`;
     }
     
     const checkoutDataNew = {
@@ -1264,6 +1400,17 @@
       minute: '2-digit'
     });
 
+    let paymentMethodText = '';
+    if (checkoutData.paymentMethod === 'cash') {
+      paymentMethodText = '💵 الدفع عند الاستلام';
+    } else if (checkoutData.paymentMethod === 'vodafone') {
+      paymentMethodText = '📱 فودافون كاش\n⚠️ في انتظار صورة التحويل';
+    } else if (checkoutData.paymentMethod === 'instapay') {
+      paymentMethodText = '💳 انستا بي\n⚠️ في انتظار صورة التحويل';
+    } else {
+      paymentMethodText = '💳 بطاقة ائتمان';
+    }
+
     const message = `
 🛒 *طلب جديد - طيار مارت*
 
@@ -1292,9 +1439,7 @@ ${productsList.replace(/%0A/g, '\n')}
 💵 *الإجمالي النهائي: ${total} ج.م*
 ━━━━━━━━━━━━━━━━━━
 💳 *طريقة الدفع:*
-${checkoutData.paymentMethod === 'cash'
-  ? '💵 الدفع عند الاستلام'
-  : '💳 بطاقة ائتمان'}
+${paymentMethodText}
 
 ━━━━━━━━━━━━━━━━━━
 ✅ شكراً لاختيارك *طيار*❤️
@@ -1351,6 +1496,6 @@ ${checkoutData.paymentMethod === 'cash'
     }
   });
 </script>
-
+<script src="data-mart.js"></script>
 </body>
 </html>
