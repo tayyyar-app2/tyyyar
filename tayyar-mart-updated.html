@@ -223,8 +223,8 @@
       padding: 15px;
       padding-bottom: 120px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
     }
 
     .product-card {
@@ -243,12 +243,12 @@
 
     .product-image {
       width: 100%;
-      height: 120px;
+      height: 80px;
       background: linear-gradient(135deg, #fff9f0 0%, #f5f5f5 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 45px;
+      font-size: 35px;
       position: relative;
       overflow: hidden;
       border-bottom: 1px solid #eee;
@@ -1223,6 +1223,14 @@
           <label style="display: block; color: #333; font-size: 13px; font-weight: 600; margin-bottom: 8px; text-align: right;">العنوان <span style="color: #e8742a;">*</span></label>
           <input type="text" id="customer-address" placeholder="الشارع، المنطقة، المحافظة..." required="" style="width:100%; padding:12px 15px; border:1px solid #ddd; border-radius:12px; font-family: &#39;Tajawal&#39;, sans-serif; font-size:14px; text-align:right; transition:all 0.3s ease;" onfocus="this.style.borderColor=&#39;#e8742a&#39;; this.style.boxShadow=&#39;0 0 0 3px rgba(232, 116, 42, 0.1)&#39;" onblur="this.style.borderColor=&#39;#ddd&#39;; this.style.boxShadow=&#39;none&#39;">
         </div>
+
+        <!-- 📍 الموقع -->
+        <div style="margin-top: 15px; background: #f0f8ff; border: 2px solid #e8742a; border-radius: 10px; padding: 12px;">
+          <div style="color: #333; font-size: 13px; font-weight: 700; margin-bottom: 10px; text-align: right;">📍 الموقع (اختياري)</div>
+          <button type="button" class="checkout-btn" onclick="getGPSLocation()" style="width: 100%; margin-bottom: 10px; padding: 10px;">📌 حدد موقعك من الجهاز</button>
+          <div id="gps-status" style="font-size: 12px; color: #666; text-align: center; margin-bottom: 8px;"></div>
+          <div id="location-result" style="font-size: 12px; color: #27ae60; text-align: center; font-weight: 600;"></div>
+        </div>
       </div>
 
       <!-- 💳 طريقة الدفع -->
@@ -1267,7 +1275,7 @@
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-          <button type="button" class="tip-btn" data-tip="5" style="padding: 12px 10px; background: rgb(232, 116, 42); border: 1px solid rgb(232, 116, 42); border-radius: 10px; cursor: pointer; transition: 0.3s; text-align: center; box-shadow: rgba(232, 116, 42, 0.3) 0px 4px 12px; color: white;">
+          <button type="button" class="tip-btn" data-tip="5" style="padding: 12px 10px; background: white; border: 1px solid rgb(221, 221, 221); border-radius: 10px; cursor: pointer; transition: 0.3s; text-align: center; box-shadow: none; color: inherit;">
             <div style="font-size: 18px; font-weight: 700; color: #27ae60; margin-bottom: 3px;">5</div>
             <div style="font-size: 11px; color: #666;">جنيه</div>
           </button>
@@ -1281,11 +1289,11 @@
           </button>
         </div>
 
-        <div id="tipMessage" style="background: rgb(240, 248, 240); border-left: 4px solid rgb(39, 174, 96); padding: 12px; border-radius: 8px; margin-top: 12px; display: block;">
-          <p id="tipText" style="color: #27ae60; font-size: 13px; text-align: right; margin-bottom: 0;">🙏 شكراً لك! كل جنيه من إكراميتك يصنع فرقاً في يوم المندوب</p>
+        <div id="tipMessage" style="background: rgb(240, 248, 240); border-left: 4px solid rgb(39, 174, 96); padding: 12px; border-radius: 8px; margin-top: 12px; display: none;">
+          <p id="tipText" style="color: #27ae60; font-size: 13px; text-align: right; margin-bottom: 0;"></p>
         </div>
 
-        <input type="hidden" id="selectedTip" value="5">
+        <input type="hidden" id="selectedTip" value="">
       </div>
 
       <!-- 📋 معلومات الطلب -->
@@ -1496,6 +1504,15 @@
     }
     
     return 50;
+  }
+  
+  // ===== SERVICE FEE CALCULATION WITH LIMITS =====
+  function calculateServiceFee(subtotal) {
+    let fee = Math.round(subtotal * SERVICE_FEE_PERCENT / 100);
+    // تطبيق الحد الأدنى 4 جنيه والحد الأقصى 14 جنيه
+    if (fee < 4) fee = 4;
+    if (fee > 14) fee = 14;
+    return fee;
   }
 
   const WHATSAPP_NUMBER = '201277092892';
@@ -1872,13 +1889,14 @@
   function submitCheckout(event) {
     event.preventDefault();
     
+    const tipValue = document.getElementById('selectedTip').value;
     const checkoutDataNew = {
       name: document.getElementById('customer-name').value,
       phone: document.getElementById('customer-phone').value,
       address: document.getElementById('customer-address').value,
       cart: { ...martyrtCart },
       paymentMethod: document.querySelector('input[name="payment"]:checked').value,
-      tip: document.getElementById('selectedTip').value || 0,
+      tip: tipValue ? parseInt(tipValue) : 0,
       notes: document.getElementById('specialRequests').value || '',
       timestamp: Date.now(),
     };
@@ -1942,7 +1960,7 @@
     // Summary with Dynamic Delivery Fee
     const subtotal = calculateCartTotal();
     const deliveryFee = calculateDeliveryFee(checkoutData.address);
-    const serviceFee = Math.round(subtotal * SERVICE_FEE_PERCENT / 100);
+    const serviceFee = calculateServiceFee(subtotal);
     const total = subtotal + serviceFee + deliveryFee;
 
     document.getElementById('reviewSubtotal').textContent = `${subtotal} ج.م`;
@@ -1961,7 +1979,7 @@
 
     const subtotal = calculateCartTotal();
     const deliveryFee = calculateDeliveryFee(checkoutData.address);
-    const serviceFee = Math.round(subtotal * SERVICE_FEE_PERCENT / 100);
+    const serviceFee = calculateServiceFee(subtotal);
     const totalWithTip = subtotal + serviceFee + deliveryFee + parseInt(checkoutData.tip || 0);
     const total = subtotal + serviceFee + deliveryFee;
 
@@ -2001,6 +2019,14 @@
       notesText = `\n📝 *ملاحظات:* ${checkoutData.notes}`;
     }
 
+    // إضافة الموقع إذا كان متوفراً
+    let locationText = '';
+    if (userLocationCoordinates) {
+      const lat = userLocationCoordinates.lat;
+      const lng = userLocationCoordinates.lng;
+      locationText = `\n📍 *الموقع:* https://maps.google.com/?q=${lat},${lng}`;
+    }
+
     const message = `
 🛒 *طلب جديد - طيار مارت*
 
@@ -2012,7 +2038,7 @@
 👤 *بيانات العميل*
 👤 الاسم: ${checkoutData.name}
 📞 الهاتف: ${checkoutData.phone}
-📍 العنوان: ${checkoutData.address}
+📍 العنوان: ${checkoutData.address}${locationText}
 
 ━━━━━━━━━━━━━━━━━━
 🛍️ *المنتجات المطلوبة*
@@ -2042,13 +2068,6 @@ ${paymentMethodText}${notesText}
       document.getElementById('martReview').classList.remove('active');
       document.getElementById('successModal').style.display = 'flex';
     }, 500);
-    
-    // تمسح الطلب والشارات بعد إرسال الواتس
-    setTimeout(() => {
-      resetCheckout();
-      updateCategoryBadges();
-      location.reload();
-    }, 3000);
   }
 
   function resetCheckout() {
@@ -2060,8 +2079,10 @@ ${paymentMethodText}${notesText}
     sessionStorage.removeItem('tayyar_mart_cart');
     sessionStorage.removeItem('tayyar_mart_category');
     document.getElementById('successModal').style.display = 'none';
-    document.getElementById('gps-status').textContent = '';
-    document.getElementById('location-result').textContent = '';
+    const gpsStatus = document.getElementById('gps-status');
+    const locationResult = document.getElementById('location-result');
+    if (gpsStatus) gpsStatus.textContent = '';
+    if (locationResult) locationResult.textContent = '';
     backToHome();
   }
 
@@ -2197,6 +2218,8 @@ ${paymentMethodText}${notesText}
       initializePaymentHandlers();
     }, 100);
   };
+
+
 </script>
 
 
