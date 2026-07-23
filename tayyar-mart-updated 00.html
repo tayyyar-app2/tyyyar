@@ -243,21 +243,25 @@
 
     .product-image {
       width: 100%;
-      height: 80px;
+      height: auto;
+      min-height: 100px;
       background: linear-gradient(135deg, #fff9f0 0%, #f5f5f5 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 35px;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
       border-bottom: 1px solid #eee;
+      padding: 8px;
     }
     
     .product-image img {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: cover !important;
+      max-width: 100% !important;
+      max-height: 150px !important;
+      width: auto !important;
+      height: auto !important;
+      object-fit: contain !important;
       display: block !important;
       border: none;
     }
@@ -373,48 +377,48 @@
     /* ===== REVIEW PAGE STYLES ===== */
     .review-container {
       flex: 1;
-      padding: 20px;
+      padding: 12px;
       padding-bottom: 100px;
       background: #f5f5f5;
     }
 
     .review-section {
       background: white;
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 15px;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .review-section-title {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
       color: #e8742a;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .review-product-item {
       display: flex;
-      gap: 15px;
-      padding: 15px;
+      gap: 10px;
+      padding: 10px;
       background: #f9f9f9;
-      border-radius: 10px;
-      margin-bottom: 12px;
+      border-radius: 8px;
+      margin-bottom: 8px;
       align-items: flex-start;
     }
 
     .review-product-image {
-      width: 100px;
-      height: 100px;
+      width: 50px;
+      height: 50px;
       background: linear-gradient(135deg, #fff9f0 0%, #f5f5f5 100%);
-      border-radius: 8px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 40px;
+      font-size: 24px;
       flex-shrink: 0;
       border: 2px solid #e8742a;
       box-shadow: 0 2px 8px rgba(232, 116, 42, 0.15);
@@ -431,9 +435,10 @@
     .review-product-image img {
       width: 100% !important;
       height: 100% !important;
-      object-fit: cover !important;
-      border-radius: 6px;
+      object-fit: contain !important;
+      border-radius: 4px;
       display: block;
+      padding: 2px;
     }
 
     .review-product-details {
@@ -442,44 +447,46 @@
 
     .review-product-name {
       font-weight: 600;
-      font-size: 14px;
+      font-size: 12px;
       color: #333;
-      margin-bottom: 5px;
+      margin-bottom: 3px;
+      line-height: 1.3;
     }
 
     .review-product-category {
-      font-size: 12px;
+      font-size: 10px;
       color: #999;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
     }
 
     .review-product-price {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 700;
       color: #e8742a;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
     }
 
     .review-qty-control {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
       background: white;
-      border-radius: 6px;
-      padding: 5px;
+      border-radius: 5px;
+      padding: 3px;
       width: fit-content;
     }
 
     .review-qty-btn {
-      width: 28px;
-      height: 28px;
+      width: 22px;
+      height: 22px;
       border: 1px solid #ddd;
       background: white;
       color: #e8742a;
-      border-radius: 4px;
+      border-radius: 3px;
       cursor: pointer;
       font-weight: 700;
       transition: all 0.2s ease;
+      font-size: 12px;
     }
 
     .review-qty-btn:hover {
@@ -488,26 +495,27 @@
     }
 
     .review-qty-display {
-      width: 30px;
+      width: 24px;
       text-align: center;
       font-weight: 600;
       color: #333;
+      font-size: 12px;
     }
 
     .review-summary {
       background: white;
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 15px;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
     }
 
     .review-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 0;
+      padding: 8px 0;
       border-bottom: 1px solid #f0f0f0;
-      font-size: 14px;
+      font-size: 12px;
     }
 
     .review-row:last-child {
@@ -516,25 +524,25 @@
 
     .review-row.total {
       border-bottom: 2px solid #e8742a;
-      padding-top: 15px;
-      padding-bottom: 15px;
-      font-size: 16px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      font-size: 14px;
       font-weight: 700;
       color: #e8742a;
     }
 
     .review-customer-info {
       background: white;
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 15px;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
     }
 
     .review-info-row {
       display: flex;
       justify-content: space-between;
-      padding: 10px 0;
-      font-size: 13px;
+      padding: 7px 0;
+      font-size: 11px;
       border-bottom: 1px solid #f0f0f0;
     }
 
@@ -551,6 +559,7 @@
       color: #333;
       text-align: left;
       word-break: break-word;
+      font-size: 11px;
     }
 
     .review-footer {
@@ -560,20 +569,20 @@
       right: 0;
       background: white;
       border-top: 2px solid #e8742a;
-      padding: 15px 20px;
+      padding: 10px 12px;
       display: flex;
-      gap: 10px;
+      gap: 8px;
       z-index: 50;
     }
 
     .review-footer-btn {
       flex: 1;
-      padding: 12px;
+      padding: 10px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       font-weight: 700;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 12px;
       transition: all 0.3s ease;
     }
 
@@ -1449,14 +1458,71 @@
     { id: 72, n: "ريتش بيك بيتى بان 6 قطع", d: "🍞 مخبوزات", p: 30, e: "🎂", cat: "baked" ,img:" " },
 
     //  اخر مخبوزات ----
+    // ===== قسم الألبان الكامل =====
+    // اللبن
+    { id: 100, n: "لبن جهينة", d: "🥛 ألبان", p: 12, e: "🥛", cat: "dairy" ,img:" " },
+    { id: 101, n: "لبن المراعي", d: "🥛 ألبان", p: 12, e: "🥛", cat: "dairy" ,img:" " },
+    { id: 102, n: "لبن بيتي", d: "🥛 ألبان", p: 12, e: "🥛", cat: "dairy" ,img:" " },
+    { id: 103, n: "لبن دومتي", d: "🥛 ألبان", p: 12, e: "🥛", cat: "dairy" ,img:" " },
+    { id: 104, n: "لبن عبور لاند", d: "🥛 ألبان", p: 12, e: "🥛", cat: "dairy" ,img:" " },
+    { id: 105, n: "لبن كامل الدسم", d: "🥛 ألبان", p: 12, e: "🥛", cat: "dairy" ,img:" " },
+    { id: 106, n: "لبن نصف دسم", d: "🥛 ألبان", p: 12, e: "🥛", cat: "dairy" ,img:" " },
+    { id: 107, n: "لبن خالي الدسم", d: "🥛 ألبان", p: 12, e: "🥛", cat: "dairy" ,img:" " },
+    { id: 108, n: "لبن خالي اللاكتوز", d: "🥛 ألبان", p: 15, e: "🥛", cat: "dairy" ,img:" " },
+    { id: 109, n: "لبن رايب", d: "🥛 ألبان", p: 13, e: "🥛", cat: "dairy" ,img:" " },
+    // الزبادي
+    { id: 110, n: "زبادي جهينة", d: "🥛 ألبان", p: 8, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 111, n: "زبادي المراعي", d: "🥛 ألبان", p: 8, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 112, n: "زبادي بيتي", d: "🥛 ألبان", p: 8, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 113, n: "زبادي دومتي", d: "🥛 ألبان", p: 8, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 114, n: "زبادي دانون", d: "🥛 ألبان", p: 10, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 115, n: "زبادي سادة", d: "🥛 ألبان", p: 8, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 116, n: "زبادي لايت", d: "🥛 ألبان", p: 9, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 117, n: "زبادي يوناني", d: "🥛 ألبان", p: 12, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 118, n: "زبادي فراولة", d: "🥛 ألبان", p: 9, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 119, n: "زبادي خوخ", d: "🥛 ألبان", p: 9, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 120, n: "زبادي مانجو", d: "🥛 ألبان", p: 9, e: "🥣", cat: "dairy" ,img:" " },
+    // الجبن
+    { id: 121, n: "جبنة دومتي", d: "🥛 ألبان", p: 20, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 122, n: "جبنة عبور لاند", d: "🥛 ألبان", p: 20, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 123, n: "جبنة بيتي", d: "🥛 ألبان", p: 20, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 124, n: "جبنة جهينة", d: "🥛 ألبان", p: 20, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 125, n: "جبنة إسطنبولي", d: "🥛 ألبان", p: 22, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 126, n: "جبنة فيتا", d: "🥛 ألبان", p: 25, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 127, n: "جبنة لايت", d: "🥛 ألبان", p: 18, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 128, n: "جبنة قريش", d: "🥛 ألبان", p: 15, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 129, n: "جبنة رومي", d: "🥛 ألبان", p: 30, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 130, n: "جبنة فلمنك", d: "🥛 ألبان", p: 28, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 131, n: "جبنة جودة", d: "🥛 ألبان", p: 25, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 132, n: "جبنة حلوم", d: "🥛 ألبان", p: 32, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 133, n: "جبنة كيري", d: "🥛 ألبان", p: 20, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 134, n: "جبنة لافاش كيري", d: "🥛 ألبان", p: 20, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 135, n: "جبنة بريزيدن", d: "🥛 ألبان", p: 28, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 136, n: "جبنة شيدر شرائح", d: "🥛 ألبان", p: 18, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 137, n: "جبنة شيدر مبشورة", d: "🥛 ألبان", p: 18, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 138, n: "جبنة شيدر بلوك", d: "🥛 ألبان", p: 20, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 139, n: "جبنة موزاريلا", d: "🥛 ألبان", p: 22, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 140, n: "جبنة موزاريلا مبشورة", d: "🥛 ألبان", p: 22, e: "🧀", cat: "dairy" ,img:" " },
+    { id: 141, n: "جبنة موزاريلا بلوك", d: "🥛 ألبان", p: 24, e: "🧀", cat: "dairy" ,img:" " },
+    // منتجات ألبان أخرى
+    { id: 142, n: "لبنة", d: "🥛 ألبان", p: 15, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 143, n: "قشطة", d: "🥛 ألبان", p: 18, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 144, n: "كريمة طبخ", d: "🥛 ألبان", p: 20, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 145, n: "كريمة خفق", d: "🥛 ألبان", p: 22, e: "🥣", cat: "dairy" ,img:" " },
+    { id: 146, n: "زبدة المراعي", d: "🥛 ألبان", p: 25, e: "🧈", cat: "dairy" ,img:" " },
+    { id: 147, n: "زبدة جهينة", d: "🥛 ألبان", p: 25, e: "🧈", cat: "dairy" ,img:" " },
+    { id: 148, n: "زبدة بلدي", d: "🥛 ألبان", p: 30, e: "🧈", cat: "dairy" ,img:" " },
+    { id: 149, n: "سمنة بلدي", d: "🥛 ألبان", p: 35, e: "🍯", cat: "dairy" ,img:" " },
+    { id: 150, n: "سمنة نباتي", d: "🥛 ألبان", p: 20, e: "🍯", cat: "dairy" ,img:" " },
+    // ===== نهاية قسم الألبان الكامل =====
     { id: 73, n: "زبادي", d: "🥛 ألبان", p: 8, e: "🥣", cat: "dairy" ,img:" " },
     { id: 74, n: "أرز", d: "🛍️ بقالة", p: 20, e: "🍚", cat: "groceries",img:" "  },
     { id: 75, n: "LM احمر", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking",img:" "  },
     { id: 76, n: "LM  ازرق", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" ,img:" " },
     { id: 77, n: "LM  ابيض", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" ,img:" " },
-   { id: 78, n: "شوكولاته", d: "🧁 حاجات حلوه", p: 90, e: "🧁", cat: "HagatHelwa",img:" "  },
+    { id: 78, n: "سجاير مانشستر فواكه", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking",img:" " },
+   { id: 79, n: "شوكولاته", d: "🧁 حاجات حلوه", p: 90, e: "🧁", cat: "HagatHelwa",img:" "  },
   // حاجات حلوه
-{ id: 79, n: "شوكولاته", d: "🧁 حاجات حلوه", p: 90, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 80, n: "كنافة", d: "🧁 حاجات حلوه", p: 75, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 81, n: "بسبوسة", d: "🧁 حاجات حلوه", p: 60, e: "🧁", cat: "HagatHelwa" ,img:" " },
 { id: 82, n: "كريم كراميل", d: "🧁 حاجات حلوه", p: 50, e: "🍮", cat: "HagatHelwa" ,img:" " },
