@@ -719,10 +719,10 @@ MENU.filter(p => p.brand === 'B Laban' && BLABAN_EXTRA_IDS.includes(p.id)).forEa
 // ===== إضافات كشري الخديوي =====
 const KOSHARI_KHODEIRY_EXTRAS = [
   { id: 'ex_aish',      n: 'عيش توست',   p: 12.5 },
-  { id: 'ex_bawel',     n: 'بصل محمر / تقليه',   p: 12.5 },
+  // { id: 'ex_bawel',     n: 'بصل محمر / تقليه',   p: 12.5 },
   { id: 'ex_hummus',    n: 'حمص',       p: 10 },
   { id: 'ex_salad',     n: 'سلطة',      p: 15 },
-  { id: 'ex_sauce',     n: 'صلصة',      p: 10 },
+  // { id: 'ex_sauce',     n: 'صلصة',      p: 10 },
 ];
 MENU.filter(p => p.brand === 'Koshary Al Khedewy').forEach(p => { p.extras = KOSHARI_KHODEIRY_EXTRAS; });
 CATEGORIES = {

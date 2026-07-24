@@ -174,7 +174,7 @@ function openExtrasModal(id,isNew){
   const html=`<div id="extras-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)cancelExtras(${id},${isNew})">
     <div style="background:#fff;width:100%;max-width:480px;border-radius:16px 16px 0 0;padding:18px 16px 20px;max-height:75vh;overflow-y:auto;">
       <div style="font-weight:800;font-size:16px;margin-bottom:2px;">➕ إضافات لـ ${p.n}</div>
-      <div style="font-size:15px;color:#ff6302;margin-bottom:10px;">اختياري — مش لازم تختار حاجة</div>
+      <div style="font-size:15px;color:#ff6302;margin-bottom:10px;">اختياري —  مش لازم تختار حاجة</div>
       ${rows}
     <div style="display:flex;gap:10px;margin-top:16px;">
         <button onclick="${isNew?`skipExtras(${id})`:`cancelExtras(${id},${isNew})`}" style="flex:1;padding:13px;background:#f1f1f1;color:#555;border:none;border-radius:10px;font-weight:700;font-size:15px;">${isNew?'بدون إضافات':'إلغاء'}</button>
