@@ -717,20 +717,12 @@ const BLABAN_EXTRAS = [
 const BLABAN_EXTRA_IDS = [332, 333, 349, 334, 791, 789, 296, 297, 298 ,348,788,280,];
 MENU.filter(p => p.brand === 'B Laban' && BLABAN_EXTRA_IDS.includes(p.id)).forEach(p => { p.extras = BLABAN_EXTRAS; });
 // ===== إضافات كشري الخديوي =====
-const KOSHARI_KHODEIRY_EXTRAS = [
-  { id: 'ex_aish',      n: 'عيش توست',   p: 12.5 },
+// const KOSHARI_KHODEIRY_EXTRAS = [
+  // { id: 'ex_aish',      n: 'عيش توست',   p: 12.5 },
   // { id: 'ex_bawel',     n: 'بصل محمر / تقليه',   p: 12.5 },
-  { id: 'ex_hummus',    n: 'حمص',       p: 10 },
-  { id: 'ex_salad',     n: 'سلطة',      p: 15 },
+  // { id: 'ex_hummus',    n: 'حمص',       p: 10 },
+  // { id: 'ex_salad',     n: 'سلطة',      p: 15 },
   // { id: 'ex_sauce',     n: 'صلصة',      p: 10 },
-];
-MENU.filter(p => p.brand === 'Koshary Al Khedewy').forEach(p => { p.extras = KOSHARI_KHODEIRY_EXTRAS; });
-CATEGORIES = {
-  baked: "🍞 مخبوزات",
-  dairy: "🥛 ألبان",
-  groceries: "🛍️ بقالة",
-  vegetables: "🥬 خضروات",
-  fruits: "🍎 فواكه",
-  drinks: "🧃 مشروبات"
-}
+// ];
+// MENU.filter(p => p.brand === 'Koshary Al Khedewy').forEach(p => { p.extras = KOSHARI_KHODEIRY_EXTRAS; });
 

@@ -300,7 +300,7 @@ function buildReview(nm,ph,ad){
   const it=cartItems(),tot=cartTotal(),notes=document.getElementById('cno').value.trim();
   const payLbl=pay==='online'?'📲 انستاباي / فودافون كاش':'💵 عند الاستلام';
   const del=getDeliveryFee(ad);
-  const serviceFee=6;
+  const serviceFee=5;
  const grandTotal=tot+del+serviceFee+selectedTip;
  document.getElementById('rl').innerHTML=it.map(i=>`
     <div class="ritem">
@@ -1115,3 +1115,4 @@ function startOrderTracking(oid){
   poll();
   trackingInterval=setInterval(poll, 1000);
 }
+
