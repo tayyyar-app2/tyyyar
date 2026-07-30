@@ -3,7 +3,7 @@
 <html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>طيار مارت - تسوق قوتك</title>
+  <title>طيار ماركت- تسوق قوتك</title>
   <link rel="icon" href="file:///C:/Users/mohme/Downloads/38833FF26BA1D.UnigramPreview_g9c9v27vpyspw!App/img/logo.jpeg">
   <link href="./tayyar-mart-up4_files/css2" rel="stylesheet">
   <meta name="theme-color" content="#e8742a">
@@ -11,7 +11,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="طيار مارت">
+  <meta name="apple-mobile-web-app-title" content="طيار ماركت">
 
   <style>
     * {
@@ -151,6 +151,7 @@
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       transition: all 0.3s ease;
+      display: none;
     }
 
     .start-button:hover {
@@ -656,7 +657,7 @@
   <div class="mart-logo-container">
     <div class="mart-logo">🛒</div>
   </div>
-  <h1 class="mart-title">طيار مارت</h1>
+  <h1 class="mart-title">طيار ماركت</h1>
   <p class="mart-subtitle">تسوق احتياجاتك اليومية بكل سهولة</p>
   
   <div class="categories-grid">
@@ -707,7 +708,7 @@
     </button>
   </div>
 
-  <button class="start-button" onclick="goToCategory(&#39;dairy&#39;, &#39;🥛 ألبان&#39;)">ابدأ التسوق الآن</button>
+  <button class="start-button" onclick="proceedToCheckout()">تأكيد الطلب الحالي</button>
 </div>
 
 <!-- ===== CATEGORY PAGES ===== -->
@@ -1272,8 +1273,8 @@
           </div>
         </div>
 
-        <div id="paymentWarning" style="display:none; margin-top:12px; padding:12px; background:#fff3cd; border:1px solid #ffc107; border-radius:8px; font-size:15px; color:#856404; text-align:right;">
-          ⚠️ <strong>تنبيه:</strong> بعد تاكيد الطلب ,هتلاقي رقم التحويل في رساله الواتساب  
+        <div id="paymentWarning" style="display:none; margin-top:12px; padding:12px; background:#fff3cd; border:1px solid #ffc107; border-radius:8px; font-size:14px; color:#856404; text-align:right; line-height:1.6;">
+          🔔 <strong>تنبيه مهم:</strong><br/>بعد تأكيد الطلب هتلاقي رقم التحويل في رسالة الواتس<br/>📸 الرجاء تصوير إيصال التحويل وإرساله لنا  
         </div>
       </div>
 
@@ -1369,11 +1370,26 @@
     // بقاله
     { id: 1, n: "ارز", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/ارز.webp" },
     { id: 2, n: "مكرونه الملكه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "مكرونه الملكه اسبكتي", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "لسان عصفور الملكه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "شعريه الملكه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "ماجي مرقه دجاج 48 قطع", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "كيس فجيتار حار", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "كيس فجيتار بارد", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "فانيلين تاج الملوك", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "كيك شيف دريم", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "قهوه نسكافيه  حبيبات", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "قهوه تركي بن فاتح ساده  ابو عوف 200 جم", d: "🛍️ بقالة", p: 180, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "قهوه تركي بن فاتح محوج ابو عوف 200 جم", d: "🛍️ بقالة", p: 200, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "نسكافيه3*1  24 كيس", d: "🛍️ بقالة", p:160 , e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "شاي العروسه 250 جم", d: "🛍️ بقالة", p: 55, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+    { id: 2, n: "شاي ليبتون 250 جم", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:"./img-mart/مكرونه.webp" },
+
     { id: 3, n: "سكر 1ك", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:" " },
     { id:4 , n: "ملح", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" ,img:" " },
-    { id: 5, n: "دقيق 1ك", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" ,img:""},
-    { id:6 , n: "زيت", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" ,img:" " },
-    { id: 7, n: "سمنه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:" "  },
+    { id: 5, n: "دقيق 1 ك", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" ,img:""},
+    { id:6 , n: "زيت كرستال 2.2 لتر", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" ,img:" " },
+    { id: 7, n: "سمنه روابي 1.5 ك", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:" "  },
     { id: 8, n: "صلصه", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" ,img:" " },
     { id: 9, n: "كاتشب", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:" "  },
     { id: 10, n: "خل", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" ,img:" " },
@@ -1451,13 +1467,6 @@
 
     //  اخر مشروبات----
      //  مخبوزات----
-    { id: 72, n: "عيش بلدي 5 قطع", d: "🍞 مخبوزات", p: 10, e: "🎂", cat: "baked" ,img:" " },
-    { id: 72, n: " عيش ابيض 5 قطع", d: "🍞 مخبوزات", p: 10, e: "🎂", cat: "baked" ,img:" " },
-    { id: 72, n: "رتش بيك برجر  4 قطع", d: "🍞 مخبوزات", p: 30, e: "🎂", cat: "baked",img:" "  },
-    { id: 72, n: "ريتش بيك توست 500 جم", d: "🍞 مخبوزات ", p: 57, e: "🎂", cat: "baked",img:" "  },
-    { id: 72, n: "ريتش بيك توست بالرده 500 جم", d: "🍞 مخبوزات", p: 57, e: "🎂", cat: "baked" ,img:" " },
-    { id: 72, n: "مولتو ماجنوم بالشوكولاته 80 جرام", d: "🍞 مخبوزات", p: 15, e: "🎂", cat: "baked",img:" "  },
-    { id: 72, n: "ريتش بيك بيتى بان 6 قطع", d: "🍞 مخبوزات", p: 30, e: "🎂", cat: "baked" ,img:" " },
 
     //  اخر مخبوزات ----
     // ===== قسم الألبان الكامل =====
@@ -1521,52 +1530,123 @@
     { id: 74, n: "أرز", d: "🛍️ بقالة", p: 20, e: "🍚", cat: "groceries",img:" "  },
     // ===== قسم الدخان الكامل =====
     // بوكس كليوباترا
-    { id: 75, n: "بوكس كليوباترا", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking",img:" "  },
-    { id: 76, n: "كليوباترا سوبر", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" ,img:" " },
+    { id: 75, n: "بوكس كليوباترا", d: "🚬 دخان", p: 55, e: "🚬", cat: "smoking",img:"./img-mart/س كلوبترا.jpg"  },
+    { id: 76, n: "كليوباترا سوبر", d: "🚬 دخان", p: 65, e: "🚬", cat: "smoking" ,img:"./img-mart/س سوبر.jpg" },
     
     // LM ألوان
-    { id: 77, n: "إل إم أحمر", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 78, n: "إل إم أزرق", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 79, n: "إل إم أبيض", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" ,img:" " },
+    { id: 77, n: "إل إم أحمر", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:"./img-mart/س الام احمر.jpg" },
+    { id: 78, n: "إل إم أزرق", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" ,img:"./img-mart/س الام ازرق.jpg" },
+    { id: 79, n: "إل إم أبيض", d: "🚬 دخان", p: 90, e: "🚬", cat: "smoking" ,img:"./img-mart/س الام م ابيض.jpg" },
     
     // مارلبورو ألوان
-    { id: 80, n: "مارلبورو أحمر", d: "🚬 دخان", p: 100, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 81, n: "مارلبورو أبيض", d: "🚬 دخان", p: 100, e: "🚬", cat: "smoking" ,img:" " },
+    { id: 80, n: "مارلبورو أحمر", d: "🚬 دخان", p: 115, e: "🚬", cat: "smoking" ,img:"./img-mart/س مارلبور احمر.jpg" },
+    { id: 81, n: "مارلبورو أبيض", d: "🚬 دخان", p: 110, e: "🚬", cat: "smoking" ,img:"./img-mart/س مرلبورا ابيض.jpg" },
     
     // يونيستون ألوان
-    { id: 82, n: "يونيستون أحمر", d: "🚬 دخان", p: 85, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 83, n: "يونيستون أزرق", d: "🚬 دخان", p: 85, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 84, n: "يونيستون أبيض", d: "🚬 دخان", p: 85, e: "🚬", cat: "smoking" ,img:" " },
+    { id: 82, n: "يونيستون أحمر", d: "🚬 دخان", p: 75, e: "🚬", cat: "smoking" ,img:"./img-mart/س ينستوم احمر.jpg" },
+    { id: 83, n: "يونيستون أزرق", d: "🚬 دخان", p: 75, e: "🚬", cat: "smoking" ,img:"./img-mart/س ينستون ازرق.jpg" },
+    { id: 84, n: "يونيستون أبيض", d: "🚬 دخان", p: 75, e: "🚬", cat: "smoking" ,img:"./img-mart/س ينستون ابيض.jpg" },
     
     // ميريت
-    { id: 85, n: "ميريت أصفر", d: "🚬 دخان", p: 80, e: "🚬", cat: "smoking" ,img:" " },
+    { id: 85, n: "ميريت أصفر", d: "🚬 دخان", p: 120, e: "🚬", cat: "smoking" ,img:"./img-mart/س مرت اصفر.jpg" },
     
     // كابتن بلاك نكهات مختلفة
-    { id: 86, n: "كابتن بلاك أحمر", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 87, n: "كابتن بلاك أزرق", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 88, n: "كابتن بلاك دارك كريمة", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 89, n: "كابتن بلاك فانيليا", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 90, n: "كابتن بلاك نعناع", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 91, n: "كابتن بلاك جولد", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
+    { id: 86, n: "كابتن بلاك أحمر", d: "🚬 دخان", p: 55, e: "🚬", cat: "smoking" ,img:"./img-mart/س كبتن بلاك احمر.jpg" },
+    { id: 87, n: "كابتن بلاك أزرق", d: "🚬 دخان", p: 55, e: "🚬", cat: "smoking" ,img:"./img-mart/س كبتن بلاك ازرق.jpg" },
+    { id: 88, n: "كابتن بلاك دارك كريمة", d: "🚬 دخان", p: 105, e: "🚬", cat: "smoking" ,img:"./img-mart/س كبتن بلاك درك كريمه.jpg" },
+    { id: 89, n: "كابتن بلاك فانيليا", d: "🚬 دخان", p: 105, e: "🚬", cat: "smoking" ,img:"./img-mart/س كبتن بلاك فنيلايا .jpg" },
+    { id: 90, n: "كابتن بلاك تفاح اخضر", d: "🚬 دخان", p: 105, e: "🚬", cat: "smoking" ,img:"./img-mart/س كبتن بلاك تفاح اخضر.jpg" },
+    { id: 91, n: "كابتن بلاك جولد", d: "🚬 دخان", p: 105, e: "🚬", cat: "smoking" ,img:"./img-mart/س كبتن بيلاك جولد.jpg" },
     
     // مانشستر نكهات مختلفة
-    { id: 92, n: "مانشستر تفاحتين", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 93, n: "مانشستر نعناع", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 94, n: "مانشستر خوخ", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 95, n: "مانشستر كريز", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 96, n: "مانشستر مانجا", d: "🚬 دخان", p: 95, e: "🚬", cat: "smoking" ,img:" " },
+    { id: 92, n: "مانشستر تفاحتين", d: "🚬 دخان", p: 40, e: "🚬", cat: "smoking" ,img:"./img-mart/س تفاح.jpg" },
+    { id: 93, n: "مانشستر نعناع", d: "🚬 دخان", p: 40, e: "🚬", cat: "smoking" ,img:"./img-mart/س نعناع.jpg" },
+    { id: 94, n: "مانشستر خوخ", d: "🚬 دخان", p: 40, e: "🚬", cat: "smoking" ,img:"./img-mart/س خوخ.jpg" },
+    { id: 95, n: "مانشستر كريز", d: "🚬 دخان", p: 40, e: "🚬", cat: "smoking" ,img:"./img-mart/س كربز.jpg" },
+    { id: 96, n: "مانشستر مانجا", d: "🚬 دخان", p: 40, e: "🚬", cat: "smoking" ,img:"./img-mart/س مانجا.jpg" },
     
     // معسل نكهات مختلفة
-    { id: 97, n: "معسل تفاحتين", d: "🚬 دخان", p: 120, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 98, n: "معسل لبان نعناع", d: "🚬 دخان", p: 120, e: "🚬", cat: "smoking" ,img:" " },
-    { id: 99, n: "معسل خوخ", d: "🚬 دخان", p: 120, e: "🚬", cat: "smoking" ,img:" " },
+    { id: 97, n: "معسل تفاحتين", d: "🚬 دخان", p: 230, e: "🚬", cat: "smoking" ,img:"./img-mart/س معسل تفاح.jpg" },
+    { id: 98, n: "معسل لبان نعناع", d: "🚬 دخان", p: 230, e: "🚬", cat: "smoking" ,img:"./img-mart/س معسل لبان.jpg" },
+    { id: 99, n: "معسل خوخ", d: "🚬 دخان", p: 230, e: "🚬", cat: "smoking" ,img:"./img-mart/س معسل خوخ.jpg" },
     // ===== نهاية قسم الدخان =====
-   { id: 150, n: "شوكولاته", d: "🧁 حاجات حلوه", p: 90, e: "🧁", cat: "HagatHelwa",img:" "  },
+   { id: 150, n: "شوكولاته", d: "🧁 حاجات حلوه", p: 90, e: "🧁", cat: "HagatHelwa",img:""  },
   // حاجات حلوه
-{ id: 151, n: "كنافة", d: "🧁 حاجات حلوه", p: 75, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 152, n: "بسبوسة", d: "🧁 حاجات حلوه", p: 60, e: "🧁", cat: "HagatHelwa" ,img:" " },
-{ id: 153, n: "كريم كراميل", d: "🧁 حاجات حلوه", p: 50, e: "🍮", cat: "HagatHelwa" ,img:" " },
-{ id: 154, n: "حلويات مشكلة", d: "🧁 حاجات حلوه", p: 80, e: "🧁", cat: "HagatHelwa",img:" "  },
+
+// ===== شيبسي وتشيبس =====
+{ id: 200, n: "شيبسي ملح", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 201, n: "شيبسي جبنة", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 202, n: "شيبسي جبنة متبلة", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 203, n: "شيبسي شطة وليمون", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 204, n: "شيبسي طماطم", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 205, n: "شيبسي خل", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 206, n: "شيبسي حار", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 207, n: "تايجر", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 208, n: "كرانشي", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+
+// ===== بيك رولز وبيك ستيكس =====
+{ id: 209, n: "بيك رولز جبنة", d: "🧁 حاجات حلوه", p: 12, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 210, n: "بيك رولز بيتزا", d: "🧁 حاجات حلوه", p: 12, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 211, n: "بيك رولز شطة", d: "🧁 حاجات حلوه", p: 12, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 212, n: "بيك ستيكس", d: "🧁 حاجات حلوه", p: 12, e: "🧁", cat: "HagatHelwa",img:" "  },
+
+// ===== فشار ومولتو =====
+{ id: 213, n: "فشار", d: "🧁 حاجات حلوه", p: 10, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 214, n: "مولتو شوكولاتة", d: "🧁 حاجات حلوه", p: 20, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 215, n: "مولتو فراولة", d: "🧁 حاجات حلوه", p: 20, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 216, n: "مولتو كاسترد", d: "🧁 حاجات حلوه", p: 20, e: "🧁", cat: "HagatHelwa",img:" "  },
+
+// ===== كيك وحلويات =====
+{ id: 217, n: "هوهوز", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 218, n: "توينكيز", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 219, n: "أوريو", d: "🧁 حاجات حلوه", p: 6, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 220, n: "بيسكريم", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 221, n: "فريسكا", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 222, n: "تودو", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
+
+// ===== بسكويت =====
+{ id: 223, n: "بسكويت ماري", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 224, n: "بسكويت الشاي", d: "🧁 حاجات حلوه", p: 6, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 225, n: "بسكويت باللبن", d: "🧁 حاجات حلوه", p: 6, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 226, n: "بسكويت بالشيكولاتة", d: "🧁 حاجات حلوه", p: 6, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 227, n: "بسكويت جوز الهند", d: "🧁 حاجات حلوه", p: 6, e: "🧁", cat: "HagatHelwa",img:" "  },
+
+// ===== ويفر وشوكولاتة =====
+{ id: 228, n: "ويفر ماندولين", d: "🧁 حاجات حلوه", p: 10, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 229, n: "شوكولاتة كورونا", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 230, n: "شوكولاتة ماندولين", d: "🧁 حاجات حلوه", p: 10, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 231, n: "شوكولاتة بريك", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 232, n: "شوكولاتة مورو", d: "🧁 حاجات حلوه", p: 25, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 233, n: "شوكولاتة كيت كات", d: "🧁 حاجات حلوه", p: 10, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 234, n: "شوكولاتة كادبوري", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+
+// ===== جيلي ومنتوس =====
+{ id: 235, n: "جيلي", d: "🧁 حاجات حلوه", p: 5, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 236, n: "مارشميلو", d: "🧁 حاجات حلوه", p: 12, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 237, n: "منتوس", d: "🧁 حاجات حلوه", p: 5, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 238, n: "تيك تاك", d: "🧁 حاجات حلوه", p: 3, e: "🧁", cat: "HagatHelwa",img:" "  },
+
+// ===== لبان =====
+{ id: 239, n: "لبان إكسترا", d: "🧁 حاجات حلوه", p: 2, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 240, n: "لبان تريديت", d: "🧁 حاجات حلوه", p: 2, e: "🧁", cat: "HagatHelwa",img:" "  },
+
+// ===== مصاصات =====
+{ id: 241, n: "مصاصات تشوبا تشوبس", d: "🧁 حاجات حلوه", p: 3, e: "🧁", cat: "HagatHelwa",img:" "  },
+
+// ===== آيس كريم =====
+{ id: 242, n: "آيس كريم دولسيكا", d: "🧁 حاجات حلوه", p: 12, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 243, n: "آيس كريم دولفين", d: "🧁 حاجات حلوه", p: 10, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 244, n: "آيس كريم كيمو", d: "🧁 حاجات حلوه", p: 8, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 245, n: "آيس كريم كورنيتو", d: "🧁 حاجات حلوه", p: 15, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 246, n: "آيس كريم ساندويتش", d: "🧁 حاجات حلوه", p: 6, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 247, n: "آيس كريم كوب", d: "🧁 حاجات حلوه", p: 8, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 248, n: "آيس كريم كون", d: "🧁 حاجات حلوه", p: 5, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 249, n: "آيس كريم شوكولاتة", d: "🧁 حاجات حلوه", p: 8, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 250, n: "آيس كريم فانيليا", d: "🧁 حاجات حلوه", p: 8, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 251, n: "آيس كريم فراولة", d: "🧁 حاجات حلوه", p: 8, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 252, n: "آيس كريم مانجو", d: "🧁 حاجات حلوه", p: 8, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 253, n: "آيس كريم ميكس", d: "🧁 حاجات حلوه", p: 12, e: "🍦", cat: "HagatHelwa",img:" "  },
+{ id: 254, n: "آيس كريم عائلي", d: "🧁 حاجات حلوه", p: 35, e: "🍦", cat: "HagatHelwa",img:" "  },
 // ===== منتجات صحية الكاملة =====
 { id: 155, n: "سوكرادورف =بديل السكر الابيض", d: "🥗 منتجات صحية", p: 250, e: "🍯", cat: "healthy",img:"./img/قطره2.jpeg"  },
 { id: 156, n: " زبدة الفول السوداني الطبيعية", d: "🥗 منتجات صحية", p: 105, e: "🌰", cat: "healthy",img:" ./img/زبده الفول السوداني.jpeg"  },
@@ -1635,6 +1715,18 @@
   }
 
   const WHATSAPP_NUMBER = '201277092892';
+
+  // ===== إعدادات بوت التليجرام =====
+  const TELEGRAM_BOT_TOKEN = '8777961810:AAGrD0080iAWc-m4GI4Snv7broN_ms-GB8k';
+  
+  // ===== قائمة Chat IDs للتليجرام - أضف الأرقام اللي تبغيها هنا =====
+  // مثال: const TELEGRAM_CHAT_IDS = ['8767256379', '123456789', '987654321'];
+  // لما تزيد واحد جديد: أكتب الرقم وزود فاصلة وقوس
+  const TELEGRAM_CHAT_IDS = [
+    '8767256379',  // ← محمد (الأساسي)
+    // '6718797521',  // ← أضف الأشخاص الآخرين هنا (احذف علامة التعليق // لما تبدأ الاستخدام)
+    // '987654321',
+  ];
 
   let currentCategory = null;
   let currentSearchQuery = '';
@@ -1745,20 +1837,6 @@
   }
 
   function goToCategory(catId, catName) {
-    if (currentCategory && currentCategory !== catId && Object.keys(martyrtCart).length > 0) {
-      const currentCatName = CATEGORIES[currentCategory] || currentCategory;
-      const confirm = window.confirm(
-        `⚠️ عندك سلة من قسم "${currentCatName}"\n\nهتنقل القسم وتفقد السلة دي؟`
-      );
-      
-      if (!confirm) {
-        return;
-      }
-      
-      martyrtCart = {};
-      sessionStorage.removeItem('tayyar_mart_cart');
-    }
-    
     currentCategory = catId;
     currentSource = 'tayyar-mart';
     currentSearchQuery = '';
@@ -1927,6 +2005,15 @@
     updateCategoryBadges();
     updateCheckoutBar();
     saveMartSession();
+    
+    // إظهار/إخفاء زر تأكيد الطلب
+    const startBtn = document.querySelector('.start-button');
+    const cartItemCount = Object.values(martyrtCart).reduce((sum, qty) => sum + qty, 0);
+    if (cartItemCount > 0) {
+      startBtn.style.display = 'block';
+    } else {
+      startBtn.style.display = 'none';
+    }
   }
 
   function changeReviewQty(productId, change) {
@@ -2118,12 +2205,15 @@
     });
 
     let paymentMethodText = '';
+    let paymentInstructions = '';
     if (checkoutData.paymentMethod === 'cash') {
       paymentMethodText = '💵 الدفع عند الاستلام';
     } else if (checkoutData.paymentMethod === 'vodafone') {
       paymentMethodText = '📱 فودافون كاش';
+      paymentInstructions = `\n\n🔔 *تعليمات الدفع:*\n📱 رقم الفودافون: *01024130987*\n📸 الرجاء تصوير إيصال التحويل وإرساله في الرسائل`;
     } else if (checkoutData.paymentMethod === 'instapay') {
       paymentMethodText = '💳 انستا بي';
+      paymentInstructions = `\n\n🔔 *تعليمات الدفع:*\n💳 رقم انستا بي: *01024130987*\n📸 الرجاء تصوير إيصال التحويل وإرساله في الرسائل`;
     } else {
       paymentMethodText = '💳 بطاقة ائتمان';
     }
@@ -2152,6 +2242,7 @@
 ━━━━━━━━━━━━━━━━━━
 📅 *تاريخ الطلب:* ${date}
 🕒 *وقت الطلب:* ${time}
+⏱️ *وقت التوصيل المتوقع:* 35 - 60 دقيقة
 
 ━━━━━━━━━━━━━━━━━━
 👤 *بيانات العميل*
@@ -2174,7 +2265,7 @@ ${productsList.replace(/%0A/g, '\n')}
 💵 *الإجمالي النهائي: ${totalWithTip} ج.م*
 ━━━━━━━━━━━━━━━━━━
 💳 *طريقة الدفع:*
-${paymentMethodText}${notesText }
+${paymentMethodText}${paymentInstructions}${notesText }
 
 ━━━━━━━━━━━━━━━━━━
 ✅ شكراً لاختيارك *طيار*❤️
@@ -2183,10 +2274,45 @@ ${paymentMethodText}${notesText }
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
+    // إرسال الطلب إلى بوت التليجرام
+    sendOrderToTelegram(message);
+
     setTimeout(() => {
       document.getElementById('martReview').classList.remove('active');
       document.getElementById('successModal').style.display = 'flex';
     }, 500);
+  }
+
+  // ===== دالة لإرسال الطلب إلى بوت التليجرام (لكل Chat IDs) =====
+  function sendOrderToTelegram(message) {
+    // رابط Telegram Bot API للإرسال
+    const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    
+    // إرسال الرسالة لكل Chat ID في القائمة
+    TELEGRAM_CHAT_IDS.forEach((chatId) => {
+      fetch(telegramUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: 'Markdown'
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.ok) {
+          console.log(`✅ تم إرسال الطلب للتليجرام (Chat ID: ${chatId}) بنجاح`);
+        } else {
+          console.error(`❌ خطأ في البوت (Chat ID: ${chatId}):`, data.description);
+        }
+      })
+      .catch(error => {
+        console.error(`❌ خطأ في الاتصال مع بوت التليجرام (Chat ID: ${chatId}):`, error);
+      });
+    });
   }
 
   function resetCheckout() {
