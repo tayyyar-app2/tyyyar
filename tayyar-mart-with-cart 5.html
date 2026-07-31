@@ -203,6 +203,300 @@
     .category-title {
       font-size: 18px;
       font-weight: 700;
+      flex: 1;
+      text-align: center;
+    }
+
+    .cart-button {
+      position: relative;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      background: #ff6b6b;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      display: none;
+      animation: badgePulse 0.3s ease;
+    }
+
+    .cart-badge.show {
+      display: flex;
+    }
+
+    @keyframes badgePulse {
+      0% {
+        transform: scale(0.8);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* ===== Shopping Cart Modal ===== */
+    .cart-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 200;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .cart-modal-overlay.active {
+      display: block;
+    }
+
+    .cart-modal {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 100%;
+      height: 100vh;
+      background: white;
+      z-index: 201;
+      display: flex;
+      flex-direction: column;
+      animation: slideInRight 0.3s ease;
+      overflow: hidden;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .cart-header {
+      background: #e8742a;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .cart-close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .cart-items-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 15px;
+      background: #f9f9f9;
+    }
+
+    .cart-item {
+      background: white;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .cart-item-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #fff9f0 0%, #f5f5f5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .cart-item-image img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .cart-item-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cart-item-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .cart-item-price {
+      color: #e8742a;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 4px 8px;
+    }
+
+    .cart-quantity-control button {
+      background: none;
+      border: none;
+      color: #e8742a;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .cart-quantity-control span {
+      min-width: 30px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .cart-delete-btn {
+      background: none;
+      border: none;
+      color: #ff6b6b;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.2s ease;
+    }
+
+    .cart-delete-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+
+    .cart-empty-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .cart-footer {
+      background: white;
+      padding: 15px 20px;
+      border-top: 1px solid #ddd;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .cart-summary {
+      margin-bottom: 12px;
+    }
+
+    .cart-summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .cart-summary-total {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 16px;
+      color: #e8742a;
+      padding-top: 8px;
+      border-top: 1px solid #ddd;
+    }
+
+    .cart-checkout-btn {
+      width: 100%;
+      padding: 12px 20px;
+      background: #e8742a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .cart-checkout-btn:hover {
+      background: #d66121;
+      box-shadow: 0 4px 12px rgba(232, 116, 42, 0.3);
+    }
+
+    .cart-checkout-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
 
     .search-bar {
@@ -716,7 +1010,10 @@
   <div class="header-bar">
     <button class="back-button" onclick="backToHome()">←</button>
     <h2 class="category-title" id="categoryTitle">🛍️ بقالة</h2>
-    <div style="width: 24px;"></div>
+    <button class="cart-button" onclick="openCartModal()">
+      🛒
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
   </div>
 
   <div class="search-bar">
@@ -1530,7 +1827,7 @@
     { id: 136, n: "جبنة شيدر شرائح 125جرام", d: "🥛 ألبان", p: 18, e: "🧀", cat: "dairy" ,img:"./img-mart/جبنه شيدر.jpg" },
     { id: 137, n: "جبنة شيدر مبشورة", d: "🥛 ألبان", p: 18, e: "🧀", cat: "dairy" ,img:"./img-mart/جبنه شيدر  مبشوره.jpg" },
     // { id: 138, n: "جبنة شيدر بلوك", d: "🥛 ألبان", p: 20, e: "🧀", cat: "dairy" ,img:" " },
-    { id: 139, n: "جبنة موزاريلا", d: "🥛 ألبان", p: 22, e: "🧀", cat: "dairy" ,img:"./img-mart/جبنه منزيرلا.jpg" },
+    { id: 139, n: "جبنة موتزاريلا", d: "🥛 ألبان", p: 22, e: "🧀", cat: "dairy" ,img:"./img-mart/جبنه منزيرلا.jpg" },
     // { id: 140, n: "جبنة موزاريلا مبشورة", d: "🥛 ألبان", p: 22, e: "🧀", cat: "dairy" ,img:" " },
     // { id: 141, n: "جبنة موزاريلا بلوك", d: "🥛 ألبان", p: 24, e: "🧀", cat: "dairy" ,img:" " },
     // منتجات ألبان أخرى
@@ -1592,14 +1889,14 @@
   // حاجات حلوه
 
 // ===== شيبسي وتشيبس =====
-{ id: 200, n: "شيبسي ملح", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 200, n: "دوريتوس", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 201, n: "شيبسي جبنة", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 202, n: "شيبسي جبنة متبلة", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 203, n: "شيبسي شطة وليمون", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 204, n: "شيبسي طماطم", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:"./img-mart/ب بن ساده.jpg"  },
+{ id: 204, n: "شيبسي طماطم", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:""  },
 { id: 205, n: "شيبسي خل", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 206, n: "شيبسي حار", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 207, n: "تايجر", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 206, n: "كرانشي حار", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 207, n: "دوريتوس شطه وليمون", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 208, n: "كرانشي", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
 
 // ===== بيك رولز وبيك ستيكس =====
@@ -1609,10 +1906,10 @@
 { id: 212, n: "بيك ستيكس", d: "🧁 حاجات حلوه", p: 12, e: "🧁", cat: "HagatHelwa",img:" "  },
 
 // ===== فشار ومولتو =====
-{ id: 213, n: "فشار", d: "🧁 حاجات حلوه", p: 10, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 213, n: "شيتوس جبنه", d: "🧁 حاجات حلوه", p: 10, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 214, n: "مولتو شوكولاتة", d: "🧁 حاجات حلوه", p: 20, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 215, n: "مولتو فراولة", d: "🧁 حاجات حلوه", p: 20, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 216, n: "مولتو كاسترد", d: "🧁 حاجات حلوه", p: 20, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 216, n: "شيتوس حار", d: "🧁 حاجات حلوه", p: 20, e: "🧁", cat: "HagatHelwa",img:" "  },
 
 // ===== كيك وحلويات =====
 { id: 217, n: "هوهوز", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
@@ -1625,18 +1922,18 @@
 // ===== بسكويت =====
 { id: 223, n: "بسكويت ماري", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 224, n: "بسكويت الشاي", d: "🧁 حاجات حلوه", p: 6, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 225, n: "بسكويت باللبن", d: "🧁 حاجات حلوه", p: 6, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 225, n: "بسكويت نواعم", d: "🧁 حاجات حلوه", p: 6, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 226, n: "بسكويت بالشيكولاتة", d: "🧁 حاجات حلوه", p: 6, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 227, n: "بسكويت جوز الهند", d: "🧁 حاجات حلوه", p: 6, e: "🧁", cat: "HagatHelwa",img:" "  },
 
 // ===== ويفر وشوكولاتة =====
 { id: 228, n: "ويفر ماندولين", d: "🧁 حاجات حلوه", p: 10, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 229, n: "شوكولاتة كورونا", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 229, n: "توينكيز فراوله ", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 230, n: "شوكولاتة ماندولين", d: "🧁 حاجات حلوه", p: 10, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 231, n: "شوكولاتة بريك", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 231, n: "شوكولاتة KitKat", d: "🧁 حاجات حلوه", p: 8, e: "🧁", cat: "HagatHelwa",img:" "  },
 { id: 232, n: "شوكولاتة مورو", d: "🧁 حاجات حلوه", p: 25, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 233, n: "شوكولاتة كيت كات", d: "🧁 حاجات حلوه", p: 10, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 234, n: "شوكولاتة كادبوري", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 233, n: "شوكولاتة  ديري ميللك", d: "🧁 حاجات حلوه", p: 10, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 234, n: "شوكولاتة مالتيزر 37 جم", d: "🧁 حاجات حلوه", p: 15, e: "🧁", cat: "HagatHelwa",img:" "  },
 
 // ===== جيلي ومنتوس =====
 { id: 235, n: "جيلي", d: "🧁 حاجات حلوه", p: 5, e: "🧁", cat: "HagatHelwa",img:" "  },
@@ -1645,8 +1942,8 @@
 { id: 238, n: "تيك تاك", d: "🧁 حاجات حلوه", p: 3, e: "🧁", cat: "HagatHelwa",img:" "  },
 
 // ===== لبان =====
-{ id: 239, n: "لبان إكسترا", d: "🧁 حاجات حلوه", p: 2, e: "🧁", cat: "HagatHelwa",img:" "  },
-{ id: 240, n: "لبان تريديت", d: "🧁 حاجات حلوه", p: 2, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 239, n: "لبان clorets", d: "🧁 حاجات حلوه", p: 2, e: "🧁", cat: "HagatHelwa",img:" "  },
+{ id: 240, n: "لبان تريديت بطيخ", d: "🧁 حاجات حلوه", p: 2, e: "🧁", cat: "HagatHelwa",img:" "  },
 
 // ===== مصاصات =====
 { id: 241, n: "مصاصات تشوبا تشوبس", d: "🧁 حاجات حلوه", p: 3, e: "🧁", cat: "HagatHelwa",img:" "  },
@@ -1847,6 +2144,18 @@
         }
       }
     });
+    
+    // Update cart badge in header
+    const totalCartItems = Object.values(martyrtCart).reduce((sum, qty) => sum + qty, 0);
+    const cartBadge = document.getElementById('cartBadge');
+    if (cartBadge) {
+      if (totalCartItems > 0) {
+        cartBadge.textContent = totalCartItems;
+        cartBadge.classList.add('show');
+      } else {
+        cartBadge.classList.remove('show');
+      }
+    }
   }
 
   // ===== NAVIGATION =====
@@ -2483,7 +2792,144 @@ ${paymentMethodText}${paymentInstructions}${notesText }
   };
 
 
+  // ===== Shopping Cart Modal Functions =====
+  function openCartModal() {
+    if (Object.keys(martyrtCart).length === 0) {
+      alert('🛒 السلة فارغة!');
+      return;
+    }
+    document.getElementById('cartModalOverlay').classList.add('active');
+    renderCartItems();
+  }
+
+  function closeCartModal() {
+    document.getElementById('cartModalOverlay').classList.remove('active');
+  }
+
+  function renderCartItems() {
+    const container = document.getElementById('cartItemsContainer');
+    const items = Object.entries(martyrtCart);
+
+    if (items.length === 0) {
+      container.innerHTML = `
+        <div class="cart-empty">
+          <div class="cart-empty-icon">🛒</div>
+          <p>السلة فارغة</p>
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    items.forEach(([id, qty]) => {
+      const product = MENU.find(p => p.id === parseInt(id));
+      if (!product) return;
+
+      const productImage = product.img || 'https://via.placeholder.com/80';
+      const totalPrice = product.p * qty;
+
+      html += `
+        <div class="cart-item">
+          <div class="cart-item-image">
+            <img src="${productImage}" alt="${product.n}" onerror="this.src='https://via.placeholder.com/80'">
+          </div>
+          <div class="cart-item-details">
+            <div>
+              <div class="cart-item-name">${product.n}</div>
+              <div class="cart-item-price">${totalPrice} ج.م</div>
+            </div>
+            <div class="cart-item-controls">
+              <div class="cart-quantity-control">
+                <button onclick="updateCartQtyFromModal(${id}, ${qty - 1})">−</button>
+                <span>${qty}</span>
+                <button onclick="updateCartQtyFromModal(${id}, ${qty + 1})">+</button>
+              </div>
+              <button class="cart-delete-btn" onclick="removeFromCartModal(${id})">🗑️</button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+    updateCartSummary();
+  }
+
+  function updateCartQtyFromModal(productId, newQty) {
+    if (newQty <= 0) {
+      removeFromCartModal(productId);
+      return;
+    }
+    martyrtCart[productId] = newQty;
+    saveMartSession();
+    updateCategoryBadges();
+    renderCartItems();
+  }
+
+  function removeFromCartModal(productId) {
+    delete martyrtCart[productId];
+    saveMartSession();
+    updateCategoryBadges();
+    
+    if (Object.keys(martyrtCart).length === 0) {
+      closeCartModal();
+      alert('تم إزالة المنتج من السلة');
+    } else {
+      renderCartItems();
+    }
+  }
+
+  function updateCartSummary() {
+    const total = calculateCartTotal();
+    const count = Object.values(martyrtCart).reduce((sum, qty) => sum + qty, 0);
+    
+    const summaryHtml = `
+      <div class="cart-summary">
+        <div class="cart-summary-row">
+          <span>عدد المنتجات:</span>
+          <span>${count}</span>
+        </div>
+        <div class="cart-summary-row">
+          <span>إجمالي السعر:</span>
+          <span>${total} ج.م</span>
+        </div>
+      </div>
+    `;
+    
+    document.getElementById('cartSummaryContent').innerHTML = summaryHtml;
+  }
+
+  function proceedToCheckoutFromCart() {
+    closeCartModal();
+    proceedToCheckout();
+  }
+
+  // Update cart badge when opening modal
+  document.getElementById('cartModalOverlay')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeCartModal();
+    }
+  });
+
 </script>
 
+<!-- ===== Shopping Cart Modal ===== -->
+<div id="cartModalOverlay" class="cart-modal-overlay">
+  <div class="cart-modal">
+    <div class="cart-header">
+      <h2>🛒 سلة الشراء</h2>
+      <button class="cart-close-btn" onclick="closeCartModal()">✕</button>
+    </div>
+    
+    <div class="cart-items-container" id="cartItemsContainer">
+      <!-- Cart items will be rendered here -->
+    </div>
+    
+    <div class="cart-footer">
+      <div id="cartSummaryContent"></div>
+      <button class="cart-checkout-btn" onclick="proceedToCheckoutFromCart()">إتمام الطلب</button>
+    </div>
+  </div>
+</div>
 
 </body></html>
