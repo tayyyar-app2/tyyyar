@@ -1708,16 +1708,15 @@
     { id: 2022, n: "صلصه", d: "🛍️ بقالة", p: 53.55, e: "🫒", cat: "groceries" ,img:"./img-mart/ب صلصه.jpg" },
     { id: 2023, n: "كاتشب", d: "🛍️ بقالة", p: 30, e: "🫒", cat: "groceries",img:"./img-mart/ب كاتشب.jpg"  },
     { id: 2024, n: "خل", d: "🛍️ بقالة", p: 18.95, e: "🫒", cat: "groceries" ,img:"./img-mart/ب خل.jpg" },
-    { id: 2025, n: "زيت زيتون بكر 250مل", d: "🛍️ بقالة", p:200 , e: "🫒", cat: "groceries",img:"./img-mart/ب زيت زيتون.jpg"  },
-     
-    // بقولياتسس
-    { id: 2026, n: "زيت زيتون بكر 500مل", d: "🛍️ بقالة", p: 380, e: "🫒", cat: "groceries" ,img:"./img-mart/ب زيت زيتون.jpg" },
+    // { id: 2025, n: "مايونيز", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:" "  },
+    // بقوليات
+    { id: 2026, n: "فول الضحي", d: "🛍️ بقالة", p: 67.19, e: "🫒", cat: "groceries" ,img:"./img-mart/ب فول.jpg" },
     { id: 2027, n: "عدس", d: "🛍️ بقالة", p: 64.58, e: "🫒", cat: "groceries" ,img:"./img-mart/ب عدس.jpg" },
     { id: 2028, n: "لوبيا 500 جم", d: "🛍️ بقالة", p: 105.58, e: "🫒", cat: "groceries",img:"./img-mart/ب لوبيا.jpg"  },
     { id: 2029, n: "فاصوليا", d: "🛍️ بقالة", p: 95, e: "🫒", cat: "groceries" ,img:"./img-mart/ب فاصوليا.jpg" },
     { id: 2030, n: "تونه صن شاين حاااار", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" ,img:"./img-mart/ب تونه حار.jpg" },
     { id: 2031, n: "تونه صن شاين ", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries" ,img:"./img-mart/ب تونه.jpg" },
-    { id: 2032, n: "فول الضحي", d: "🛍️ بقالة", p: 67.19, e: "🫒", cat: "groceries",img:"./img-mart/ب فول.jpg "  },
+    // { id: 2032, n: "مكرونه اسبكتي", d: "🛍️ بقالة", p: 35, e: "🫒", cat: "groceries",img:" "  },
     { id: 2033, n: "فلفل اسود", d: "🛍️ بقالة", p: 98.18, e: "🫒", cat: "groceries",img:"./img-mart/ب فلفل اسود.jpg"  },
     { id: 2034, n: "الكمون", d: "🛍️ بقالة", p: 98, e: "🫒", cat: "groceries",img:"./img-mart/ب كمون مطحون.jpg"  },
     { id: 2035, n: "القرفه", d: "🛍️ بقالة", p: 67.73, e: "🫒", cat: "groceries" ,img:"./img-mart/ب قرفه.jpg" },
@@ -2599,6 +2598,9 @@ ${paymentMethodText}${paymentInstructions}${notesText }
 ✅ شكراً لاختيارك *طيار*❤️
 `;
     
+    // حفظ حالة تم تأكيد الطلب قبل مغادرة التطبيق
+    sessionStorage.setItem('tayyar_mart_order_confirmed', 'true');
+    
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 
@@ -2643,7 +2645,140 @@ ${paymentMethodText}${paymentInstructions}${notesText }
     });
   }
 
-  function resetCheckout() {
+
+
+  // ===== نظام أوقات الفتح والغلق =====
+  const CATEGORIES_WITH_HOURS = {
+    dairy: { name: 'ألبان وجبن', closeTime: 10, openTime: 6 },
+    bakery: { name: 'مخبوزات', closeTime: 10, openTime: 6 },
+    tobacco: { name: 'دخان', closeTime: 10, openTime: 6 },
+    groceries: { name: 'بقالة', closeTime: 10, openTime: 6 },
+  vegetables: { name: 'خضروات', closeTime: 10, openTime: 6 },
+  fruits: { name: 'فواكه', closeTime: 10, openTime: 6 },
+  drinks: { name: 'مشروبات', closeTime: 10, openTime: 6},
+  HagatHelwa: { name: ' حاجات حلوه', closeTime: 10, openTime: 6 },
+   healthy: { name: 'منتجات صحية', closeTime: 10, openTime: 6 },
+  };
+
+  function isCurrentlyOpen(categoryId) {
+    if (!CATEGORIES_WITH_HOURS[categoryId]) return true;
+    
+    const now = new Date();
+    const currentHour = now.getHours();
+    const { closeTime, openTime } = CATEGORIES_WITH_HOURS[categoryId];
+    
+    // المتجر مغلق من الساعة closeTime إلى openTime
+    if (closeTime < openTime) {
+      // مثلاً: مغلق من 1 إلى 10 صباحاً
+      return !(currentHour >= closeTime && currentHour < openTime);
+    } else {
+      // مثلاً: مغلق من 23 إلى 6 (عبر منتصف الليل)
+      return !(currentHour >= closeTime || currentHour < openTime);
+    }
+  }
+
+  function getNextOpenTime(categoryId) {
+    if (!CATEGORIES_WITH_HOURS[categoryId]) return null;
+    const { openTime } = CATEGORIES_WITH_HOURS[categoryId];
+    return `${openTime}:00 صباحاً`;
+  }
+
+  // ===== INITIALIZATION =====
+  document.addEventListener('DOMContentLoaded', function() {
+    loadMartSession();
+    updateCategoryBadges();
+    applyClosedCategoryStyles();
+    
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('status') === 'success') {
+      alert('✅ تم استقبال طلبك بنجاح!');
+      resetCheckout();
+    }
+
+    // التحقق من العودة من تطبيق آخر
+    handleAppReturn();
+  });
+
+  // ===== تطبيق أنماط الفئات المغلقة =====
+  function applyClosedCategoryStyles() {
+    const buttons = document.querySelectorAll('.category-button');
+    buttons.forEach(button => {
+      const categoryText = button.textContent.trim().split('\n')[0];
+      
+      // تحديد الفئة من النص
+      let categoryId = null;
+      if (categoryText === 'ألبان وجبن') categoryId = 'dairy';
+      else if (categoryText === 'مخبوزات') categoryId = 'bakery';
+      else if (categoryText === 'دخان') categoryId = 'tobacco';
+      else if (categoryText === 'بقالة') categoryId = 'groceries';
+      else if (categoryText === 'خضروات') categoryId = 'vegetables';
+      else if (categoryText === 'فواكه') categoryId = 'fruits';
+      else if (categoryText === 'مشروبات') categoryId = 'drinks';
+      else if (categoryText === 'حاجات حلوه') categoryId = 'HagatHelwa';
+      else if (categoryText === 'منتجات صحية') categoryId = 'healthy';
+      if (!categoryId) return;
+      
+      const isOpen = isCurrentlyOpen(categoryId);
+      
+      if (!isOpen) {
+        // إنشاء overlay للفئة المغلقة
+        const overlay = document.createElement('div');
+        overlay.style.position = 'absolute';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.background = 'rgba(0, 0, 0, 0.6)';
+        overlay.style.borderRadius = '15px';
+        overlay.style.display = 'flex';
+        overlay.style.flexDirection = 'column';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = '10';
+        overlay.style.color = 'white';
+        overlay.style.fontSize = '14px';
+        overlay.style.fontWeight = 'bold';
+        overlay.style.textAlign = 'center';
+        overlay.style.padding = '10px';
+        
+        const nextOpen = getNextOpenTime(categoryId);
+        overlay.innerHTML = `
+          <div>🔒 مغلق الآن</div>
+          <div style="font-size: 12px; margin-top: 5px;">يفتح في ${nextOpen}</div>
+        `;
+        
+        button.style.position = 'relative';
+        button.style.opacity = '0.7';
+        button.appendChild(overlay);
+        
+        // منع الضغط على الفئة المغلقة
+        button.style.cursor = 'not-allowed';
+        button.onclick = (e) => {
+          e.preventDefault();
+          alert(`😴 عذراً، هذه الفئة مغلقة الآن\nتفتح في ${nextOpen}`);
+          return false;
+        };
+      }
+    });
+  }
+
+  // ===== التعامل مع العودة من تطبيق آخر =====
+  function handleAppReturn() {
+    // حفظ حالة تم تأكيد الطلب في localStorage
+    if (sessionStorage.getItem('tayyar_mart_order_confirmed')) {
+      // تم تأكيد الطلب سابقاً - إعادة تعيين كامل
+      resetCheckout();
+      sessionStorage.removeItem('tayyar_mart_order_confirmed');
+      console.log('✅ تم إعادة تعيين التطبيق بعد تأكيد الطلب');
+    }
+  }
+
+  // تحديث resetCheckout لحفظ حالة تم تأكيد الطلب
+  const originalResetCheckout = window.resetCheckout || function() {};
+  window.resetCheckout = function() {
+    // حفظ أننا أكملنا الطلب
+    sessionStorage.setItem('tayyar_mart_order_confirmed', 'true');
+    
     martyrtCart = {};
     currentCategory = null;
     currentSource = 'regular';
@@ -2657,19 +2792,7 @@ ${paymentMethodText}${paymentInstructions}${notesText }
     if (gpsStatus) gpsStatus.textContent = '';
     if (locationResult) locationResult.textContent = '';
     backToHome();
-  }
-
-  // ===== INITIALIZATION =====
-  document.addEventListener('DOMContentLoaded', function() {
-    loadMartSession();
-    updateCategoryBadges();
-    
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('status') === 'success') {
-      alert('✅ تم استقبال طلبك بنجاح!');
-      resetCheckout();
-    }
-  });
+  };
 
   window.addEventListener('beforeunload', saveMartSession);
 
