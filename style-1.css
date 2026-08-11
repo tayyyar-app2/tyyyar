@@ -41,7 +41,7 @@ body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);dire
 .btab[data-brand="Krebs"].active{background:linear-gradient(135deg,#ff3300,#101010);}
 .btab[data-brand="Sliceno"].active{background:linear-gradient(135deg,#0a9154,#000000);}
 .btab[data-brand="Fan w Tarab"].active{background:linear-gradient(135deg,#ff0000,#d0c7c7b3);}
-.btab[data-brand="sokradorf"].active{background:linear-gradient(135deg,#008cff,#c0e009b3);}
+.btab[data-brand="Chicken Factor"].active{background:linear-gradient(135deg,#ff0044,#ffffffa6);}
 .bb{background:rgba(0,0,0,0.1);border-radius:20px;padding:1px 7px;font-size:11px;}
 .btab.active .bb{background:rgba(255,255,255,0.25);}
 .tab-logo{width:26px;height:26px;border-radius:7px;object-fit:cover;flex-shrink:0;}
