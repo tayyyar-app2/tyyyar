@@ -254,6 +254,10 @@ function setBrand(b,btn){
   btn.classList.add('active');
   updateHeaderBrand(b);
   render();
+
+  setTimeout(() => {
+  document.getElementById('prods').scrollIntoView({ behavior: 'smooth' });
+}, 100);
 }
 
 function setBrandFromHeader(b){
@@ -261,6 +265,11 @@ function setBrandFromHeader(b){
   document.querySelectorAll('.btab').forEach(t=>t.classList.toggle('active',t.dataset.brand===b));
   updateHeaderBrand(b);
   render();
+  // الاسكرول/////
+  setTimeout(() => {
+  document.getElementById('prods').scrollIntoView({ behavior: 'smooth' });
+}, 100);
+  
 }
 
 function updateHeaderBrand(b){
