@@ -1,15 +1,15 @@
 const RESTAURANT_SCHEDULE = {
-  'Bazooka':            { open: '10:00', close: '5:00' },
-  'Karam El Sham':      { open: '10:00', close: '5:00' },
-  'B Laban':            { open: '10:00', close: '5:00' },
-  'Wahmy Burger':       { open: '10:00', close: '5:00' },
-  'Koshary Al Khedewy': { open: '10:00', close: '5:00' },
-  'Hawawshi Al Refaie': { open: '10:00', close: '5:00' },
-  'Saadaawy Burger':    { open: '10:00', close: '5:00' },
-  'Krebs':              { open: '10:00', close: '5:00' },
-  'Sliceno':            { open: '10:00', close: '5:00' },
-  'Fan w Tarab':        { open: '10:00', close: '5:00' },
-  'Chicken Factor':          { open: '10:00', close: '5:00' },
+  'Bazooka':            { open: '11:00', close: '2:00' },
+  'Karam El Sham':      { open: '11:00', close: '2:00' },
+  'B Laban':            { open: '11:00', close: '2:00' },
+  'Wahmy Burger':       { open: '11:00', close: '2:00' },
+  'Koshary Al Khedewy': { open: '11:00', close: '2:00' },
+  'Hawawshi Al Refaie': { open: '11:00', close: '2:00' },
+  'Saadaawy Burger':    { open: '11:00', close: '2:00' },
+  'Krebs':              { open: '11:00', close: '2:00' },
+  'Sliceno':            { open: '11:00', close: '2:00' },
+  'Fan w Tarab':        { open: '11:00', close: '2:00' },
+  'Chicken Factor':     { open: '11:00', close: '2:00' },
 };
 
 function isOpen(brandKey) {
