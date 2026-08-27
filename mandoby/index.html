@@ -1078,37 +1078,64 @@ function addSwipeListener(el){
 }
 
 // ════════════════════════════════════════════
-// 🔄 UPDATE ORDER STATUS
+// 🔄 UPDATE ORDER STATUS — ✅ تعديل جديد
 // ════════════════════════════════════════════
 function upd(id,status){
-  const btns=document.querySelectorAll(`#c-${id} .btn:not(.btn-dn):not(.btn-c):not(.btn-undo):not(.btn-wa):not(.btn-map)`);
-  btns.forEach(b=>b.disabled=true);
+  // 🔒 تحقق أولاً من أن المندوب الحالي هو المخول بتحديث الأوردر ده
+  db.collection('orders').doc(id).get().then(doc=>{
+    if(!doc.exists){
+      showToast('❌ الأوردر مش موجود');
+      return;
+    }
 
-  const update={driverStatus:status};
-  if(status==='received') update.receivedAt=new Date().toISOString();
-  if(status==='preparing') update.preparingAt=new Date().toISOString();
-  if(status==='on_way') update.onWayAt=new Date().toISOString();
-  if(status==='delivered') update.deliveredAt=new Date().toISOString();
+    const orderData = doc.data();
+    const isAssigned = orderData.assignedDriverPhone === currentUser.phone;
+    const isFirstTime = !orderData.assignedDriverPhone; // لو مفيش assigned driver بعد
 
-  // If driver, also save driver info on the order
-  if(currentUser && currentUser.role==='driver'){
-    update.driverPhone=currentUser.phone;
-    update.driverName=currentUser.name;
-    update.driverId=currentUser.id||'';
-  }
+    // لو المندوب ده مش المخول والأوردر معين لمندوب تاني
+    if(!isFirstTime && !isAssigned){
+      showToast(`❌ هذا الطلب معين ل${orderData.assignedDriverName || 'مندوب آخر'}`);
+      return;
+    }
 
-  const retry=(attempts=0)=>{
-    db.collection('orders').doc(id).update(update)
-      .then(()=>{
-          showToast(getStatusMsg(status));
-          if(status==='delivered' && navigator.vibrate) navigator.vibrate([200,100,200,100,200]);
-        })
-      .catch(e=>{
-        if(attempts<3) setTimeout(()=>retry(attempts+1), 2000*attempts);
-        else { showToast('❌ حصل خطأ في التحديث'); btns.forEach(b=>b.disabled=false); }
-    });
-  };
-  retry();
+    const btns=document.querySelectorAll(`#c-${id} .btn:not(.btn-dn):not(.btn-c):not(.btn-undo):not(.btn-wa):not(.btn-map)`);
+    btns.forEach(b=>b.disabled=true);
+
+    const update={driverStatus:status};
+    if(status==='received') update.receivedAt=new Date().toISOString();
+    if(status==='preparing') update.preparingAt=new Date().toISOString();
+    if(status==='on_way') update.onWayAt=new Date().toISOString();
+    if(status==='delivered') update.deliveredAt=new Date().toISOString();
+
+    // لو أول مرة استقبال، خصص هذا المندوب للأوردر
+    if(isFirstTime && status==='received'){
+      update.assignedDriverPhone = currentUser.phone;
+      update.assignedDriverId = currentUser.id || '';
+      update.assignedDriverName = currentUser.name;
+    }
+
+    // احفظ معلومات المندوب الحالي دائماً على الأوردر
+    if(currentUser && currentUser.role==='driver'){
+      update.driverPhone=currentUser.phone;
+      update.driverName=currentUser.name;
+      update.driverId=currentUser.id||'';
+    }
+
+    const retry=(attempts=0)=>{
+      db.collection('orders').doc(id).update(update)
+        .then(()=>{
+            showToast(getStatusMsg(status));
+            if(status==='delivered' && navigator.vibrate) navigator.vibrate([200,100,200,100,200]);
+          })
+        .catch(e=>{
+          if(attempts<3) setTimeout(()=>retry(attempts+1), 2000*attempts);
+          else { showToast('❌ حصل خطأ في التحديث'); btns.forEach(b=>b.disabled=false); }
+      });
+    };
+    retry();
+  }).catch(e=>{
+    showToast('❌ خطأ في التحقق من الأوردر');
+  });
 }
 
 function getStatusMsg(status){
@@ -1729,7 +1756,7 @@ function showToast(msg){
   },2500);
 }
 
-const TELEGRAM_BOT_TOKEN = '6815967081:AAG5P9z_V8Z0_R_K_Z_Z_Z_Z_Z_Z_Z_Z_Z_Z'; // Placeholder
+const TELEGRAM_BOT_TOKEN = '6815967081:AAG5P9z_V8Z0_R_K_Z_Z_Z_Z_Z_Z_Z_Z_Z'; // Placeholder
 
 // ════════════════════════════════════════════
 
