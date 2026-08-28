@@ -3,6 +3,32 @@
 body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);direction:rtl;min-height:100vh;padding-bottom:120px;}
 
 /* ===== HEADER ===== */
+.ad-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-right: 5px;
+  justify-content: flex-end;
+}
+
+.ad-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  flex-shrink: 0;
+}
+
+.ad-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  font-family: Tajawal, sans-serif;
+  letter-spacing: -0.3px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
 /*  */
 .hdr{background:linear-gradient(160deg,#ff6302 0%,#ff7708 100%);padding:12px 20px 44px;text-align:center;position:relative;overflow:hidden; min-height: 120px;}
 .hdr::before{content:'';position:absolute;bottom:-1px;left:0;right:0;height:32px;background:var(--bg);border-radius:50% 50% 0 0/32px 32px 0 0;}
@@ -311,27 +337,89 @@ input:checked + label .checkmark{
   white-space: nowrap;
   z-index: 9999;
 }
+/*  
+*/
 .ad-carousel {
   width: 100%;
-  margin: 15px 0;
-  padding: 0 15px;
+  margin: 10px auto;
+  padding: 0 12px;
   box-sizing: border-box;
 }
 
+/* اللوجو والاسم فوق البنر */
+.ad-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding-right: 12px;
+  padding-left: 12px;
+  justify-content: flex-end;
+}
+
+.ad-logo-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+}
+
+.ad-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  font-family: Tajawal, sans-serif;
+  letter-spacing: -0.3px;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* البنر - المهم */
 .ad-banner {
   position: relative;
   width: 100%;
-  height: 200px;
-  border-radius: 12px;
+  height: 120px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  user-select: none;
+  touch-action: pan-y;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.ad-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e8f0f8 0%, #dce8f0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #999;
+  position: relative;
+  z-index: 1;
+  object-fit: contain;
+  object-position: center;
+}
+
+.ad-image-placeholder::before {
+  content: '📷 اضف صورة الاعلان';
+  font-family: Tajawal, sans-serif;
+}
 .ad-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: fill;
+  object-position: center;
+  display: block;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .ad-overlay {
@@ -339,23 +427,12 @@ input:checked + label .checkmark{
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-  color: white;
-  padding: 15px;
-  text-align: center;
+  background: linear-gradient(to top, rgba(0,0,0,0.1), transparent);
+  height: 40px;
+  z-index: 2;
 }
 
-.ad-overlay h3 {
-  margin: 5px 0;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.ad-overlay p {
-  margin: 0;
-  font-size: 12px;
-}
-
+/* النقاط */
 .ad-dots {
   display: flex;
   justify-content: center;
@@ -369,66 +446,14 @@ input:checked + label .checkmark{
   border-radius: 50%;
   background: #ddd;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+}
+
+.ad-dot:hover {
+  background: #bbb;
 }
 
 .ad-dot.active {
-  background: #ff6600;
-}
-/* لوجو */
-.top-header {
-    width: 100%;
-    height: 48px; /* مساحة صغيرة */
-    
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 14px;
-    box-sizing: border-box;
-
-    /* تدرج ألوان طيار */
-    background: linear-gradient(
-        90deg,
-        #ff8a00 0%,
-        #ff9f1c 45%,
-        #ffb347 100%
-    );
-
-    direction: rtl;
-
-    /* يخلي الحواف ناعمة */
-    border-radius: 0 0 10px 10px;
-}
-
-
-/* العاشر من رمضان */
-.location-box {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    direction: rtl;
-}
-
-.location-box img {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
-}
-
-.location-box span {
-    font-size: 15px;
-    font-weight: 600;
-    color: #ffffff;
-    white-space: nowrap;
-}
-
-
-/* لوجو طيار */
-.tayyar-logo {
-    width: 65px;
-    height: 32px;
-    object-fit: contain;
-    border-radius: 50%;
+  background: #000000;
+  transform: scale(1.2);
 }

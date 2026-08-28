@@ -1129,18 +1129,23 @@ function startOrderTracking(oid){
 const BANNERS = [
   {
     id: 1,
-    image: './img/Koshary Al Khedewy.jpeg',
-    restaurantName: 'كشري الخديوي',
-    restaurantId: 'Koshary Al Khedewy',
+    image: './img/اعلان بلبن المؤديه.jpg',
+    restaurantId: 'B Laban',
     
   },
   {
     id: 2,
-    image: './img/logo pezza.jpeg',
-    restaurantName: 'بيتزا سلايزينو',
-    restaurantId: 'pizza-elhab',
+    image: './img/خصم كرم الشام.jpg',
+    restaurantId: 'Karam El Sham',
    
-  }
+  },
+
+  {
+   id: 3,
+   image: './img/توصيل مجاني اتشكن فاكتور.jpg',
+   restaurantId: 'Chicken Factor',
+  
+ },
 ];
 
 let adCurrentIndex = 0;
@@ -1152,14 +1157,13 @@ function renderAdCarousel() {
   
   const banner = BANNERS[adCurrentIndex];
   carousel.innerHTML = `
-  
+
     <div class="ad-banner" 
          onclick="goToRestaurant('${banner.restaurantId}')"
          ontouchstart="handleTouchStart(event)"
          ontouchend="handleTouchEnd(event)">
       <img src="${banner.image}" alt="${banner.title}" class="ad-image">
       <div class="ad-overlay">
-        <p>${banner.restaurantName}</p>
       </div>
     </div>
     
