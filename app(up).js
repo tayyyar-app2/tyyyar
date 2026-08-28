@@ -1125,3 +1125,104 @@ function startOrderTracking(oid){
   trackingInterval=setInterval(poll, 1000);
 }
 
+// Advertisement Carousel
+const BANNERS = [
+  {
+    id: 1,
+    image: './img/Koshary Al Khedewy.jpeg',
+    restaurantName: 'كشري الخديوي',
+    restaurantId: 'Koshary Al Khedewy',
+    
+  },
+  {
+    id: 2,
+    image: './img/logo pezza.jpeg',
+    restaurantName: 'بيتزا سلايزينو',
+    restaurantId: 'pizza-elhab',
+   
+  }
+];
+
+let adCurrentIndex = 0;
+let touchStartX = 0;
+
+function renderAdCarousel() {
+  const carousel = document.getElementById('ad-carousel');
+  if(!BANNERS.length) return;
+  
+  const banner = BANNERS[adCurrentIndex];
+  carousel.innerHTML = `
+  
+    <div class="ad-banner" 
+         onclick="goToRestaurant('${banner.restaurantId}')"
+         ontouchstart="handleTouchStart(event)"
+         ontouchend="handleTouchEnd(event)">
+      <img src="${banner.image}" alt="${banner.title}" class="ad-image">
+      <div class="ad-overlay">
+        <p>${banner.restaurantName}</p>
+      </div>
+    </div>
+    
+    <div class="ad-dots">
+      ${BANNERS.map((_, idx) => `
+        <span class="ad-dot ${idx === adCurrentIndex ? 'active' : ''}" 
+              onclick="goToBanner(${idx})"></span>
+      `).join('')}
+    </div>
+  `;
+}
+
+// التحكم بـ Touch
+function handleTouchStart(e) {
+  touchStartX = e.touches[0].clientX;
+}
+
+function handleTouchEnd(e) {
+  const touchEndX = e.changedTouches[0].clientX;
+  const diff = touchStartX - touchEndX;
+  
+  // سحب لليسار (التالي)
+  if(diff > 50) {
+    nextBanner();
+  }
+  // سحب لليمين (السابق)
+  else if(diff < -50) {
+    prevBanner();
+  }
+}
+
+function prevBanner() {
+  adCurrentIndex = (adCurrentIndex - 1 + BANNERS.length) % BANNERS.length;
+  renderAdCarousel();
+  resetAutoPlay();
+}
+
+function nextBanner() {
+  adCurrentIndex = (adCurrentIndex + 1) % BANNERS.length;
+  renderAdCarousel();
+  resetAutoPlay();
+}
+
+function goToBanner(idx) {
+  adCurrentIndex = idx;
+  renderAdCarousel();
+  resetAutoPlay();
+}
+
+function goToRestaurant(restaurantId) {
+  brand = restaurantId;
+  renderFiltered();
+  document.getElementById('prods').scrollIntoView({ behavior: 'smooth' });
+}
+
+let autoPlayTimer;
+function resetAutoPlay() {
+  clearInterval(autoPlayTimer);
+  autoPlayTimer = setInterval(() => {
+    adCurrentIndex = (adCurrentIndex + 1) % BANNERS.length;
+    renderAdCarousel();
+  }, 5000);
+}
+
+renderAdCarousel();
+resetAutoPlay();

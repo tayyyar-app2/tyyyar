@@ -3,12 +3,14 @@
 body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);direction:rtl;min-height:100vh;padding-bottom:120px;}
 
 /* ===== HEADER ===== */
+/*  */
 .hdr{background:linear-gradient(160deg,#ff6302 0%,#ff7708 100%);padding:12px 20px 44px;text-align:center;position:relative;overflow:hidden; min-height: 120px;}
 .hdr::before{content:'';position:absolute;bottom:-1px;left:0;right:0;height:32px;background:var(--bg);border-radius:50% 50% 0 0/32px 32px 0 0;}
 .hdr::after{content:'';position:absolute;top:-40px;left:-20px;width:180px;height:180px;background:rgba(255,255,255,0.08);border-radius:50%;pointer-events:none;}
 .hdr-glow{position:absolute;top:-30px;right:-30px;width:160px;height:160px;background:rgba(255,255,255,0.06);border-radius:50%;pointer-events:none;}
 .logo-img{width:96px;height:96px;border-radius:24px;object-fit:cover;margin:0 auto 10px;display:block;box-shadow:0 6px 24px rgba(0,0,0,0.25),0 0 0 3px rgba(255,255,255,0.2);position:relative;z-index:1;}
 .bn{font-size:26px;font-weight:900;color:#fff;letter-spacing:-0.5px;position:relative;z-index:1;text-shadow:0 2px 8px rgba(0,0,0,0.2);}
+
 /* Brand logos row in header */
 .hdr-brands{display:flex;justify-content:center;gap:10px;margin-top:10px;position:relative;z-index:1;flex-wrap:wrap;}
 .hdr-brand-logo{width:40px;height:40px;border-radius:10px;object-fit:cover;border:2px solid rgba(255,255,255,0.3);transition:all 0.2s;cursor:pointer;}
@@ -308,4 +310,125 @@ input:checked + label .checkmark{
   border-radius: 20px;
   white-space: nowrap;
   z-index: 9999;
+}
+.ad-carousel {
+  width: 100%;
+  margin: 15px 0;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
+
+.ad-banner {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.ad-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ad-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.ad-overlay h3 {
+  margin: 5px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.ad-overlay p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.ad-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.ad-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ddd;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.ad-dot.active {
+  background: #ff6600;
+}
+/* لوجو */
+.top-header {
+    width: 100%;
+    height: 48px; /* مساحة صغيرة */
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 14px;
+    box-sizing: border-box;
+
+    /* تدرج ألوان طيار */
+    background: linear-gradient(
+        90deg,
+        #ff8a00 0%,
+        #ff9f1c 45%,
+        #ffb347 100%
+    );
+
+    direction: rtl;
+
+    /* يخلي الحواف ناعمة */
+    border-radius: 0 0 10px 10px;
+}
+
+
+/* العاشر من رمضان */
+.location-box {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    direction: rtl;
+}
+
+.location-box img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.location-box span {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+
+/* لوجو طيار */
+.tayyar-logo {
+    width: 65px;
+    height: 32px;
+    object-fit: contain;
+    border-radius: 50%;
 }
