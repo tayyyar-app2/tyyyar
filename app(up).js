@@ -81,19 +81,20 @@ function renderFiltered(){
       : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:34px;min-height:90px;">${p.e}</div>`;
     const _st=getProductStatus(p.id);
       const _ov=_st==='soldout'?`<div class="item-overlay soldout">غير متوفر</div>`:_st==='busy'?`<div class="item-overlay busy">⏳ طلب كثير</div>`:_st==='delayed'?`<div class="item-overlay busy">🕐 هيتأخر</div>`:'';
+      const selectedSize=cartExtras[p.id]&&cartExtras[p.id].sizeLabel?`<div style="font-size:12px;color:#e8742a;margin-top:4px;">📏 ${cartExtras[p.id].sizeLabel}</div>`:'';
        return `<div class="pc ${q>0?'in-cart':''} ${_st==='soldout'?'item-soldout':''}" id="pc${p.id}">
       <div class="pc-img-wrap">${imgEl}${_ov}<img src="${p.lg}" class="pc-logo-badge" alt=""></div>
 <div class="pcb">
-        <div><div class="pcn">${p.n}</div><div class="pcd">${p.d}</div>${p.extras&&p.extras.length&&q===0?'<div style="font-size:11px;color:#e8742a;margin-top:2px;">🧁 يوجد إضافات</div>':''}</div>
+        <div><div class="pcn">${p.n}</div><div class="pcd">${p.d}</div>${p.sizes&&p.sizes.length&&q===0?'<div style="font-size:11px;color:#e8742a;margin-top:2px;">📏 يوجد أحجام</div>':''}${p.extras&&p.extras.length&&q===0?'<div style="font-size:11px;color:#e8742a;margin-top:2px;">🧁 يوجد إضافات</div>':''}</div>
         <div class="pcf">
-          <div class="pcp">${p.p} ج.م</div>
+          <div class="pcp">${p.sizes&&cartExtras[p.id]&&cartExtras[p.id].sizePrice?cartExtras[p.id].sizePrice:p.p} ج.م</div>
           <div class="qc">
             <button class="qb" onclick="chg(${p.id},-1)">−</button>
             <span class="qn" id="qn${p.id}">${q}</span>
             <button class="qb" onclick="chg(${p.id},1)">+</button>
           </div>
         </div>
-        ${p.extras&&p.extras.length&&q>0?`<div style="cursor:pointer;color:#e8742a;font-size:12px;font-weight:600;margin-top:4px;text-align:left;" onclick="openExtrasModal(${p.id},false)">✏️ تعديل الإضافات</div>`:''}
+        ${p.sizes&&cartExtras[p.id]&&q>0?`<div style="cursor:pointer;color:#e8742a;font-size:12px;font-weight:600;margin-top:4px;text-align:left;" onclick="openSizeModal(${p.id},false)">✏️ تعديل الحجم</div>`:''}${p.extras&&p.extras.length&&q>0?`<div style="cursor:pointer;color:#e8742a;font-size:12px;font-weight:600;margin-top:4px;text-align:left;" onclick="openExtrasModal(${p.id},false)">✏️ تعديل الإضافات</div>`:''}
       </div>
     </div>`;
   }).join('');
@@ -122,18 +123,20 @@ function render(){
       : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:34px;min-height:90px;">${p.e}</div>`;
          const _st=getProductStatus(p.id);
         const _ov=_st==='soldout'?`<div class="item-overlay soldout">غير متوفر</div>`:_st==='busy'?`<div class="item-overlay busy">⏳ طلب كثير</div>`:_st==='delayed'?`<div class="item-overlay busy">🕐 هيتأخر</div>`:'';
+        const selectedSize=cartExtras[p.id]?`<div style="font-size:12px;color:#e8742a;margin-top:4px;">📏 ${cartExtras[p.id].sizeLabel}</div>`:'';
           return `<div class="pc ${q>0?'in-cart':''} ${_st==='soldout'?'item-soldout':''}" id="pc${p.id}">
       <div class="pc-img-wrap">${imgEl}${_ov}<img src="${p.lg}" class="pc-logo-badge" alt=""></div>
       <div class="pcb">
-        <div><div class="pcn">${p.n}</div><div class="pcd">${p.d}</div></div>
+        <div><div class="pcn">${p.n}</div><div class="pcd">${p.d}</div>${p.sizes&&p.sizes.length&&q===0?'<div style="font-size:11px;color:#e8742a;margin-top:2px;">📏 يوجد أحجام</div>':''}</div>
         <div class="pcf">
-          <div class="pcp">${p.p} ج.م</div>
+          <div class="pcp">${p.sizes&&cartExtras[p.id]?cartExtras[p.id].sizePrice:p.p} ج.م</div>
           <div class="qc">
             <button class="qb" onclick="chg(${p.id},-1)">−</button>
             <span class="qn" id="qn${p.id}">${q}</span>
             <button class="qb" onclick="chg(${p.id},1)">+</button>
           </div>
         </div>
+        ${p.sizes&&cartExtras[p.id]&&q>0?`<div style="cursor:pointer;color:#e8742a;font-size:12px;font-weight:600;margin-top:4px;text-align:left;" onclick="openSizeModal(${p.id},false)">✏️ تعديل الحجم</div>`:''}
       </div>
     </div>`;
   }).join('');
@@ -152,6 +155,10 @@ function chg(id,d){
    return;
  }
   const cur=cart[id]||0;
+  if(d>0 && cur===0 && p && p.sizes && p.sizes.length){
+    openSizeModal(id,true);
+    return;
+  }
   if(d>0 && cur===0 && p && p.extras && p.extras.length){
     openExtrasModal(id,true);
     return;
@@ -162,6 +169,53 @@ function chg(id,d){
   if(qe)qe.textContent=n;
   if(ce)ce.className='pc '+(n>0?'in-cart':'');
   updateFab();updateBadges();
+}
+function openSizeModal(id,isNew){
+  const p=MENU.find(x=>x.id==id);
+  if(!p||!p.sizes) return;
+  const sel=cartExtras[id]||{sizeId:'small',sizeLabel:p.sizes[0].label,sizePrice:p.sizes[0].price};
+ const rows=p.sizes.map(s=>`
+    <label style="display:flex;justify-content:space-between;align-items:center;padding:12px 4px;border-bottom:1px solid #eee;font-size:14px;">
+      <span style="display:flex;align-items:center;gap:6px;"><input type="radio" name="size" value="${s.id}" ${sel.sizeId===s.id?'checked':''} style="margin-left:2px;transform:scale(1.2);">${s.label}</span>
+      <span style="color:#e8742a;font-weight:700;">${s.price} ج.م</span>
+    </label>`).join('');
+  const html=`<div id="size-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)cancelSize(${id},${isNew})">
+    <div style="background:#fff;width:100%;max-width:480px;border-radius:16px 16px 0 0;padding:18px 16px 20px;max-height:75vh;overflow-y:auto;">
+      <div style="font-weight:800;font-size:16px;margin-bottom:2px;">📏 اختر حجم الطلب</div>
+      <div style="font-size:15px;color:#ff6302;margin-bottom:10px;font-weight:600;">${p.n}</div>
+      ${rows}
+    <div style="display:flex;gap:10px;margin-top:16px;">
+        <button onclick="cancelSize(${id},${isNew})" style="flex:1;padding:13px;background:#f1f1f1;color:#555;border:none;border-radius:10px;font-weight:700;font-size:15px;">إلغاء</button>
+        <button onclick="confirmSize(${id},${isNew})" style="flex:2;padding:13px;background:#e8742a;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:15px;">تأكيد الحجم</button>
+      </div>
+    </div>
+  </div>`;
+  const div=document.createElement('div');
+  div.id='size-modal-wrap';
+  div.innerHTML=html;
+  document.body.appendChild(div);
+}
+function confirmSize(id,isNew){
+  const selectedRadio=document.querySelector('input[name="size"]:checked');
+  if(!selectedRadio) return;
+  const p=MENU.find(x=>x.id==id);
+  const selected=p.sizes.find(s=>s.id===selectedRadio.value);
+  if(!selected) return;
+  cartExtras[id]={sizeId:selected.id,sizeLabel:selected.label,sizePrice:selected.price};
+  cart[id]=(cart[id]||0)+1;
+  closeSizeModal();
+  const qe=document.getElementById('qn'+id),ce=document.getElementById('pc'+id);
+  if(qe)qe.textContent=cart[id]||0;
+  if(ce)ce.className='pc in-cart';
+  updateFab();updateBadges();
+}
+function cancelSize(id,isNew){
+  if(!isNew) closeSizeModal();
+  else closeSizeModal();
+}
+function closeSizeModal(){
+  const wrap=document.getElementById('size-modal-wrap');
+  if(wrap) wrap.remove();
 }
 function openExtrasModal(id,isNew){
   const p=MENU.find(x=>x.id==id);
@@ -230,11 +284,18 @@ function cartItems(){
   return Object.entries(cart).map(([id,q])=>{
     const p=MENU.find(x=>x.id==id);
     if(!p) return null;
-    const selIds=cartExtras[id]||[];
+    const extraData=cartExtras[id]||{};
+    let basePrice=p.p;
+    let sizeLabel='';
+    if(p.sizes&&extraData.sizePrice){
+      basePrice=extraData.sizePrice;
+      sizeLabel=extraData.sizeLabel||'';
+    }
+    const selIds=Array.isArray(extraData)?extraData:[];
     const selExtras=(p.extras||[]).filter(e=>selIds.includes(e.id));
     const extrasSum=selExtras.reduce((s,e)=>s+e.p,0);
-    const unitP=p.p+extrasSum;
-    return {...p,q,extras:selExtras,extrasSum,t:unitP*q};
+    const unitP=basePrice+extrasSum;
+    return {...p,q,extras:selExtras,extrasSum,t:unitP*q,sizeLabel,pId:parseInt(id)};
   }).filter(Boolean);
 }
 function cartTotal(){return cartItems().reduce((s,i)=>s+i.t,0);}
@@ -315,7 +376,7 @@ function buildReview(nm,ph,ad){
  document.getElementById('rl').innerHTML=it.map(i=>`
     <div class="ritem">
       ${i.img ? `<img src="${i.img}" style="width:54px;height:54px;object-fit:cover;border-radius:10px;margin-left:10px;flex-shrink:0;">` : `<span style="font-size:28px;margin-left:10px;">${i.e}</span>`}
-     <div style="flex:1"><div class="rn">${i.n}</div>${i.extras&&i.extras.length?`<div style="font-size:11px;color:#e8742a;margin:2px 0;">+ ${i.extras.map(e=>e.n).join('، ')}</div>`:''}<div class="rs"><span style="color:#e8742a;font-weight:700;">${BL[i.brand]}</span> · ${i.p+i.extrasSum} ج.م / قطعة</div>
+     <div style="flex:1"><div class="rn">${i.n}</div>${i.sizeLabel?`<div style="font-size:11px;color:#e8742a;margin:2px 0;">📏 ${i.sizeLabel}</div>`:''}${i.extras&&i.extras.length?`<div style="font-size:11px;color:#e8742a;margin:2px 0;">+ ${i.extras.map(e=>e.n).join('، ')}</div>`:''}<div class="rs"><span style="color:#e8742a;font-weight:700;">${BL[i.brand]}</span> · ${i.p+i.extrasSum} ج.م / قطعة</div>
         <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
           <button onclick="updateReviewQty(${i.id},-1)" style="width:26px;height:26px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:16px;font-weight:700;color:#e8742a;line-height:1;">−</button>
           <span style="min-width:16px;text-align:center;font-weight:700;">${i.q}</span>
@@ -485,7 +546,11 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
 
   // بناء تفاصيل المنتجات
   const itemsText = Object.entries(byBrand).map(([b, ps]) => {
-    const lines = ps.map(i => `• ${i.n}${i.extras&&i.extras.length?`\n  ➕ ${i.extras.map(e=>e.n+' (+'+e.p+' ج.م)').join('، ')}`:''}\n  ${i.q} × ${i.p+(i.extrasSum||0)} ج.م = *${i.t} ج.م*`).join('\n');
+    const lines = ps.map(i => {
+      const sizeLabel=i.sizeLabel?`\n  📏 الحجم: ${i.sizeLabel}`:'';
+      const unitPrice=i.p+(i.extrasSum||0);
+      return `• ${i.n}${sizeLabel}${i.extras&&i.extras.length?`\n  ➕ ${i.extras.map(e=>e.n+' (+'+e.p+' ج.م)').join('، ')}`:''}\n  ${i.q} × ${unitPrice} ج.م = *${i.t} ج.م*`;
+    }).join('\n');
     return `\n${brandEmojis[b]} *${BL[b]}*\n─────────────\n${lines}`;
   }).join('\n');
 
