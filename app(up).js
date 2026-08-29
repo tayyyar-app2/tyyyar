@@ -1,4 +1,5 @@
 const SERVICE_FEE = 5;
+const SHOPPING_FEE = 10;
 // تحميل إعدادات الأدمن من Firebase
 (async function loadAdminSettings(){
   try {
@@ -444,8 +445,8 @@ function getDeliveryFee(address) {
   if (ad.includes('الاندلس') || ad.includes('اندلس')) return 70;
   if (ad.includes('الاردنيه') || ad.includes('الاردنيه')) return 25;
   if (ad.includes('صيدناوي') || ad.includes('صيدناوي')) return 30;
-  if (ad.includes('الحي33') || ad.includes('الحي 33')) return 85;
-  if (ad.includes('الحي 28') || ad.includes('الحي28')) return 70;
+  if (ad.includes('الحي33') || ad.includes('الحي 33')) return 90;
+  if (ad.includes('الحي 28') || ad.includes('الحي28')) return 80;
   if (ad.includes('دار مصر') || ad.includes('دار مصر')) return 40 ;
   if (ad.includes('حي الياسمين') || ad.includes('حي الياسمين')) return 40;
 
@@ -766,7 +767,7 @@ function updateOtherFees(){
   if(!ad||ad.length<5){if(box)box.style.display='none';return;}
   const del=getDeliveryFee(ad);
   document.getElementById('other-del-val').textContent=del+' ج.م';
-  document.getElementById('other-total-fees-val').textContent=(del+SERVICE_FEE)+' ج.م';
+  document.getElementById('other-total-fees-val').textContent=(del+SERVICE_FEE+SHOPPING_FEE)+' ج.م';
   if(box)box.style.display='block';
 }
 
