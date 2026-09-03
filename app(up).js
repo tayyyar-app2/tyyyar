@@ -87,7 +87,7 @@ function renderFiltered(){
 <div class="pcb">
         <div><div class="pcn">${p.n}</div><div class="pcd">${p.d}</div>${p.sizes&&p.sizes.length&&q===0?'<div style="font-size:11px;color:#e8742a;margin-top:2px;">📏 يوجد أحجام</div>':''}${p.extras&&p.extras.length&&q===0?'<div style="font-size:11px;color:#e8742a;margin-top:2px;">🧁 يوجد إضافات</div>':''}</div>
         <div class="pcf">
-          <div class="pcp">${p.sizes&&cartExtras[p.id]&&cartExtras[p.id].sizePrice?cartExtras[p.id].sizePrice:p.p} ج.م</div>
+         <div class="pcp">${p.sizes&&cartExtras[p.id]?`${cartExtras[p.id].sizeLabel} ${cartExtras[p.id].sizePrice}`:p.p} ج.م</div>
           <div class="qc">
             <button class="qb" onclick="chg(${p.id},-1)">−</button>
             <span class="qn" id="qn${p.id}">${q}</span>
@@ -129,7 +129,7 @@ function render(){
       <div class="pcb">
         <div><div class="pcn">${p.n}</div><div class="pcd">${p.d}</div>${p.sizes&&p.sizes.length&&q===0?'<div style="font-size:11px;color:#e8742a;margin-top:2px;">📏 يوجد أحجام</div>':''}</div>
         <div class="pcf">
-          <div class="pcp">${p.sizes&&cartExtras[p.id]?cartExtras[p.id].sizePrice:p.p} ج.م</div>
+          <div class="pcp">${p.sizes&&cartExtras[p.id]?`${cartExtras[p.id].sizeLabel} ${cartExtras[p.id].sizePrice}`:p.p} ج.م</div>
           <div class="qc">
             <button class="qb" onclick="chg(${p.id},-1)">−</button>
             <span class="qn" id="qn${p.id}">${q}</span>
@@ -201,7 +201,7 @@ function confirmSize(id,isNew){
   const p=MENU.find(x=>x.id==id);
   const selected=p.sizes.find(s=>s.id===selectedRadio.value);
   if(!selected) return;
-  cartExtras[id]={sizeId:selected.id,sizeLabel:selected.label,sizePrice:selected.price};
+  cartExtras[id]={sizeId:selected.id,sizeLabel:selected.label,sizePrice:parseInt(selected.price)||0};
   cart[id]=(cart[id]||0)+1;
   closeSizeModal();
   const qe=document.getElementById('qn'+id),ce=document.getElementById('pc'+id);
@@ -285,17 +285,17 @@ function cartItems(){
     const p=MENU.find(x=>x.id==id);
     if(!p) return null;
     const extraData=cartExtras[id]||{};
-    let basePrice=p.p;
+   let basePrice=parseInt(p.p)||0;
     let sizeLabel='';
     if(p.sizes&&extraData.sizePrice){
-      basePrice=extraData.sizePrice;
+    basePrice=parseInt(extraData.sizePrice)||0;
       sizeLabel=extraData.sizeLabel||'';
     }
     const selIds=Array.isArray(extraData)?extraData:[];
     const selExtras=(p.extras||[]).filter(e=>selIds.includes(e.id));
     const extrasSum=selExtras.reduce((s,e)=>s+e.p,0);
-    const unitP=basePrice+extrasSum;
-    return {...p,q,extras:selExtras,extrasSum,t:unitP*q,sizeLabel,pId:parseInt(id)};
+   const unitP=parseInt(basePrice||0)+parseInt(extrasSum||0);
+   return {...p,q,extras:selExtras,extrasSum,t:unitP*q,sizeLabel,pId:parseInt(id),basePrice};
   }).filter(Boolean);
 }
 function cartTotal(){return cartItems().reduce((s,i)=>s+i.t,0);}
@@ -376,7 +376,7 @@ function buildReview(nm,ph,ad){
  document.getElementById('rl').innerHTML=it.map(i=>`
     <div class="ritem">
       ${i.img ? `<img src="${i.img}" style="width:54px;height:54px;object-fit:cover;border-radius:10px;margin-left:10px;flex-shrink:0;">` : `<span style="font-size:28px;margin-left:10px;">${i.e}</span>`}
-     <div style="flex:1"><div class="rn">${i.n}</div>${i.sizeLabel?`<div style="font-size:11px;color:#e8742a;margin:2px 0;">📏 ${i.sizeLabel}</div>`:''}${i.extras&&i.extras.length?`<div style="font-size:11px;color:#e8742a;margin:2px 0;">+ ${i.extras.map(e=>e.n).join('، ')}</div>`:''}<div class="rs"><span style="color:#e8742a;font-weight:700;">${BL[i.brand]}</span> · ${i.p+i.extrasSum} ج.م / قطعة</div>
+     <div style="flex:1"><div class="rn">${i.n}</div>${i.sizeLabel?`<div style="font-size:11px;color:#e8742a;margin:2px 0;">📏 ${i.sizeLabel}</div>`:''}${i.extras&&i.extras.length?`<div style="font-size:11px;color:#e8742a;margin:2px 0;">+ ${i.extras.map(e=>e.n).join('، ')}</div>`:''}<div class="rs"><span style="color:#e8742a;font-weight:700;">${BL[i.brand]}</span>${i.sizeLabel?` · ${i.sizeLabel} ${i.basePrice||i.p} ج.م`:` · ${i.p} ج.م`}</div>
         <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
           <button onclick="updateReviewQty(${i.id},-1)" style="width:26px;height:26px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:16px;font-weight:700;color:#e8742a;line-height:1;">−</button>
           <span style="min-width:16px;text-align:center;font-weight:700;">${i.q}</span>
@@ -548,8 +548,9 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
   const itemsText = Object.entries(byBrand).map(([b, ps]) => {
     const lines = ps.map(i => {
       const sizeLabel=i.sizeLabel?`\n  📏 الحجم: ${i.sizeLabel}`:'';
-      const unitPrice=i.p+(i.extrasSum||0);
-      return `• ${i.n}${sizeLabel}${i.extras&&i.extras.length?`\n  ➕ ${i.extras.map(e=>e.n+' (+'+e.p+' ج.م)').join('، ')}`:''}\n  ${i.q} × ${unitPrice} ج.م = *${i.t} ج.م*`;
+      const unitPrice=i.sizeLabel?(i.basePrice||i.p):(parseInt(i.p)||0)+(parseInt(i.extrasSum||0)||0);
+const displayPrice=i.sizeLabel?`${i.sizeLabel} (${unitPrice} ج.م)`:unitPrice;
+return `• ${i.n}${i.extras&&i.extras.length?`\n  ➕ ${i.extras.map(e=>e.n+' (+'+e.p+' ج.م)').join('، ')}`:''}\n  ${i.q} × ${displayPrice} = *${i.t} ج.م*`;
     }).join('\n');
     return `\n${brandEmojis[b]} *${BL[b]}*\n─────────────\n${lines}`;
   }).join('\n');
@@ -1195,7 +1196,7 @@ function startOrderTracking(oid){
 const BANNERS = [
   {
     id: 1,
-    image: './img/اعلان بلبن المؤديه.jpg',
+    image: './img/اعلان بلبن .jpg',
     restaurantId: 'B Laban',
     
   },
