@@ -1196,7 +1196,7 @@ function startOrderTracking(oid){
 const BANNERS = [
   {
     id: 1,
-    image: './img/اعلان بلبن .jpg',
+    image: './img/اعلان بلبن.jpg',
     restaurantId: 'B Laban',
     
   },
