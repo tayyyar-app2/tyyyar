@@ -708,185 +708,185 @@ const MENU=[
     { id: "small", label: "صغير", price: "75" },
     { id: "medium", label: "وسط", price: "90" },
     { id: "large", label: "كبير رول", price: "140" }
-  ], img: './img'},
+  ], img: './img/كريب بطاطس جبنه.jpeg'},
 
 {id: 793, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب استربس', p: "120", d: 'خليط جبن كريب + كاتشب + مايونيز + استربس', sizes: [
     { id: "small", label: "صغير", price: "120" },
     { id: "medium", label: "وسط", price: "140" },
     { id: "large", label: "كبير رول", price: "225" }
-  ], img: './img'},
+  ], img: './img/كريب استربس.jpeg'},
 
 {id: 794, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب استربس فريش', p: "95", d: 'خليط جبن كريب + كاتشب + مايونيز + استربس فريش', sizes: [
     { id: "small", label: "صغير", price: "95" },
     { id: "medium", label: "وسط", price: "120" },
     { id: "large", label: "كبير رول", price: "160" }
-  ], img: './img'},
+  ], img: './img/كريب استربس.jpeg'},
 
 {id: 795, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب بانية', p: "85", d: 'خليط جبن كريب + كاتشب + مايونيز + بانية', sizes: [
     { id: "small", label: "صغير", price: "85" },
     { id: "medium", label: "وسط", price: "100" },
     { id: "large", label: "كبير رول", price: "150" }
-  ], img: './img'},
+  ], img: './img/ث كريب بانيه.jpg'},
 
 {id: 796, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب شيش', p: "130", d: 'خليط جبن كريب + كاتشب + مايونيز + شيش', sizes: [
     { id: "small", label: "صغير", price: "130" },
     { id: "medium", label: "وسط", price: "175" },
     { id: "large", label: "كبير رول", price: "260" }
-  ], img: './img'},
+  ], img: './img/ث كريب شيش.jpg'},
 
 {id: 797, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب شيش فريش', p: "115", d: 'خليط جبن كريب + كاتشب + مايونيز + شيش فريش', sizes: [
     { id: "small", label: "صغير", price: "115" },
     { id: "medium", label: "وسط", price: "135" },
     { id: "large", label: "كبير رول", price: "205" }
-  ], img: './img'},
+  ], img: './img/ث كريب شيش فرش.jpg'},
 
 {id: 798, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب شاورما فراخ', p: "115", d: 'خليط جبن + صدور الدجاج فريش + كاتشب + مايونيز + فلفل ألوان + زيتون + تومية', sizes: [
     { id: "small", label: "صغير", price: "115" },
     { id: "medium", label: "وسط", price: "150" },
     { id: "large", label: "كبير رول", price: "225" }
-  ], img: './img'},
+  ], img: './img/ث كريب شاورما فراخ .jpg'},
 
 {id: 799, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب فاهيتا', p: "105", d: 'خليط جبن كريب + كاتشب + مايونيز + زيتون شرائح + فلفل رومي + صدور فريش + صوص باربكيو', sizes: [
     { id: "small", label: "صغير", price: "105" },
     { id: "medium", label: "وسط", price: "145" },
     { id: "large", label: "كبير رول", price: "215" }
-  ], img: './img'},
+  ], img: './img/ث كريب فا هيتا.jpg'},
 
 {id: 800, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب سوبر كرانش', p: "115", d: 'خليط جبن كريب + كاتشب + مايونيز + فلفل رومي + بانية + استربس + أصابع موزاريلا', sizes: [
     { id: "small", label: "صغير", price: "115" },
     { id: "medium", label: "وسط", price: "140" },
     { id: "large", label: "كبير رول", price: "215" }
-  ], img: './img'},
+  ], img: './img/ث كريب سوبر  كرانشي .jpg'},
 
 {id: 801, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب كوردن بلو', p: "115", d: 'خليط جبن كريب + كاتشب + مايونيز + كوردن بلو + صوص شيدر', sizes: [
     { id: "small", label: "صغير", price: "115" },
     { id: "medium", label: "وسط", price: "145" },
     { id: "large", label: "كبير رول", price: "220" }
-  ], img: './img'},
+  ], img: './img/ث كريب كوردن بلو .jpg'},
 
 {id: 802, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب تشيكن رانش', p: "115", d: 'خليط جبن كريب + كاتشب + مايونيز + صدور دجاج فريش + صوص رانش', sizes: [
     { id: "small", label: "صغير", price: "115" },
     { id: "medium", label: "وسط", price: "140" },
     { id: "large", label: "كبير رول", price: "220" }
-  ], img: './img'},
+  ], img: './img/ث كريب تشكن رانش.jpg'},
 
 {id: 803, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب هالينو', p: "100", d: 'خليط جبن كريب + كاتشب + مايونيز + استربس فريش حار + شيش فريش + فلفل هالينو', sizes: [
     { id: "small", label: "صغير", price: "100" },
     { id: "medium", label: "وسط", price: "120" },
     { id: "large", label: "كبير رول", price: "195" }
-  ], img: './img'},
+  ], img: './img/ث كريب هلابيانو .jpg'},
 
 {id: 804, brand: 'El-Thawra', category: 'كريب فراخ', n: 'كريب اسكالوب بانيه', p: "90", d: 'خليط جبن كريب + كاتشب + مايونيز + اسكالوب بانيه', sizes: [
     { id: "small", label: "صغير", price: "90" },
     { id: "medium", label: "وسط", price: "115" },
     { id: "large", label: "كبير رول", price: "170" }
-  ], img: './img'},
+  ], img: './img/ث كريب اسكالوب بانيه.jpg'},
   {id: 805, brand: 'El-Thawra', category: 'ميكسات كريب', n: 'كريب سوبر ميكس دجاج', p: "115", d: 'خليط جبن كريب + كاتشب + مايونيز + استربس + شاورما دجاج تركي مدخن + صوص رانش', sizes: [
     { id: "small", label: "صغير", price: "115" },
     { id: "medium", label: "وسط", price: "140" },
     { id: "large", label: "كبير رول", price: "215" }
-  ], img: './img'},
+  ], img: './img/ث كريب مكس وسوبر دجاج.jpg'},
 
 {id: 806, brand: 'El-Thawra', category: 'ميكسات كريب', n: 'كريب ميكس استربس شيش', p: "125", d: 'خليط جبن كريب + كاتشب + مايونيز + استربس + شيش', sizes: [
     { id: "small", label: "صغير", price: "125" },
     { id: "medium", label: "وسط", price: "160" },
     { id: "large", label: "كبير رول", price: "245" }
-  ], img: './img'},
+  ], img: './img/ث كريب كيمس استربس فرش .jpg'},
 
-{id: 807, brand: 'El-Thawra', category: 'ميكسات كريب', n: 'كريب سكلاس شطشوط', p: "", d: 'خليط جبن كريب + كاتشب + مايونيز + زيتون شرائح + استربس فريش + نصف بيكون + شيش فريش + صوص تكساس + فلفل اخضر حار', sizes: [
+{id: 807, brand: 'El-Thawra', category: 'ميكسات كريب', n: 'كريب سكلانس شطشوط', p: "", d: 'خليط جبن كريب + كاتشب + مايونيز + زيتون شرائح + استربس فريش + نصف بيكون + شيش فريش + صوص تكساس + فلفل اخضر حار', sizes: [
     { id: "small", label: "صغير", price: "" },
     { id: "medium", label: "وسط", price: "155" },
     { id: "large", label: "كبير رول", price: "" }
-  ], img: './img'},
+  ], img: './img/ث كريب سكلانس شطشطوط.jpg'},
 
 {id: 808, brand: 'El-Thawra', category: 'ميكسات كريب', n: 'كريب كوكتيل فراخ حار/بارد', p: "115", d: 'خليط جبن كريب + كاتشب + مايونيز + بانيه + استربس + شيش + فلفل ألوان', sizes: [
     { id: "small", label: "صغير", price: "115" },
     { id: "medium", label: "وسط", price: "140" },
     { id: "large", label: "كبير رول", price: "215" }
-  ], img: './img'},
+  ], img: './img/ث كريب كوكتيل .jpg'},
 
 {id: 809, brand: 'El-Thawra', category: 'ميكسات كريب', n: 'كريب ميكس لحوم', p: "110", d: 'خليط جبن كريب + كاتشب + مايونيز + سجق + كفتة + سوسيس + شاورما لحم + صوص تكساس', sizes: [
     { id: "small", label: "صغير", price: "110" },
     { id: "medium", label: "وسط", price: "140" },
     { id: "large", label: "كبير رول", price: "225" }
-  ], img: './img'},
+  ], img: './img/ث كريب ميكس لحوم .jpg'},
 
 {id: 810, brand: 'El-Thawra', category: 'ميكسات كريب', n: 'كريب سوبر لحم', p: "125", d: 'خليط جبن كريب + كاتشب + مايونيز + كفتة + دونر كباب + بسطرمة + رانش صوص', sizes: [
     { id: "small", label: "صغير", price: "125" },
     { id: "medium", label: "وسط", price: "155" },
     { id: "large", label: "كبير رول", price: "240" }
-  ], img: './img'},
+  ], img: './img/ث كريب سوبريم لحم .jpg'},
 
 {id: 811, brand: 'El-Thawra', category: 'ميكسات كريب', n: 'كريب رانش سموك حار/بارد', p: "110", d: 'استربس فريش + سلامي + صوص اسموكي رانش + خليط جبن كريب + كاتشب + مايونيز', sizes: [
     { id: "small", label: "صغير", price: "110" },
     { id: "medium", label: "وسط", price: "135" },
     { id: "large", label: "كبير رول", price: "200" }
-  ], img: './img'},
+  ], img: './img/ث كريب رانش اسموكي .jpg'},
 
 {id: 812, brand: 'El-Thawra', category: 'ميكسات كريب', n: 'كريب ميكس الثورة حار/بارد', p: "120", d: 'خليط جبن كريب + كاتشب + مايونيز + استربس + بانيه + شيش + كفتة + سجق + بيف بيكون + صوص شيدر', sizes: [
     { id: "small", label: "صغير", price: "120" },
     { id: "medium", label: "وسط", price: "145" },
     { id: "large", label: "كبير رول", price: "225" }
-  ], img: './img'},
+  ], img: './img/ث كريب رانش اسموكي .jpg'},
   {id: 813, brand: 'El-Thawra', category: 'كريب سي فود', n: 'كريب جمبري فرايد', p: "225", d: 'خليط جبن كريب + كاتشب + مايونيز + جمبري فرايد + بوبشر', sizes: [
     { id: "small", label: "صغير", price: "225" },
     { id: "medium", label: "وسط", price: "280" },
     { id: "large", label: "كبير رول", price: "385" }
-  ], img: './img'},
+  ], img: './img/ث كريب جمبري جريل .jpg'},
 
 {id: 814, brand: 'El-Thawra', category: 'كريب سي فود', n: 'كريب جمبري جريل', p: "295", d: 'خليط جبن كريب + كاتشب + مايونيز + جمبري جريل + صوص سراج + فلفل ألوان', sizes: [
     { id: "small", label: "صغير", price: "295" },
     { id: "medium", label: "وسط", price: "380" },
     { id: "large", label: "كبير رول", price: "530" }
-  ], img: './img'},
+  ], img: './img/ث كريب جمبري جريل .jpg'},
 
 {id: 815, brand: 'El-Thawra', category: 'كريب سي فود', n: 'كريب سي فود فور فرايد', p: "155", d: 'خليط جبن كريب + كاتشب + مايونيز + سي فود فود فريد + كاليماري + كابوريا + بوبشر', sizes: [
     { id: "small", label: "صغير", price: "155" },
     { id: "medium", label: "وسط", price: "200" },
     { id: "large", label: "كبير رول", price: "310" }
-  ], img: './img'},
+  ], img: './img/ث كريب سي فود فريد.jpg'},
 
 {id: 816, brand: 'El-Thawra', category: 'كريب سي فود', n: 'كريب سي فود فور جريل', p: "200", d: 'خليط جبن كريب + كاتشب + مايونيز + سي فود جريل + كاليماري + كابوريا + بوبشر', sizes: [
     { id: "small", label: "صغير", price: "200" },
     { id: "medium", label: "وسط", price: "260" },
     { id: "large", label: "كبير رول", price: "390" }
-  ], img: './img'},
+  ], img: './img/ث كريب سي فود جريل .jpg'},
   {id: 817, brand: 'El-Thawra', category: 'كريب لحوم', n: 'كريب سوسيس', p: "85", d: 'خليط جبن كريب + كاتشب + مايونيز + هوت دوج + شيش', sizes: [
     { id: "small", label: "صغير", price: "85" },
     { id: "medium", label: "وسط", price: "105" },
     { id: "large", label: "كبير رول", price: "185" }
-  ], img: './img'},
+  ], img: './img/ث كريب سوسيس.jpg'},
 
 {id: 818, brand: 'El-Thawra', category: 'كريب لحوم', n: 'كريب سجق', p: "110", d: 'خليط جبن كريب + كاتشب + مايونيز + سجق + صوص شيدر', sizes: [
     { id: "small", label: "صغير", price: "110" },
     { id: "medium", label: "وسط", price: "140" },
     { id: "large", label: "كبير رول", price: "225" }
-  ], img: './img'},
+  ], img: './img/ث كريب سجق.jpg'},
 
 {id: 819, brand: 'El-Thawra', category: 'كريب لحوم', n: 'كريب كفتة', p: "120", d: 'خليط جبن كريب + كاتشب + مايونيز + كفتة + تكساس صوص', sizes: [
     { id: "small", label: "صغير", price: "120" },
     { id: "medium", label: "وسط", price: "155" },
     { id: "large", label: "كبير رول", price: "235" }
-  ], img: './img'},
+  ], img: './img/ث كريب كفته.jpg'},
 
 {id: 820, brand: 'El-Thawra', category: 'كريب لحوم', n: 'كريب شاورما لحم', p: "135", d: 'خليط جبن كريب + كاتشب + مايونيز + شاورما لحم + فلفل ألوان + صوص شيدر', sizes: [
     { id: "small", label: "صغير", price: "135" },
     { id: "medium", label: "وسط", price: "175" },
     { id: "large", label: "كبير رول", price: "260" }
-  ], img: './img'},
+  ], img: './img/ث كريب شاورما لحم.jpg'},
 
 {id: 821, brand: 'El-Thawra', category: 'كريب لحوم', n: 'كريب دونر كباب', p: "115", d: 'خليط جبن كريب + كاتشب + مايونيز + دونر لحم + صوص شيدر', sizes: [
     { id: "small", label: "صغير", price: "115" },
     { id: "medium", label: "وسط", price: "155" },
     { id: "large", label: "كبير رول", price: "230" }
-  ], img: './img'},
-  {id: 822, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا ماربيتا', p: "80", d: 'كيري + صوص بيتزا + موزاريلا', sizes: [
+  ], img: './img/ث كريب دونر كباب.jpg'},
+  {id: 822, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا مارجريتا', p: "80", d: 'كيري + صوص بيتزا + موزاريلا', sizes: [
     { id: "small", label: "صغير", price: "80" },
     { id: "medium", label: "وسط", price: "100" },
     { id: "large", label: "كبير", price: "110" }
   ], img: './img'},
 
-{id: 823, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا تشيز لافر', p: "90", d: 'كيري + صوص بيتزا + موزاريلا + ريكوتا + فلفل ألوان + زيتون', sizes: [
+{id: 823, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا تشيز لافرز', p: "90", d: 'كيري + صوص بيتزا + موزاريلا + ريكوتا + فلفل ألوان + زيتون', sizes: [
     { id: "small", label: "صغير", price: "90" },
     { id: "medium", label: "وسط", price: "120" },
     { id: "large", label: "كبير", price: "140" }
@@ -1173,4 +1173,36 @@ const MENU=[
   { id: "medium", label: "وسط", price: "190" },
   { id: "large", label: "كبير رول", price: "375" }
 ], img: './img'},
+{id: 877, brand: 'El-Thawra', category: 'وجبات فردية', n: 'لايت بوكس', p: "110", d: '3 قطع استربس (150 جرام) + بطاطس + 2 خبز + ثومية', img: './img'},
+
+{id: 878, brand: 'El-Thawra', category: 'وجبات فردية', n: 'سوبر لايت بوكس', p: "170", d: '5 قطع استربس (250 جرام) + بطاطس + 3 خبز + كولسلو + ثومية', img: './img'},
+
+{id: 879, brand: 'El-Thawra', category: 'وجبات فردية', n: 'سناك بوكس', p: "145", d: '2 قطع بونشد + قطعة كبيرة وواحدة صغيرة + بطاطس + 2 خبز + ثومية', img: './img'},
+
+{id: 880, brand: 'El-Thawra', category: 'وجبات فردية', n: 'تشيكن وينجز', p: "120", d: '3 قطع جناح + بطاطس + 2 خبز', img: './img'},
+
+{id: 881, brand: 'El-Thawra', category: 'وجبات فردية', n: 'دبابيس دجاج', p: "160", d: '3 قطع دبابيس + كولسلو + ثومية + بطاطس + 3 خبز', img: './img'},
+
+{id: 882, brand: 'El-Thawra', category: 'وجبات فردية', n: 'ديز بوكس', p: "190", d: 'صدر + دبوس + جناح + بطاطس + ثومية + 3 خبز', img: './img'},
+
+{id: 883, brand: 'El-Thawra', category: 'وجبات فردية', n: 'سوبر ديز بوكس', p: "230", d: 'فخذين + كولسلو + جناح + بطاطس + ثومية + 4 خبز', img: './img'},
+
+{id: 884, brand: 'El-Thawra', category: 'وجبات فردية', n: 'ديز صدر', p: "240", d: '3 قطع صدر + كولسلو + ثومية + بطاطس + 3 خبز', img: './img'},
+
+{id: 885, brand: 'El-Thawra', category: 'وجبات فردية', n: 'بوكس الثورة', p: "330", d: '6 قطع (فخذ + صدر + 2 جناح) + كولسلو + ثومية + 6 خبز + 2 ثومية', img: './img'},
+
+{id: 886, brand: 'El-Thawra', category: 'وجبات أطفال', n: 'تشيكن كيدز', p: "105", d: '2 قطعة بونشد عادي + 2 دوبس + بطاطس + خبز + هدية', img: './img'},
+
+{id: 887, brand: 'El-Thawra', category: 'وجبات أطفال', n: 'تشيكن استربس', p: "100", d: '2 قطعة استربس عادي + بطاطس + خبز + هدية', img: './img'},
+
+{id: 888, brand: 'El-Thawra', category: 'وجبات عائلية', n: 'سوبر بوكس', p: "500", d: '8 قطع بونشد (فرخة كاملة) + 9 خبز + 2 كولسلو + 3 ثومية + بطاطس كبيرة', img: './img'},
+
+{id: 889, brand: 'El-Thawra', category: 'وجبات عائلية', n: 'فاميلي ميل', p: "660", d: '12 قطعة بونشد + صدر + فخذ + جناح + 12 خبز + 3 كولسلو + 2 ثومية + 2 بطاطس كبيرة', img: './img'},
+
+{id: 890, brand: 'El-Thawra', category: 'وجبات عائلية', n: 'وجبة اقتصادية', p: "790", d: '15 قطعة بونشد + صدر + فخذ + جناح + 2 دوبس + 9 خبز + 4 كولسلو + 2 ثومية + 2 بطاطس كبيرة', img: './img'},
+
+{id: 891, brand: 'El-Thawra', category: 'وجبات عائلية', n: 'سوبر كريسبى استربس', p: "360", d: '12 قطعة استربس (600 جرام) + 6 خبز + 2 كولسلو + 3 ثومية + بطاطس كبيرة', img: './img'},
+
+{id: 892, brand: 'El-Thawra', category: 'وجبات عائلية', n: 'ميكس الثورة', p: "480", d: '6 قطع بونشد + صدر + 2 جناح + 6 قطع استربس (300 جرام) + بطاطس كبيرة + 2 كولسلو + 2 ثومية', img: './img'},
+
 ];
