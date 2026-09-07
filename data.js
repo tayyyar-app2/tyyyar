@@ -884,19 +884,19 @@ const MENU=[
     { id: "small", label: "صغير", price: "80" },
     { id: "medium", label: "وسط", price: "100" },
     { id: "large", label: "كبير", price: "110" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا مارجريتا.jpg'},
 
 {id: 823, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا تشيز لافرز', p: "90", d: 'كيري + صوص بيتزا + موزاريلا + ريكوتا + فلفل ألوان + زيتون', sizes: [
     { id: "small", label: "صغير", price: "90" },
     { id: "medium", label: "وسط", price: "120" },
     { id: "large", label: "كبير", price: "140" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا تشيز لا فرز .jpg'},
 
 {id: 824, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا خضار', p: "85", d: 'كيري + صوص بيتزا + موزاريلا + خضار مشكل + مشروم + زيتون', sizes: [
     { id: "small", label: "صغير", price: "85" },
     { id: "medium", label: "وسط", price: "115" },
     { id: "large", label: "كبير", price: "135" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا خضار.jpg'},
 
 {id: 825, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا بانية رانش', p: "90", d: 'كيري + صوص بيتزا + بانية + موزاريلا + فلفل ألوان + زيتون + صوص رانش', sizes: [
     { id: "small", label: "صغير", price: "90" },
@@ -908,66 +908,66 @@ const MENU=[
     { id: "small", label: "صغير", price: "100" },
     { id: "medium", label: "وسط", price: "160" },
     { id: "large", label: "كبير", price: "190" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا تشكن فراش .jpg'},
 
 {id: 827, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا تشيكن رانش', p: "100", d: 'كيري + صوص بيتزا + صدور دجاج فريش + موزاريلا + فلفل ألوان + زيتون + صوص رانش', sizes: [
     { id: "small", label: "صغير", price: "100" },
     { id: "medium", label: "وسط", price: "165" },
     { id: "large", label: "كبير", price: "210" }
-  ], img: './img'},
+  ], img: './img/ث بيتز ا تشكن ر انش .jpg'},
 
 {id: 828, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا ميكس تشيكن حار/بارد', p: "100", d: 'كيري + صوص بيتزا + موزاريلا + استربس فريش + بانية + فلفل ألوان + زيتون + صوص رانش', sizes: [
     { id: "small", label: "صغير", price: "100" },
     { id: "medium", label: "وسط", price: "150" },
     { id: "large", label: "كبير", price: "180" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا ميكس  اتشكن .jpg'},
 
 {id: 829, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا الاستربس فريش حار/بارد', p: "90", d: 'كيري + صوص بيتزا + استربس فريش + موزاريلا + فلفل ألوان + زيتون', sizes: [
     { id: "small", label: "صغير", price: "90" },
     { id: "medium", label: "وسط", price: "145" },
     { id: "large", label: "كبير", price: "175" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا استر ب س  فريش .jpg'},
   {id: 830, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا تركي', p: "100", d: 'كيري + صوص بيتزا + موتزاريلا + فلفل ألوان + زيتون', sizes: [
     { id: "small", label: "صغير", price: "100" },
     { id: "medium", label: "وسط", price: "155" },
     { id: "large", label: "كبير", price: "190" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا تركي .jpg'},
 
 {id: 831, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا باربكيو دجاج (فاهيتا)', p: "100", d: 'كيري + صوص بيتزا + صدور دجاج فريش + موزاريلا + فلفل ألوان + مشروم + زيتون + صوص باربكيو', sizes: [
     { id: "small", label: "صغير", price: "100" },
     { id: "medium", label: "وسط", price: "170" },
     { id: "large", label: "كبير", price: "200" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا باربيا كيوا  دجاج .jpg'},
 
 {id: 832, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا شيش طاووق', p: "95", d: 'كيري + صوص بيتزا + شيش فريش + موزاريلا + فلفل ألوان + زيتون', sizes: [
     { id: "small", label: "صغير", price: "95" },
     { id: "medium", label: "وسط", price: "150" },
     { id: "large", label: "كبير", price: "180" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا شيش طاوق .jpg'},
 
 {id: 833, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا سوبر سوبر بريم', p: "105", d: 'كيري + صوص بيتزا + صدور دجاج فريش + بسطرمة + هوت دوج + موزاريلا + فلفل ألوان + زيتون', sizes: [
     { id: "small", label: "صغير", price: "105" },
     { id: "medium", label: "وسط", price: "160" },
     { id: "large", label: "كبير", price: "190" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا سوبر يم .jpg'},
 
 {id: 834, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا شاورما فراخ', p: "100", d: 'كيري + صوص بيتزا + صدور دجاج + موزاريلا + فلفل ألوان + زيتون + صوص تومية', sizes: [
     { id: "small", label: "صغير", price: "100" },
     { id: "medium", label: "وسط", price: "165" },
     { id: "large", label: "كبير", price: "205" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا شاورما فرلخ .jpg'},
 
 {id: 835, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا الثورة حار/بارد', p: "105", d: 'كيري + صوص بيتزا + موزاريلا + سلامي + استربس فريش + هوت دوج كباب + فلفل ألوان + زيتون + صوص تكساس', sizes: [
     { id: "small", label: "صغير", price: "105" },
     { id: "medium", label: "وسط", price: "170" },
     { id: "large", label: "كبير", price: "195" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا الثوره.jpg'},
 
 {id: 836, brand: 'El-Thawra', category: 'بيتزا تشيكن', n: 'بيتزا رانش سموكي', p: "125", d: 'كيري + صوص بيتزا + سلامي + استربس فريش + صوص سموكي رانش + موزاريلا + فلفل ألوان + زيتون', sizes: [
     { id: "small", label: "صغير", price: "125" },
     { id: "medium", label: "وسط", price: "180" },
     { id: "large", label: "كبير", price: "195" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا رانش اسموكي .jpg'},
   {id: 837, brand: 'El-Thawra', category: 'بيتزا بيف', n: 'بيتزا سوسيس', p: "90", d: 'كيري + صوص بيتزا + هوت دوج + موزاريلا + فلفل ألوان + زيتون + صوص شيدر', sizes: [
     { id: "small", label: "صغير", price: "90" },
     { id: "medium", label: "وسط", price: "140" },
@@ -978,37 +978,37 @@ const MENU=[
     { id: "small", label: "صغير", price: "100" },
     { id: "medium", label: "وسط", price: "170" },
     { id: "large", label: "كبير", price: "205" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا سوسيس.jpg'},
 
 {id: 839, brand: 'El-Thawra', category: 'بيتزا بيف', n: 'بيتزا سجق', p: "110", d: 'كيري + صوص بيتزا + سجق + موزاريلا + فلفل ألوان + زيتون + صوص شيدر', sizes: [
     { id: "small", label: "صغير", price: "110" },
     { id: "medium", label: "وسط", price: "180" },
     { id: "large", label: "كبير", price: "210" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا كفته.jpg'},
 
 {id: 840, brand: 'El-Thawra', category: 'بيتزا بيف', n: 'بيتزا بولو', p: "110", d: 'كيري + صوص بيتزا + لحوم مفرومة + موزاريلا + فلفل ألوان + زيتون + صوص تكساس', sizes: [
     { id: "small", label: "صغير", price: "110" },
     { id: "medium", label: "وسط", price: "175" },
     { id: "large", label: "كبير", price: "205" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا كفته.jpg'},
 
 {id: 841, brand: 'El-Thawra', category: 'بيتزا بيف', n: 'بيتزا بيروني', p: "95", d: 'كيري + صوص بيتزا + لحم ببروني + موزاريلا + فلفل ألوان + زيتون', sizes: [
     { id: "small", label: "صغير", price: "95" },
     { id: "medium", label: "وسط", price: "140" },
     { id: "large", label: "كبير", price: "170" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا ببروني .jpg'},
 
 {id: 842, brand: 'El-Thawra', category: 'بيتزا بيف', n: 'بيتزا ميكس لحوم', p: "105", d: 'كيري + صوص بيتزا + ميكس لحوم + موزاريلا + فلفل ألوان + زيتون', sizes: [
     { id: "small", label: "صغير", price: "105" },
     { id: "medium", label: "وسط", price: "175" },
     { id: "large", label: "كبير", price: "205" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا ميكس لحوم .jpg'},
 
 {id: 843, brand: 'El-Thawra', category: 'بيتزا بيف', n: 'بيتزا سموكد برجر', p: "110", d: 'كيري + صوص بيتزا + برجر لحم مدخن + كاتشب + موزاريلا + فلفل ألوان + زيتون + صوص شيدر', sizes: [
     { id: "small", label: "صغير", price: "110" },
     { id: "medium", label: "وسط", price: "175" },
     { id: "large", label: "كبير", price: "205" }
-  ], img: './img'},
+  ], img: './img/ث بيتزا سموكد برجر .jpg'},
 
 {id: 844, brand: 'El-Thawra', category: 'بيتزا بيف', n: 'بيتزا فور سيزون', p: "170", d: 'كيري + صوص بيتزا + موزاريلا + لحم بيف + دونر كباب + استربس + فلفل ألوان + زيتون', sizes: [
     // { id: "small", label: "صغير", price: "" },
