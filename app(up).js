@@ -1194,21 +1194,30 @@ function startOrderTracking(oid){
 
 // Advertisement Carousel
 const BANNERS = [
+
+ {
+   id: 1,
+   image: './img/اعلان الثوة.jpg',
+   restaurantId: 'El-Thawra',
+  
+ },
+
   {
-    id: 1,
+    id: 2,
     image: './img/اعلان بلبن.jpg',
     restaurantId: 'B Laban',
     
   },
-  {
-    id: 2,
-    image: './img/خصم كرم الشام.jpg',
-    restaurantId: 'Karam El Sham',
-   
-  },
 
   {
-   id: 3,
+  id:3 ,
+  image: './img/خصم كرم الشام.jpg',
+  restaurantId: 'Karam El Sham',
+ 
+},
+
+  {
+   id:4 ,
    image: './img/توصيل مجاني اتشكن فاكتور.jpg',
    restaurantId: 'Chicken Factor',
   
