@@ -1194,20 +1194,20 @@ function startOrderTracking(oid){
 
 // Advertisement Carousel
 const BANNERS = [
+   {
+   id: 1,
+   image: './img/اعلان بلبن.jpg',
+   restaurantId: 'B Laban',
+   
+ },
 
  {
-   id: 1,
+   id: 2,
    image: './img/اعلان الثوة.jpg',
    restaurantId: 'El-Thawra',
   
  },
 
-  {
-    id: 2,
-    image: './img/اعلان بلبن.jpg',
-    restaurantId: 'B Laban',
-    
-  },
 
   {
   id:3 ,
