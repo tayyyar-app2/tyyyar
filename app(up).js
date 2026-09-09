@@ -1,5 +1,38 @@
 const SERVICE_FEE = 5;
 const SHOPPING_FEE = 10;
+
+// ===== جدول الأكواز والخصومات =====
+const DISCOUNT_CODES = {
+  'SAVE50': {
+    code: 'SAVE50',
+    type: 'fixed',      // ثابت
+    value: 50,          // 50 جنيه
+    appliesTo: 'total', // من الإجمالي
+    active: false
+  },
+  'DISCOUNT10': {
+    code: 'DISCOUNT10',
+    type: 'percentage', // نسبة مئوية
+    value: 10,          // 10%
+    appliesTo: 'items', // من سعر المنتجات
+    active: false
+  },
+  'FREEDELIVERY': {
+    code: 'FREEDELIVERY',
+    type: 'fixed',
+    value: 10,          // 10 جنيه (سعر التوصيل)
+    appliesTo: 'delivery', // من رسوم التوصيل
+    active: true
+  },
+  'RAMADAN50': {
+    code: 'RAMADAN50',
+    type: 'fixed',
+    value: 50,
+    appliesTo: 'total',
+    active: false
+  }
+};
+// ===== انهاية جدول الأكواز =====
 // تحميل إعدادات الأدمن من Firebase
 (async function loadAdminSettings(){
   try {
@@ -1306,3 +1339,148 @@ function resetAutoPlay() {
 
 renderAdCarousel();
 resetAutoPlay();
+
+// ===== DISCOUNT SYSTEM =====
+let appliedDiscount = null;
+
+async function validateDiscount(code) {
+  if (!code.trim()) {
+    appliedDiscount = null;
+    renderDiscountUI();
+    return;
+  }
+  
+  const codeUpper = code.toUpperCase().trim();
+  const discountObj = DISCOUNT_CODES[codeUpper];
+  
+  if (!discountObj) {
+    toast('❌ الكود غير صحيح');
+    appliedDiscount = null;
+    renderDiscountUI();
+    return;
+  }
+  
+  if (!discountObj.active) {
+    toast('❌ هذا الكود معطل');
+    appliedDiscount = null;
+    renderDiscountUI();
+    return;
+  }
+  
+  appliedDiscount = {
+    code: codeUpper,
+    type: discountObj.type,
+    value: discountObj.value,
+    appliesTo: discountObj.appliesTo
+  };
+  
+  toast('✅ تم تطبيق الكود!');
+  renderDiscountUI();
+}
+
+function getDiscountValue() {
+  if (!appliedDiscount) return 0;
+  
+  const tot = cartTotal();
+  const del = getDeliveryFee(document.getElementById('ca')?.value || '');
+  
+  let baseAmount = tot;
+  
+  // تحديد الـ base amount حسب appliesTo
+  if (appliedDiscount.appliesTo === 'delivery') {
+    baseAmount = del;
+  } else if (appliedDiscount.appliesTo === 'items') {
+    baseAmount = tot;
+  } else {
+    // 'total' - الخصم على الكل
+    baseAmount = tot + del + SERVICE_FEE;
+  }
+  
+  if (appliedDiscount.type === 'fixed') {
+    return Math.min(appliedDiscount.value, baseAmount);
+  } else {
+    return Math.floor((baseAmount * appliedDiscount.value) / 100);
+  }
+}
+
+function renderDiscountUI() {
+  const view3 = document.getElementById('view-3');
+  if (!view3) return;
+  
+  let discDiv = document.getElementById('discount-section');
+  if (!discDiv) {
+    discDiv = document.createElement('div');
+    discDiv.id = 'discount-section';
+    const tb = document.getElementById('tb');
+    if (tb && tb.parentNode) {
+      tb.parentNode.insertBefore(discDiv, tb);
+    }
+  }
+  
+  const discountVal = getDiscountValue();
+  const appliesLabel = appliedDiscount?.appliesTo === 'delivery' ? '(على التوصيل)' : 
+                       appliedDiscount?.appliesTo === 'items' ? '(على المنتجات)' : '(على الإجمالي)';
+  
+  discDiv.innerHTML = `
+    <div style="background:linear-gradient(135deg,#e8742a,#ff9f3d);border-radius:12px;color:#fff;padding:12px 14px;margin:8px 0;font-size:13px;">
+      ${appliedDiscount ? `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span>🎟️ كود الخصم: <strong>${appliedDiscount.code}</strong></span>
+          <button onclick="removeDiscount()" style="background:rgba(0,0,0,0.2);border:none;color:#fff;padding:4px 8px;border-radius:4px;font-size:11px;cursor:pointer;font-weight:700;">✕</button>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid rgba(255,255,255,0.3);">
+          <span>الخصم ${appliesLabel}:</span>
+          <span style="font-weight:700;">-${discountVal} ج.م</span>
+        </div>
+      ` : `
+        <div style="display:flex;gap:6px;">
+          <input type="text" id="discount-input" placeholder="أدخل كود الخصم" 
+            style="flex:1;padding:8px 10px;border:none;border-radius:6px;font-size:12px;font-family:inherit;"
+            onkeypress="if(event.key==='Enter') validateDiscount(this.value)">
+          <button onclick="validateDiscount(document.getElementById('discount-input').value)" 
+            style="padding:8px 12px;background:rgba(0,0,0,0.2);color:#fff;border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:11px;">
+            تطبيق
+          </button>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function removeDiscount() {
+  appliedDiscount = null;
+  renderDiscountUI();
+  toast('❌ تم إلغاء الكود');
+}
+
+// تعديل buildReceipt لتضمين الخصم
+const originalBuildReceipt = window.buildReceipt;
+window.buildReceipt = function(oid, nm, ph, ad, it, tot, payLbl, notes) {
+  const del = getDeliveryFee(ad);
+  const serviceFee = SERVICE_FEE;
+  const discountVal = getDiscountValue();
+  const finalTotal = tot + del + SERVICE_FEE - discountVal;
+  
+  // بناء الفاتورة الأصلية
+  const msg = originalBuildReceipt.call(this, oid, nm, ph, ad, it, tot, payLbl, notes);
+  
+  // إضافة الخصم إذا كان موجوداً
+  if (appliedDiscount) {
+    const discountLine = `\n🎟️ *كود الخصم:* ${appliedDiscount.code}\n💚 *الخصم:* -${discountVal} ج.م`;
+    const grandTotalLine = `💰 *الإجمالي الكلي: ${finalTotal} ج.م*`;
+    const oldGrandTotalLine = `💰 *الإجمالي الكلي: ${tot + del + serviceFee + selectedTip} ج.م*`;
+    
+    return msg.replace(oldGrandTotalLine, discountLine + `\n${grandTotalLine}`);
+  }
+  
+  return msg;
+};
+
+// استدعاء الـ UI عند فتح صفحة التأكيد
+const goStep_original = window.goStep;
+window.goStep = function(n) {
+  goStep_original.call(this, n);
+  if (n === 3) {
+    setTimeout(renderDiscountUI, 100);
+  }
+};
