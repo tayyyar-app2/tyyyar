@@ -458,3 +458,148 @@ input:checked + label .checkmark{
   background: #ffaa00;
   transform: scale(1.2);
 }
+/* ===== CELEBRATION ANIMATION ===== */
+.celebration-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.gift-box {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, #e8742a, #ff9f3d);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  box-shadow: 0 10px 40px rgba(232, 116, 42, 0.4);
+  animation: giftOpen 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+@keyframes giftOpen {
+  0% {
+    transform: scale(0.5) rotateX(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotateX(10deg);
+  }
+  100% {
+    transform: scale(1) rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  pointer-events: none;
+}
+
+.confetti.white {
+  background: #fff;
+}
+
+.confetti.orange {
+  background: #ff9f3d;
+}
+
+.confetti-fall {
+  animation: confettiFall 2s ease-out forwards;
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translateY(300px) translateX(var(--tx, 0)) rotateZ(360deg);
+    opacity: 0;
+  }
+}
+
+.star {
+  position: absolute;
+  font-size: 24px;
+  pointer-events: none;
+  animation: starFall 2s ease-out forwards;
+}
+
+@keyframes starFall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotateZ(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(250px) rotateZ(360deg);
+  }
+}
+
+.celebration-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  animation: messageAppear 0.6s ease-out;
+  z-index: 10001;
+}
+
+.celebration-message h2 {
+  font-size: 24px;
+  color: #99f100;
+  font-weight: 900;
+  margin: 20px 0 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.celebration-message .discount-value {
+  font-size: 32px;
+  color: #fff;
+  font-weight: 900;
+  text-shadow: 0 2px 8px rgba(232, 116, 42, 0.5);
+}
+
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.celebration-overlay.closing {
+  animation: fadeOut 0.4s ease-in forwards;
+}
+
+.celebration-overlay.closing .gift-box {
+  animation: giftClose 0.4s ease-in forwards;
+}
+
+@keyframes giftClose {
+  to {
+    transform: scale(0.5) rotateX(-20deg);
+    opacity: 0;
+  }
+}

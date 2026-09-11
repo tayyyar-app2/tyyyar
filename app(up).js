@@ -423,13 +423,18 @@ function buildReview(nm,ph,ad){
   ? '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>❤️ إكرامية المندوب</span><span>' + selectedTip + ' ج.م</span></div>'
   : '';
 
+const discountVal = getDiscountValue();
+const finalPrice = appliedDiscount ? grandTotal - discountVal : grandTotal;
+const discountDisplay = appliedDiscount ? (appliedDiscount.type === 'percentage' ? `-${appliedDiscount.value}%` : `-${discountVal} ج.م`) : '';
+
 document.getElementById('tb').innerHTML=`
   <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>🛒 إجمالي الطلب</span><span>${tot} ج.م</span></div>
   <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>🛵 رسوم التوصيل</span><span>${del} ج.م</span></div>
   <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>🔧 رسوم الخدمة</span><span>${SERVICE_FEE} ج.م</span></div>
   ${tipRow}
-  <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>المجموع الكلي</span><strong>${grandTotal} ج.م</strong></div>`;
- 
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>المجموع الكلي</span><strong style="text-decoration:${appliedDiscount ? 'line-through' : 'none'};color:${appliedDiscount ? '#ffffff' : '#fefefe'};">${grandTotal} ج.م</strong></div>
+  ${appliedDiscount ? `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;"><span>💚 قيمة الخصم</span><strong style="color:fff3E0;font-size:16px;font-weight:900;">${discountDisplay}</strong></div>` : ''}
+  ${appliedDiscount ? `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-top:2px solid rgba(255,255,255,0.3);padding-top:8px;margin-top:4px;"><span style="font-weight:700;">✅ المجموع بعد الخصم</span><strong style="color:#99f100;font-size:20px;font-weight:900;">${finalPrice} ج.م</strong></div>` : ''}`;
 
   const payEx=pay==='online'?`<br><span style="font-size:12px;color:#1d4ed8">📲 رقم التحويل: ${PAY_NUM}</span>`:'';
   const locTxt=loc?` <a href="${loc.url}" target="_blank" style="color:var(--grn);font-size:11px">📍 خريطة</a>`:'';
@@ -1343,10 +1348,52 @@ resetAutoPlay();
 // ===== DISCOUNT SYSTEM =====
 let appliedDiscount = null;
 
+// ===== CELEBRATION ANIMATION =====
+function showCelebration(discountAmount, discountType) {
+  const overlay = document.createElement('div');
+  overlay.className = 'celebration-overlay';
+  
+  const discountText = discountType === 'percentage' ? `-${discountAmount}%` : `-${discountAmount} ج.م`;
+  
+  overlay.innerHTML = `
+    <div class="gift-box">🎁
+      ${[...Array(8)].map((_, i) => {
+        const angle = (i * 45) * Math.PI / 180;
+        const tx = Math.cos(angle) * 100;
+        const ty = Math.sin(angle) * 100;
+        return `<div class="confetti ${i % 2 === 0 ? 'white' : 'orange'}" style="--tx: ${tx}px; left: 50%; top: 50%; animation-delay: ${i * 0.1}s;"></div>`;
+      }).join('')}
+      ${[...Array(6)].map((_, i) => 
+        `<div class="star" style="left: ${Math.random() * 80 + 10}%; top: ${Math.random() * 80 + 10}%; animation-delay: ${i * 0.15}s;">✨</div>`
+      ).join('')}
+    </div>
+    <div class="celebration-message">
+      <div class="discount-value">${discountText}</div>
+      <h2>مبروك! 🎉</h2>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
+  
+  // تحريك القصاصات
+  setTimeout(() => {
+    const confetti = overlay.querySelectorAll('.confetti-fall');
+    confetti.forEach(el => el.classList.add('confetti-fall'));
+  }, 100);
+  
+  // إغلاق الأنيميشن بعد ثانيتين
+  setTimeout(() => {
+    overlay.classList.add('closing');
+    setTimeout(() => overlay.remove(), 400);
+  }, 2000);
+}
+
+
 async function validateDiscount(code) {
   if (!code.trim()) {
     appliedDiscount = null;
     renderDiscountUI();
+    refreshReview();
     return;
   }
   
@@ -1357,6 +1404,7 @@ async function validateDiscount(code) {
     toast('❌ الكود غير صحيح');
     appliedDiscount = null;
     renderDiscountUI();
+    refreshReview();
     return;
   }
   
@@ -1364,6 +1412,7 @@ async function validateDiscount(code) {
     toast('❌ هذا الكود معطل');
     appliedDiscount = null;
     renderDiscountUI();
+    refreshReview();
     return;
   }
   
@@ -1374,8 +1423,13 @@ async function validateDiscount(code) {
     appliesTo: discountObj.appliesTo
   };
   
+  // عرض الأنيميشن الاحتفالية
+  const discountVal = discountObj.type === 'percentage' ? discountObj.value : discountObj.value;
+  showCelebration(discountVal, discountObj.type);
+  
   toast('✅ تم تطبيق الكود!');
   renderDiscountUI();
+  refreshReview();
 }
 
 function getDiscountValue() {
@@ -1450,6 +1504,7 @@ function renderDiscountUI() {
 function removeDiscount() {
   appliedDiscount = null;
   renderDiscountUI();
+  refreshReview();
   toast('❌ تم إلغاء الكود');
 }
 
