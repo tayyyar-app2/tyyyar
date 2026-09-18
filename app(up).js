@@ -1539,3 +1539,72 @@ window.goStep = function(n) {
     setTimeout(renderDiscountUI, 100);
   }
 };
+
+// ===== نظام التحقق من الموقع الجغرافي =====
+// إحداثيات العاشر من رمضان (تقريبية)
+const DELIVERY_CENTER = {
+  lat: 30.6,
+  lng: 31.4,
+  radiusKm: 15 // نطاق الخدمة بالكيلومتر
+};
+
+// حساب المسافة بين نقطتين بالكيلومتر
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // نصف قطر الأرض بالكيلومتر
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
+// التحقق من أن المستخدم في منطقة التوصيل
+async function verifyDeliveryLocation() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      console.warn('جهازك لا يدعم تحديد الموقع');
+      toast('⚠️ تأكد من تفعيل خدمة الموقع');
+      resolve(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const distance = calculateDistance(
+          latitude, 
+          longitude, 
+          DELIVERY_CENTER.lat, 
+          DELIVERY_CENTER.lng
+        );
+
+        if (distance <= DELIVERY_CENTER.radiusKm) {
+          resolve(true);
+        } else {
+          toast(`❌ آسف، الخدمة متاحة فقط في العاشر من رمضان (أنت على بعد ${distance.toFixed(1)} كم)`);
+          resolve(false);
+        }
+      },
+      (error) => {
+        console.warn('خطأ في تحديد الموقع:', error.message);
+        toast('⚠️ من فضلك فعّل خدمة الموقع');
+        resolve(false);
+      }
+    );
+  });
+}
+
+// تعديل دالة submitOrder الأصلية للتحقق من الموقع
+const placeOrder_original = window.placeOrder;
+if (submitOrder_original && typeof placeOrder_original === 'function') {
+  window.placeOrder = async function() {
+    const isInDeliveryArea = await verifyDeliveryLocation();
+    if (!isInDeliveryArea) {
+      return; // توقف الطلب إذا لم يكن في منطقة التوصيل
+    }
+    // استمر مع الطلب الأصلي
+    return placeOrder_original.call(this);
+  };
+}
