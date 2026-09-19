@@ -1,3 +1,553 @@
+// ========================================
+// 🌍 نظام Geofencing متقدم لتطبيق طيار
+// ========================================
+
+// ========== 1. قاعدة البيانات الجغرافية للمدن ==========
+const GEOFENCING_CITIES = {
+  'tayyar_10th_ramadan': {
+    name: 'العاشر من رمضان',
+    center: { lat: 30.306503, lng: 31.741455 },
+    // حدود المدينة الفعلية - Polygon بإحداثيات دقيقة
+    polygon: [
+      { lat: 30.25, lng: 31.68 },
+      { lat: 30.25, lng: 31.81 },
+      { lat: 30.36, lng: 31.81 },
+      { lat: 30.36, lng: 31.75 },
+      { lat: 30.40, lng: 31.75 },
+      { lat: 30.40, lng: 31.68 },
+      { lat: 30.36, lng: 31.68 },
+      { lat: 30.36, lng: 31.71 },
+      { lat: 30.25, lng: 31.71 },
+      { lat: 30.25, lng: 31.68 }
+    ],
+    radiusKm: 15,
+    isActive: true
+  }
+};
+
+// ========== 2. نظام التحقق من الموقع (Point in Polygon) ==========
+function isPointInPolygon(point, polygon) {
+  if (!polygon || polygon.length < 3) return false;
+  const { lat, lng } = point;
+  let isInside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const xi = polygon[i].lat;
+    const yi = polygon[i].lng;
+    const xj = polygon[j].lat;
+    const yj = polygon[j].lng;
+    const intersect = yi > lng !== yj > lng && lat < ((xj - xi) * (lng - yi)) / (yj - yi) + xi;
+    if (intersect) isInside = !isInside;
+  }
+  return isInside;
+}
+
+function getDistanceFromLatLng(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function isUserInServiceArea(userLocation, cityKey = 'tayyar_10th_ramadan') {
+  const city = GEOFENCING_CITIES[cityKey];
+  if (!city || !city.isActive) return false;
+  const { lat, lng } = userLocation;
+  if (city.polygon && city.polygon.length > 0) {
+    if (isPointInPolygon(userLocation, city.polygon)) return true;
+  }
+  const distance = getDistanceFromLatLng(lat, lng, city.center.lat, city.center.lng);
+  return distance <= city.radiusKm;
+}
+
+// ========== 3. إدارة الموقع المحفوظ - محسّن ==========
+function saveUserLocation(latitude, longitude, cityKey = 'tayyar_10th_ramadan') {
+  try {
+    const locationData = {
+      lat: latitude,
+      lng: longitude,
+      timestamp: Date.now(),
+      verified: true,
+      city: cityKey,
+      source: 'gps'
+    };
+    localStorage.setItem('tyr_user_location', JSON.stringify(locationData));
+    localStorage.setItem('tyr_location_verified', 'true');
+    localStorage.setItem('tyr_location_timestamp', locationData.timestamp.toString());
+    localStorage.setItem('tyr_location_city', cityKey);
+    console.log('✅ تم حفظ الموقع');
+    return true;
+  } catch (e) {
+    console.error('❌ خطأ في حفظ الموقع:', e);
+    return false;
+  }
+}
+
+function getSavedLocation() {
+  try {
+    const saved = localStorage.getItem('tyr_user_location');
+    if (!saved) return null;
+    return JSON.parse(saved);
+  } catch (e) {
+    console.error('❌ خطأ في قراءة الموقع:', e);
+    return null;
+  }
+}
+
+function isLocationStillValid(hoursThreshold = 24) {
+  const saved = getSavedLocation();
+  if (!saved || !saved.timestamp) return false;
+  
+  const ageHours = (Date.now() - saved.timestamp) / (1000 * 60 * 60);
+  const isValid = ageHours < hoursThreshold;
+  
+  if (!isValid) {
+    console.log(`⏰ الموقع قديم: ${ageHours.toFixed(1)} ساعات`);
+  }
+  
+  return isValid;
+}
+
+function clearSavedLocation() {
+  try {
+    localStorage.removeItem('tyr_user_location');
+    localStorage.removeItem('tyr_location_verified');
+    localStorage.removeItem('tyr_location_timestamp');
+    localStorage.removeItem('tyr_location_city');
+    console.log('🗑️ تم حذف الموقع المحفوظ');
+    return true;
+  } catch (e) {
+    console.error('❌ خطأ في حذف الموقع:', e);
+    return false;
+  }
+}
+
+// ========== 4. طلب الموقع من الجهاز - محسّن ==========
+function requestUserLocationFromDevice() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error('الجهاز لا يدعم تحديد الموقع'));
+      return;
+    }
+    
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0
+    };
+    
+    showLocationLoadingSpinner();
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        hideLocationLoadingSpinner();
+        const { latitude, longitude, accuracy } = position.coords;
+        resolve({
+          lat: latitude,
+          lng: longitude,
+          accuracy: accuracy || null
+        });
+      },
+      (error) => {
+        hideLocationLoadingSpinner();
+        
+        let errorMsg = '';
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMsg = '❌ يرجى السماح بالوصول إلى الموقع في إعدادات الجهاز';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMsg = '❌ الموقع غير متاح حالياً. تأكد من تشغيل GPS';
+            break;
+          case error.TIMEOUT:
+            errorMsg = '⏱️ انتهت مهلة البحث عن الموقع. حاول مرة أخرى';
+            break;
+          default:
+            errorMsg = '❌ حدث خطأ في تحديد الموقع';
+        }
+        
+        reject(new Error(errorMsg));
+      },
+      options
+    );
+  });
+}
+
+// ========== 4B. فتح خريطة تفاعلية لتحديد الموقع ==========
+function openLocationMap() {
+  return new Promise((resolve, reject) => {
+    showLocationLoadingSpinner();
+    
+    // أول ما يسمح بالموقع، اطلب الموقع تلقائي
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        hideLocationLoadingSpinner();
+        const { latitude, longitude } = position.coords;
+        
+        // احفظ الموقع تلقائي
+        saveUserLocation(latitude, longitude);
+        
+        console.log('✅ تم الحصول على الموقع:', latitude, longitude);
+        
+        // اعرض الموقع على الخريطة
+        showLocationMapModal(latitude, longitude);
+        
+        resolve({
+          lat: latitude,
+          lng: longitude
+        });
+      },
+      (error) => {
+        hideLocationLoadingSpinner();
+        let errorMsg = 'فشل تحديد الموقع';
+        
+        if (error.code === error.PERMISSION_DENIED) {
+          errorMsg = '❌ أنت لم تسمح بالوصول إلى الموقع';
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          errorMsg = '❌ الموقع غير متاح. تأكد من تشغيل GPS';
+        }
+        
+        showLocationErrorMessage(errorMsg);
+        reject(new Error(errorMsg));
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
+    );
+  });
+}
+
+// ========== 4C. عرض خريطة تفاعلية بالموقع ==========
+function showLocationMapModal(lat, lng) {
+  // أنشئ modal بالخريطة
+  const modal = document.createElement('div');
+  modal.id = 'location-map-modal';
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  `;
+  
+  const mapContainer = document.createElement('div');
+  mapContainer.style.cssText = `
+    width: 90%;
+    max-width: 600px;
+    height: 500px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+  `;
+  
+  // رأس الخريطة
+  const header = document.createElement('div');
+  header.style.cssText = `
+    background: #ff9f3d;
+    color: white;
+    padding: 12px 16px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  `;
+  header.innerHTML = `
+    <span>📍 موقعك</span>
+    <button onclick="document.getElementById('location-map-modal').remove()" style="background: rgba(255,255,255,0.3); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;">✕</button>
+  `;
+  mapContainer.appendChild(header);
+  
+  // iframe للخريطة (Google Maps)
+  const mapFrame = document.createElement('iframe');
+  mapFrame.src = `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
+  mapFrame.style.cssText = `
+    width: 100%;
+    height: 100%;
+    border: none;
+    flex: 1;
+  `;
+  mapContainer.appendChild(mapFrame);
+  
+  // قائمة العمليات في الأسفل
+  const footer = document.createElement('div');
+  footer.style.cssText = `
+    background: #f5f5f5;
+    padding: 12px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    border-top: 1px solid #ddd;
+  `;
+  
+  const confirmBtn = document.createElement('button');
+  confirmBtn.textContent = '✅ تأكيد الموقع';
+  confirmBtn.style.cssText = `
+    background: #44aa44;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+  `;
+  confirmBtn.onclick = () => {
+    modal.remove();
+    showLocationSuccessMessage('✅ تم حفظ موقعك بنجاح');
+  };
+  
+  const copyBtn = document.createElement('button');
+  copyBtn.textContent = '📋 نسخ الموقع';
+  copyBtn.style.cssText = `
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+  `;
+  copyBtn.onclick = () => {
+    const locationLink = `https://maps.google.com/maps?q=${lat},${lng}`;
+    navigator.clipboard.writeText(locationLink);
+    toast('✅ تم نسخ رابط الموقع');
+  };
+  
+  footer.appendChild(confirmBtn);
+  footer.appendChild(copyBtn);
+  mapContainer.appendChild(footer);
+  
+  modal.appendChild(mapContainer);
+  document.body.appendChild(modal);
+}
+
+// ========== 5. واجهة المستخدم وإظهار الرسائل ==========
+function showLocationErrorMessage(errorMessage) {
+  let msgElement = document.getElementById('location-error-msg');
+  if (!msgElement) {
+    msgElement = document.createElement('div');
+    msgElement.id = 'location-error-msg';
+    msgElement.style.cssText = `position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff4444, #ff6666); color: white; padding: 16px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; z-index: 9999; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); animation: slideDown 0.3s ease-out; text-align: center; max-width: 90%;`;
+    document.body.appendChild(msgElement);
+  }
+  msgElement.innerHTML = errorMessage;
+  msgElement.style.display = 'block';
+  setTimeout(() => { msgElement.style.display = 'none'; }, 5000);
+}
+
+function showLocationSuccessMessage(message) {
+  let msgElement = document.getElementById('location-success-msg');
+  if (!msgElement) {
+    msgElement = document.createElement('div');
+    msgElement.id = 'location-success-msg';
+    msgElement.style.cssText = `position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #44aa44, #66dd66); color: white; padding: 16px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; z-index: 9999; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); animation: slideDown 0.3s ease-out; text-align: center; max-width: 90%;`;
+    document.body.appendChild(msgElement);
+  }
+  msgElement.innerHTML = message;
+  msgElement.style.display = 'block';
+  setTimeout(() => { msgElement.style.display = 'none'; }, 3000);
+}
+
+function showLocationLoadingSpinner() {
+  let spinner = document.getElementById('location-spinner');
+  if (!spinner) {
+    spinner = document.createElement('div');
+    spinner.id = 'location-spinner';
+    spinner.style.cssText = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.8); color: white; padding: 30px; border-radius: 12px; z-index: 10000; text-align: center; font-size: 14px;`;
+    spinner.innerHTML = `<div style="border: 4px solid rgba(255, 255, 255, 0.3); border-top: 4px solid #ff9f3d; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div><p>جاري تحديد موقعك...</p>`;
+    document.body.appendChild(spinner);
+  }
+  spinner.style.display = 'block';
+}
+
+function hideLocationLoadingSpinner() {
+  const spinner = document.getElementById('location-spinner');
+  if (spinner) spinner.style.display = 'none';
+}
+
+const geoStyle = document.createElement('style');
+geoStyle.textContent = `
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes slideDown {
+    from { transform: translate(-50%, -100%); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+  }
+`;
+document.head.appendChild(geoStyle);
+
+// ========== 6. الدالة الرئيسية للتحقق من الموقع - محسّنة ==========
+async function verifyUserLocation(cityKey = 'tayyar_10th_ramadan') {
+  try {
+    // ✅ الخطوة 1: محاولة استخدام الموقع المحفوظ
+    const savedLocation = getSavedLocation();
+    if (savedLocation && isLocationStillValid()) {
+      console.log('📍 استخدام الموقع المحفوظ');
+      showLocationSuccessMessage('✅ تم استخدام موقعك المحفوظ');
+      return { success: true, cached: true, location: savedLocation };
+    }
+    
+    // ✅ الخطوة 2: طلب موقع جديد من الجهاز
+    console.log('📍 جاري طلب موقع جديد من GPS');
+    const currentLocation = await requestUserLocationFromDevice();
+    
+    // ✅ الخطوة 3: احفظ الموقع تلقائياً (بدون تحقق)
+    saveUserLocation(currentLocation.lat, currentLocation.lng, cityKey);
+    showLocationSuccessMessage('✅ تم تحديد موقعك وحفظه');
+    
+    return { success: true, cached: false, location: currentLocation };
+    
+  } catch (error) {
+    console.error('❌ خطأ في التحقق من الموقع:', error.message);
+    showLocationErrorMessage(`❌ ${error.message}`);
+    return { success: false, error: error.message };
+  }
+}
+
+async function checkLocationBeforeOrder() {
+  const result = await verifyUserLocation('tayyar_10th_ramadan');
+  return result.success;
+}
+
+// دالة إضافية: الحصول على الموقع للطلب (تستخدمها في أماكن مختلفة)
+async function getUserLocationForOrder(cityKey = 'tayyar_10th_ramadan') {
+  return await verifyUserLocation(cityKey);
+}
+
+// دالة لتحديث الموقع يدوياً (إذا تحرك العميل)
+async function refreshUserLocation() {
+  console.log('🔄 جاري تحديث الموقع...');
+  clearSavedLocation();
+  return await verifyUserLocation('tayyar_10th_ramadan');
+}
+
+// دالة لإرسال الموقع مع الطلب
+function getLocationLinkForMessage() {
+  const savedLocation = getSavedLocation();
+  if (!savedLocation) return '';
+  
+  const googleMapsLink = `https://maps.google.com/maps?q=${savedLocation.lat},${savedLocation.lng}`;
+  return googleMapsLink;
+}
+
+// ========== 7. دالة شاملة: فتح الخريطة وحفظ الموقع قبل الطلب ==========
+async function enableLocationAndSubmitOrder() {
+  try {
+    showLocationLoadingSpinner();
+    
+    // افتح الخريطة وحصل على الموقع تلقائي
+    const locationResult = await openLocationMap();
+    
+    console.log('✅ تم الحصول على الموقع:', locationResult);
+    
+    // الآن أرسل الطلب بعد حفظ الموقع
+    setTimeout(() => {
+      submitOrderToWhatsApp();
+    }, 500);
+    
+  } catch (error) {
+    console.error('❌ خطأ:', error.message);
+    hideLocationLoadingSpinner();
+  }
+}
+
+// دالة مساعدة لإرسال الطلب الفعلي
+function submitOrderToWhatsApp() {
+  const nm=document.getElementById('cust_name').value.trim();
+  const ph=document.getElementById('cust_phone').value.trim();
+  const ad=document.getElementById('ca').value.trim();
+  const it=cart;
+  const tot=cartTotal();
+  const pay=document.getElementById('pmethod').value||'cash';
+  const notes=document.getElementById('cno').value.trim();
+  const isFirstSave = !localStorage.getItem('tyr_user');
+  
+  saveUserProfile(nm, ph, ad);
+  
+  if (isFirstSave) {
+    toast('✅ تم حفظ بياناتك! في الطلب الجاي هتتملي تلقائيًا 😊✈️', 0);
+  }
+  
+  seq++;
+  localStorage.setItem('tyr_seq', seq);
+  const oid = 'TYR-' + String(seq).padStart(4, '0');
+  const payLbl = pay === 'online' ? '📲 انستاباي / فودافون كاش' : '💵 الدفع عند الاستلام';
+  const msg = buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes);
+  
+  fbq('track', 'InitiateCheckout');
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank');
+  
+  // حفظ في Firebase
+  function toFV(v) {
+    if (typeof v === 'string') return { stringValue: v };
+    if (typeof v === 'number') return { doubleValue: v };
+    if (typeof v === 'boolean') return { booleanValue: v };
+    if (Array.isArray(v)) return { arrayValue: { values: v.map(toFV) } };
+    if (v && typeof v === 'object') {
+      const f = {};
+      Object.entries(v).forEach(([k, val]) => { f[k] = toFV(val); });
+      return { mapValue: { fields: f } };
+    }
+    return { nullValue: null };
+  }
+
+  const delivFee = getDeliveryFee(ad);
+  const savedLocation = getSavedLocation();
+  const doc = {
+    name: nm,
+    phone: ph,
+    address: ad,
+    brand: brand,
+    items: it,
+    orderTotal: tot,
+    delivery: delivFee,
+    service: SERVICE_FEE,
+    grandTotal: tot + delivFee + SERVICE_FEE,
+    payment: pay,
+    orderNum: oid,
+    notes: notes,
+    timestamp: Date.now(),
+    status: 'جديد',
+    driverStatus: 'pending',
+    // أضف الموقع إلى الطلب
+    location: savedLocation ? {
+      lat: savedLocation.lat,
+      lng: savedLocation.lng,
+      mapLink: `https://maps.google.com/maps?q=${savedLocation.lat},${savedLocation.lng}`
+    } : null
+  };
+
+  const fields = {};
+  Object.entries(doc).forEach(([k, v]) => { fields[k] = toFV(v); });
+  
+  fetch(`https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders/${oid}?key=AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fields })
+  })
+    .then(r => r.json())
+    .then(r => {
+      console.log('✅ تم حفظ الطلب في Firebase مع الموقع');
+      cart = [];
+      renderCart();
+      goStep(0);
+    })
+    .catch(e => console.error('❌ خطأ في الحفظ:', e));
+}
+
 const SERVICE_FEE = 5;
 const SHOPPING_FEE = 10;
 
@@ -576,6 +1126,12 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
   const serviceFee = SERVICE_FEE;
   const grandTotal = tot + del + SERVICE_FEE;
 
+  // احصل على الموقع المحفوظ
+  const savedLocation = getSavedLocation();
+  const locationLink = savedLocation 
+    ? `https://maps.google.com/maps?q=${savedLocation.lat},${savedLocation.lng}`
+    : '';
+
   // تجميع المنتجات حسب البراند
   const byBrand = it.reduce((acc, i) => {
     (acc[i.brand] ??= []).push(i);
@@ -606,7 +1162,7 @@ return `• ${i.n}${i.extras&&i.extras.length?`\n  ➕ ${i.extras.map(e=>e.n+' (
     `\n🆔 *رقم الطلب:* ${oid}\n📅 ${new Date().toLocaleString('ar-EG')}`,
     divider,
     `👤 *الاسم:* ${nm}\n📱 *الموبايل:* ${ph}\n🗺️ *العنوان:* ${ad}`,
-    loc ? `📍 *الخريطة:* ${loc.url}` : '',
+    locationLink ? `📍 *موقع العميل:* ${locationLink}` : '',
     divider,
     `📦 *تفاصيل الطلب:*${itemsText}\n`,
     divider,
@@ -656,11 +1212,18 @@ function clearUserProfile(){
   toast('🗑️ تم مسح بياناتك المحفوظة');
 }
 
-function placeOrder(){
+async function placeOrder(){
  if(!isOpen(brand)) {
     toast('🔴 هذا المطعم مغلق حالياً', 1);
     return;
   }
+  
+  // ✅ فحص الموقع قبل السماح بالطلب
+  const locationOk = await checkLocationBeforeOrder();
+  if (!locationOk) {
+    return; // منع الطلب إذا كان خارج النطاق
+  }
+  
   // باقي الكود زي ما هو
   const it=cartItems(),tot=cartTotal();
   const nm=document.getElementById('cn').value.trim();
@@ -1539,72 +2102,3 @@ window.goStep = function(n) {
     setTimeout(renderDiscountUI, 100);
   }
 };
-
-// ===== نظام التحقق من الموقع الجغرافي =====
-// إحداثيات العاشر من رمضان (تقريبية)
-const DELIVERY_CENTER = {
-  lat: 30.6,
-  lng: 31.4,
-  radiusKm: 15 // نطاق الخدمة بالكيلومتر
-};
-
-// حساب المسافة بين نقطتين بالكيلومتر
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371; // نصف قطر الأرض بالكيلومتر
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
-}
-
-// التحقق من أن المستخدم في منطقة التوصيل
-async function verifyDeliveryLocation() {
-  return new Promise((resolve) => {
-    if (!navigator.geolocation) {
-      console.warn('جهازك لا يدعم تحديد الموقع');
-      toast('⚠️ تأكد من تفعيل خدمة الموقع');
-      resolve(false);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        const distance = calculateDistance(
-          latitude, 
-          longitude, 
-          DELIVERY_CENTER.lat, 
-          DELIVERY_CENTER.lng
-        );
-
-        if (distance <= DELIVERY_CENTER.radiusKm) {
-          resolve(true);
-        } else {
-          toast(`❌ آسف، الخدمة متاحة فقط في العاشر من رمضان (أنت على بعد ${distance.toFixed(1)} كم)`);
-          resolve(false);
-        }
-      },
-      (error) => {
-        console.warn('خطأ في تحديد الموقع:', error.message);
-        toast('⚠️ من فضلك فعّل خدمة الموقع');
-        resolve(false);
-      }
-    );
-  });
-}
-
-// تعديل دالة submitOrder الأصلية للتحقق من الموقع
-const placeOrder_original = window.placeOrder;
-if (submitOrder_original && typeof placeOrder_original === 'function') {
-  window.placeOrder = async function() {
-    const isInDeliveryArea = await verifyDeliveryLocation();
-    if (!isInDeliveryArea) {
-      return; // توقف الطلب إذا لم يكن في منطقة التوصيل
-    }
-    // استمر مع الطلب الأصلي
-    return placeOrder_original.call(this);
-  };
-}
