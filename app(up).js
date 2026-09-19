@@ -63,276 +63,60 @@ function isUserInServiceArea(userLocation, cityKey = 'tayyar_10th_ramadan') {
   return distance <= city.radiusKm;
 }
 
-// ========== 3. إدارة الموقع المحفوظ - محسّن ==========
-function saveUserLocation(latitude, longitude, cityKey = 'tayyar_10th_ramadan') {
-  try {
-    const locationData = {
-      lat: latitude,
-      lng: longitude,
-      timestamp: Date.now(),
-      verified: true,
-      city: cityKey,
-      source: 'gps'
-    };
-    localStorage.setItem('tyr_user_location', JSON.stringify(locationData));
-    localStorage.setItem('tyr_location_verified', 'true');
-    localStorage.setItem('tyr_location_timestamp', locationData.timestamp.toString());
-    localStorage.setItem('tyr_location_city', cityKey);
-    console.log('✅ تم حفظ الموقع');
-    return true;
-  } catch (e) {
-    console.error('❌ خطأ في حفظ الموقع:', e);
-    return false;
-  }
+// ========== 3. إدارة الموقع المحفوظ ==========
+function saveUserLocation(latitude, longitude) {
+  const locationData = {
+    lat: latitude,
+    lng: longitude,
+    timestamp: Date.now(),
+    verified: true
+  };
+  localStorage.setItem('tyr_user_location', JSON.stringify(locationData));
+  localStorage.setItem('tyr_location_verified', 'true');
 }
 
 function getSavedLocation() {
   try {
     const saved = localStorage.getItem('tyr_user_location');
-    if (!saved) return null;
-    return JSON.parse(saved);
+    return saved ? JSON.parse(saved) : null;
   } catch (e) {
-    console.error('❌ خطأ في قراءة الموقع:', e);
     return null;
   }
 }
 
-function isLocationStillValid(hoursThreshold = 24) {
+function isLocationStillValid() {
   const saved = getSavedLocation();
-  if (!saved || !saved.timestamp) return false;
-  
+  if (!saved) return false;
   const ageHours = (Date.now() - saved.timestamp) / (1000 * 60 * 60);
-  const isValid = ageHours < hoursThreshold;
-  
-  if (!isValid) {
-    console.log(`⏰ الموقع قديم: ${ageHours.toFixed(1)} ساعات`);
-  }
-  
-  return isValid;
+  return ageHours < 24;
 }
 
-function clearSavedLocation() {
-  try {
-    localStorage.removeItem('tyr_user_location');
-    localStorage.removeItem('tyr_location_verified');
-    localStorage.removeItem('tyr_location_timestamp');
-    localStorage.removeItem('tyr_location_city');
-    console.log('🗑️ تم حذف الموقع المحفوظ');
-    return true;
-  } catch (e) {
-    console.error('❌ خطأ في حذف الموقع:', e);
-    return false;
-  }
-}
-
-// ========== 4. طلب الموقع من الجهاز - محسّن ==========
+// ========== 4. طلب الموقع من المستخدم ==========
 function requestUserLocationFromDevice() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
       reject(new Error('الجهاز لا يدعم تحديد الموقع'));
       return;
     }
-    
-    const options = {
-      enableHighAccuracy: true,
-      timeout: 15000,
-      maximumAge: 0
-    };
-    
-    showLocationLoadingSpinner();
-    
+    const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        hideLocationLoadingSpinner();
-        const { latitude, longitude, accuracy } = position.coords;
-        resolve({
-          lat: latitude,
-          lng: longitude,
-          accuracy: accuracy || null
-        });
+        const { latitude, longitude } = position.coords;
+        resolve({ lat: latitude, lng: longitude });
       },
       (error) => {
-        hideLocationLoadingSpinner();
-        
         let errorMsg = '';
         switch (error.code) {
-          case error.PERMISSION_DENIED:
-            errorMsg = '❌ يرجى السماح بالوصول إلى الموقع في إعدادات الجهاز';
-            break;
-          case error.POSITION_UNAVAILABLE:
-            errorMsg = '❌ الموقع غير متاح حالياً. تأكد من تشغيل GPS';
-            break;
-          case error.TIMEOUT:
-            errorMsg = '⏱️ انتهت مهلة البحث عن الموقع. حاول مرة أخرى';
-            break;
-          default:
-            errorMsg = '❌ حدث خطأ في تحديد الموقع';
+          case error.PERMISSION_DENIED: errorMsg = 'يرجى السماح بالوصول إلى الموقع الجغرافي'; break;
+          case error.POSITION_UNAVAILABLE: errorMsg = 'الموقع غير متاح حالياً. تأكد من تشغيل GPS'; break;
+          case error.TIMEOUT: errorMsg = 'انتهت مهلة البحث عن الموقع. حاول مرة أخرى'; break;
+          default: errorMsg = 'حدث خطأ في تحديد الموقع';
         }
-        
         reject(new Error(errorMsg));
       },
       options
     );
   });
-}
-
-// ========== 4B. فتح خريطة تفاعلية لتحديد الموقع ==========
-function openLocationMap() {
-  return new Promise((resolve, reject) => {
-    showLocationLoadingSpinner();
-    
-    // أول ما يسمح بالموقع، اطلب الموقع تلقائي
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        hideLocationLoadingSpinner();
-        const { latitude, longitude } = position.coords;
-        
-        // احفظ الموقع تلقائي
-        saveUserLocation(latitude, longitude);
-        
-        console.log('✅ تم الحصول على الموقع:', latitude, longitude);
-        
-        // اعرض الموقع على الخريطة
-        showLocationMapModal(latitude, longitude);
-        
-        resolve({
-          lat: latitude,
-          lng: longitude
-        });
-      },
-      (error) => {
-        hideLocationLoadingSpinner();
-        let errorMsg = 'فشل تحديد الموقع';
-        
-        if (error.code === error.PERMISSION_DENIED) {
-          errorMsg = '❌ أنت لم تسمح بالوصول إلى الموقع';
-        } else if (error.code === error.POSITION_UNAVAILABLE) {
-          errorMsg = '❌ الموقع غير متاح. تأكد من تشغيل GPS';
-        }
-        
-        showLocationErrorMessage(errorMsg);
-        reject(new Error(errorMsg));
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 0
-      }
-    );
-  });
-}
-
-// ========== 4C. عرض خريطة تفاعلية بالموقع ==========
-function showLocationMapModal(lat, lng) {
-  // أنشئ modal بالخريطة
-  const modal = document.createElement('div');
-  modal.id = 'location-map-modal';
-  modal.style.cssText = `
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 10001;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  `;
-  
-  const mapContainer = document.createElement('div');
-  mapContainer.style.cssText = `
-    width: 90%;
-    max-width: 600px;
-    height: 500px;
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-  `;
-  
-  // رأس الخريطة
-  const header = document.createElement('div');
-  header.style.cssText = `
-    background: #ff9f3d;
-    color: white;
-    padding: 12px 16px;
-    font-weight: 600;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  `;
-  header.innerHTML = `
-    <span>📍 موقعك</span>
-    <button onclick="document.getElementById('location-map-modal').remove()" style="background: rgba(255,255,255,0.3); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;">✕</button>
-  `;
-  mapContainer.appendChild(header);
-  
-  // iframe للخريطة (Google Maps)
-  const mapFrame = document.createElement('iframe');
-  mapFrame.src = `https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
-  mapFrame.style.cssText = `
-    width: 100%;
-    height: 100%;
-    border: none;
-    flex: 1;
-  `;
-  mapContainer.appendChild(mapFrame);
-  
-  // قائمة العمليات في الأسفل
-  const footer = document.createElement('div');
-  footer.style.cssText = `
-    background: #f5f5f5;
-    padding: 12px;
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    border-top: 1px solid #ddd;
-  `;
-  
-  const confirmBtn = document.createElement('button');
-  confirmBtn.textContent = '✅ تأكيد الموقع';
-  confirmBtn.style.cssText = `
-    background: #44aa44;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-  `;
-  confirmBtn.onclick = () => {
-    modal.remove();
-    showLocationSuccessMessage('✅ تم حفظ موقعك بنجاح');
-  };
-  
-  const copyBtn = document.createElement('button');
-  copyBtn.textContent = '📋 نسخ الموقع';
-  copyBtn.style.cssText = `
-    background: #2196F3;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
-  `;
-  copyBtn.onclick = () => {
-    const locationLink = `https://maps.google.com/maps?q=${lat},${lng}`;
-    navigator.clipboard.writeText(locationLink);
-    toast('✅ تم نسخ رابط الموقع');
-  };
-  
-  footer.appendChild(confirmBtn);
-  footer.appendChild(copyBtn);
-  mapContainer.appendChild(footer);
-  
-  modal.appendChild(mapContainer);
-  document.body.appendChild(modal);
 }
 
 // ========== 5. واجهة المستخدم وإظهار الرسائل ==========
@@ -389,29 +173,28 @@ geoStyle.textContent = `
 `;
 document.head.appendChild(geoStyle);
 
-// ========== 6. الدالة الرئيسية للتحقق من الموقع - محسّنة ==========
+// ========== 6. الدالة الرئيسية للتحقق من الموقع ==========
 async function verifyUserLocation(cityKey = 'tayyar_10th_ramadan') {
   try {
-    // ✅ الخطوة 1: محاولة استخدام الموقع المحفوظ
     const savedLocation = getSavedLocation();
     if (savedLocation && isLocationStillValid()) {
-      console.log('📍 استخدام الموقع المحفوظ');
-      showLocationSuccessMessage('✅ تم استخدام موقعك المحفوظ');
-      return { success: true, cached: true, location: savedLocation };
+      if (isUserInServiceArea(savedLocation, cityKey)) {
+        return { success: true, cached: true, location: savedLocation };
+      }
     }
-    
-    // ✅ الخطوة 2: طلب موقع جديد من الجهاز
-    console.log('📍 جاري طلب موقع جديد من GPS');
+    showLocationLoadingSpinner();
     const currentLocation = await requestUserLocationFromDevice();
-    
-    // ✅ الخطوة 3: احفظ الموقع تلقائياً (بدون تحقق)
-    saveUserLocation(currentLocation.lat, currentLocation.lng, cityKey);
-    showLocationSuccessMessage('✅ تم تحديد موقعك وحفظه');
-    
-    return { success: true, cached: false, location: currentLocation };
-    
+    hideLocationLoadingSpinner();
+    if (isUserInServiceArea(currentLocation, cityKey)) {
+      saveUserLocation(currentLocation.lat, currentLocation.lng);
+      showLocationSuccessMessage('✅ تم التحقق من موقعك بنجاح');
+      return { success: true, cached: false, location: currentLocation };
+    } else {
+      showLocationErrorMessage('⚠️ طيار متاح حاليًا داخل العاشر من رمضان فقط');
+      return { success: false, location: currentLocation };
+    }
   } catch (error) {
-    console.error('❌ خطأ في التحقق من الموقع:', error.message);
+    hideLocationLoadingSpinner();
     showLocationErrorMessage(`❌ ${error.message}`);
     return { success: false, error: error.message };
   }
@@ -422,131 +205,7 @@ async function checkLocationBeforeOrder() {
   return result.success;
 }
 
-// دالة إضافية: الحصول على الموقع للطلب (تستخدمها في أماكن مختلفة)
-async function getUserLocationForOrder(cityKey = 'tayyar_10th_ramadan') {
-  return await verifyUserLocation(cityKey);
-}
-
-// دالة لتحديث الموقع يدوياً (إذا تحرك العميل)
-async function refreshUserLocation() {
-  console.log('🔄 جاري تحديث الموقع...');
-  clearSavedLocation();
-  return await verifyUserLocation('tayyar_10th_ramadan');
-}
-
-// دالة لإرسال الموقع مع الطلب
-function getLocationLinkForMessage() {
-  const savedLocation = getSavedLocation();
-  if (!savedLocation) return '';
-  
-  const googleMapsLink = `https://maps.google.com/maps?q=${savedLocation.lat},${savedLocation.lng}`;
-  return googleMapsLink;
-}
-
-// ========== 7. دالة شاملة: فتح الخريطة وحفظ الموقع قبل الطلب ==========
-async function enableLocationAndSubmitOrder() {
-  try {
-    showLocationLoadingSpinner();
-    
-    // افتح الخريطة وحصل على الموقع تلقائي
-    const locationResult = await openLocationMap();
-    
-    console.log('✅ تم الحصول على الموقع:', locationResult);
-    
-    // الآن أرسل الطلب بعد حفظ الموقع
-    setTimeout(() => {
-      submitOrderToWhatsApp();
-    }, 500);
-    
-  } catch (error) {
-    console.error('❌ خطأ:', error.message);
-    hideLocationLoadingSpinner();
-  }
-}
-
-// دالة مساعدة لإرسال الطلب الفعلي
-function submitOrderToWhatsApp() {
-  const nm=document.getElementById('cust_name').value.trim();
-  const ph=document.getElementById('cust_phone').value.trim();
-  const ad=document.getElementById('ca').value.trim();
-  const it=cart;
-  const tot=cartTotal();
-  const pay=document.getElementById('pmethod').value||'cash';
-  const notes=document.getElementById('cno').value.trim();
-  const isFirstSave = !localStorage.getItem('tyr_user');
-  
-  saveUserProfile(nm, ph, ad);
-  
-  if (isFirstSave) {
-    toast('✅ تم حفظ بياناتك! في الطلب الجاي هتتملي تلقائيًا 😊✈️', 0);
-  }
-  
-  seq++;
-  localStorage.setItem('tyr_seq', seq);
-  const oid = 'TYR-' + String(seq).padStart(4, '0');
-  const payLbl = pay === 'online' ? '📲 انستاباي / فودافون كاش' : '💵 الدفع عند الاستلام';
-  const msg = buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes);
-  
-  fbq('track', 'InitiateCheckout');
-  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank');
-  
-  // حفظ في Firebase
-  function toFV(v) {
-    if (typeof v === 'string') return { stringValue: v };
-    if (typeof v === 'number') return { doubleValue: v };
-    if (typeof v === 'boolean') return { booleanValue: v };
-    if (Array.isArray(v)) return { arrayValue: { values: v.map(toFV) } };
-    if (v && typeof v === 'object') {
-      const f = {};
-      Object.entries(v).forEach(([k, val]) => { f[k] = toFV(val); });
-      return { mapValue: { fields: f } };
-    }
-    return { nullValue: null };
-  }
-
-  const delivFee = getDeliveryFee(ad);
-  const savedLocation = getSavedLocation();
-  const doc = {
-    name: nm,
-    phone: ph,
-    address: ad,
-    brand: brand,
-    items: it,
-    orderTotal: tot,
-    delivery: delivFee,
-    service: SERVICE_FEE,
-    grandTotal: tot + delivFee + SERVICE_FEE,
-    payment: pay,
-    orderNum: oid,
-    notes: notes,
-    timestamp: Date.now(),
-    status: 'جديد',
-    driverStatus: 'pending',
-    // أضف الموقع إلى الطلب
-    location: savedLocation ? {
-      lat: savedLocation.lat,
-      lng: savedLocation.lng,
-      mapLink: `https://maps.google.com/maps?q=${savedLocation.lat},${savedLocation.lng}`
-    } : null
-  };
-
-  const fields = {};
-  Object.entries(doc).forEach(([k, v]) => { fields[k] = toFV(v); });
-  
-  fetch(`https://firestore.googleapis.com/v1/projects/tayyyar1/databases/(default)/documents/orders/${oid}?key=AIzaSyCK2h_v0wakqVhQJ0c-wUG1zAvR7creNU8`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fields })
-  })
-    .then(r => r.json())
-    .then(r => {
-      console.log('✅ تم حفظ الطلب في Firebase مع الموقع');
-      cart = [];
-      renderCart();
-      goStep(0);
-    })
-    .catch(e => console.error('❌ خطأ في الحفظ:', e));
-}
+// ===== انهاية نظام Geofencing =====
 
 const SERVICE_FEE = 5;
 const SHOPPING_FEE = 10;
@@ -1126,7 +785,6 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
   const serviceFee = SERVICE_FEE;
   const grandTotal = tot + del + SERVICE_FEE;
 
-  // احصل على الموقع المحفوظ
   const savedLocation = getSavedLocation();
   const locationLink = savedLocation 
     ? `https://maps.google.com/maps?q=${savedLocation.lat},${savedLocation.lng}`
@@ -1162,7 +820,8 @@ return `• ${i.n}${i.extras&&i.extras.length?`\n  ➕ ${i.extras.map(e=>e.n+' (
     `\n🆔 *رقم الطلب:* ${oid}\n📅 ${new Date().toLocaleString('ar-EG')}`,
     divider,
     `👤 *الاسم:* ${nm}\n📱 *الموبايل:* ${ph}\n🗺️ *العنوان:* ${ad}`,
-    locationLink ? `📍 *موقع العميل:* ${locationLink}` : '',
+    loc ? `📍 *الخريطة:* ${loc.url}` : '',
+     locationLink ? `📍 *موقع العميل:* ${locationLink}` : '',
     divider,
     `📦 *تفاصيل الطلب:*${itemsText}\n`,
     divider,
