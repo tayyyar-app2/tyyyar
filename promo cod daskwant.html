@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم أكواد الخصم</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      opacity: 0.9;
+      font-size: 14px;
+    }
+    
+    .content {
+      padding: 30px;
+    }
+    
+    .section {
+      margin-bottom: 40px;
+    }
+    
+    .section-title {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #667eea;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 20px;
+      background: #667eea;
+      border-radius: 2px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+    
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      width: 100%;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+      width: 100%;
+    }
+    
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+    
+    .btn-success {
+      background: #4caf50;
+      color: white;
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+    
+    .btn-danger {
+      background: #f44336;
+      color: white;
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+    
+    .btn-warning {
+      background: #ff9800;
+      color: white;
+      padding: 8px 16px;
+      font-size: 12px;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    th {
+      background: #f5f5f5;
+      padding: 15px;
+      text-align: right;
+      font-weight: 600;
+      color: #333;
+      border-bottom: 2px solid #ddd;
+    }
+    
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    tr:hover {
+      background: #f9f9f9;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .badge-success {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+    
+    .badge-danger {
+      background: #ffebee;
+      color: #c62828;
+    }
+    
+    .badge-info {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+    
+    .code-input {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .alert {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    
+    .alert-info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+    
+    .alert.show {
+      display: block;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #ddd;
+    }
+    
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 15px 20px;
+      cursor: pointer;
+      color: #666;
+      font-weight: 600;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+    
+    .tab-btn.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    
+    .stat-card h3 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    
+    .stat-card p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+    
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+    
+    @media (max-width: 768px) {
+      .form-row, .form-row-3 {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎟️ لوحة تحكم أكواد الخصم</h1>
+      <p>إدارة شاملة لأكواز البروموشن والخصومات</p>
+    </div>
+    
+    <div class="content">
+      <!-- الإحصائيات -->
+      <div class="stats">
+        <div class="stat-card">
+          <h3 id="total-codes">0</h3>
+          <p>إجمالي الأكواد</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="active-codes">0</h3>
+          <p>أكواد نشطة</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="total-usage">0</h3>
+          <p>إجمالي الاستخدامات</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="generic-codes">0</h3>
+          <p>أكواد عامة</p>
+        </div>
+      </div>
+      
+      <!-- التنبيهات -->
+      <div id="alert" class="alert"></div>
+      
+      <!-- التابات -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('create')">إنشاء كود جديد</button>
+        <button class="tab-btn" onclick="switchTab('view')">عرض الأكواد</button>
+        <button class="tab-btn" onclick="switchTab('bulk')">عمليات جماعية</button>
+      </div>
+      
+      <!-- تاب الإنشاء -->
+      <div id="create" class="tab-content active">
+        <div class="section">
+          <h2 class="section-title">إنشاء كود خصم جديد</h2>
+          
+          <form id="createCodeForm" onsubmit="createNewCode(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="code">رمز الكود *</label>
+                <input type="text" id="code" class="code-input" placeholder="مثل: WELCOME50" required>
+                <small style="color: #999;">سيتم تحويله تلقائياً لأحرف كبيرة</small>
+              </div>
+              
+              <div class="form-group">
+                <label for="description">الوصف</label>
+                <input type="text" id="description" placeholder="وصف الكود (اختياري)">
+              </div>
+            </div>
+            
+            <div class="form-row-3">
+              <div class="form-group">
+                <label for="type">نوع الخصم *</label>
+                <select id="type" required onchange="updateTypeDisplay()">
+                  <option value="">-- اختر --</option>
+                  <option value="fixed">خصم ثابت (جنيه)</option>
+                  <option value="percentage">نسبة مئوية (%)</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="value">قيمة الخصم *</label>
+                <input type="number" id="value" placeholder="مثل: 50 أو 10" min="0" required>
+                <small id="valueHint" style="color: #999;"></small>
+              </div>
+              
+              <div class="form-group">
+                <label for="appliesTo">ينطبق على *</label>
+                <select id="appliesTo" required>
+                  <option value="">-- اختر --</option>
+                  <option value="total">الإجمالي (مع التوصيل والرسوم)</option>
+                  <option value="items">المنتجات فقط</option>
+                  <option value="delivery">التوصيل فقط</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-row-3">
+              <div class="form-group">
+                <label for="scope">نطاق الكود *</label>
+                <select id="scope" required onchange="updateScopeDisplay()">
+                  <option value="all">عام - جميع المطاعم</option>
+                  <option value="Bazooka">خاص - مطعم Bazooka</option>
+                  <option value="Pizza Hut">خاص - مطعم Pizza Hut</option>
+                  <option value="custom">مطعم آخر</option>
+                </select>
+              </div>
+              
+              <div class="form-group" id="customRestaurant" style="display: none;">
+                <label for="customName">اسم المطعم</label>
+                <input type="text" id="customName" placeholder="أدخل اسم المطعم">
+              </div>
+              
+              <div class="form-group">
+                <label for="maxUses">أقصى استخدام (اختياري)</label>
+                <input type="number" id="maxUses" placeholder="مثل: 10 (اترك فارغاً للغير محدود)" min="1">
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="minOrder">الحد الأدنى للطلب (اختياري)</label>
+                <input type="number" id="minOrder" placeholder="مثل: 100" min="0">
+              </div>
+              
+              <div class="form-group">
+                <label for="expiry">تاريخ الانتهاء (اختياري)</label>
+                <input type="date" id="expiry">
+              </div>
+            </div>
+            
+            <button type="submit" class="btn-primary">✅ إنشاء الكود</button>
+          </form>
+        </div>
+      </div>
+      
+      <!-- تاب العرض -->
+      <div id="view" class="tab-content">
+        <div class="section">
+          <h2 class="section-title">الأكواد المتاحة</h2>
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <input type="text" id="searchCode" placeholder="🔍 ابحث عن كود..." onkeyup="searchCodes()">
+          </div>
+          
+          <div class="table-container" id="codesTableContainer">
+            <!-- سيتم ملء الجدول بـ JavaScript -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- تاب العمليات الجماعية -->
+      <div id="bulk" class="tab-content">
+        <div class="section">
+          <h2 class="section-title">عمليات جماعية</h2>
+          
+          <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <h3 style="margin-bottom: 15px; color: #333;">إجراءات سريعة</h3>
+            
+            <div class="form-group">
+              <label>تفعيل/تعطيل جميع الأكواد</label>
+              <div style="display: flex; gap: 10px;">
+                <button class="btn-success" style="flex: 1;" onclick="toggleAllCodes(true)">✅ تفعيل الكل</button>
+                <button class="btn-danger" style="flex: 1;" onclick="toggleAllCodes(false)">❌ تعطيل الكل</button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>نسخ احتياطية</label>
+              <div style="display: flex; gap: 10px;">
+                <button class="btn-success" style="flex: 1;" onclick="exportCodes()">📥 تصدير الأكواد</button>
+                <button class="btn-warning" style="flex: 1;" onclick="clearAllCodes()">🗑️ حذف الكل</button>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>حذف الأكواد المنتهية</label>
+              <button class="btn-danger" style="width: 100%;" onclick="deleteExpiredCodes()">🗑️ حذف الأكواد المنتهية الصلاحية</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // تبديل التابات
+    function switchTab(tabName) {
+      // إخفاء جميع التابات
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-btn').forEach(el => {
+        el.classList.remove('active');
+      });
+      
+      // إظهار التاب المختار
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+      
+      // تحديث جدول الأكواد عند الانتقال لتاب العرض
+      if (tabName === 'view') {
+        displayCodes();
+      }
+    }
+    
+    // تحديث عرض النوع
+    function updateTypeDisplay() {
+      const type = document.getElementById('type').value;
+      const hint = document.getElementById('valueHint');
+      if (type === 'fixed') {
+        hint.textContent = 'أدخل المبلغ بالجنيه';
+      } else if (type === 'percentage') {
+        hint.textContent = 'أدخل النسبة من 0 إلى 100';
+      }
+    }
+    
+    // تحديث عرض النطاق
+    function updateScopeDisplay() {
+      const scope = document.getElementById('scope').value;
+      const custom = document.getElementById('customRestaurant');
+      custom.style.display = scope === 'custom' ? 'block' : 'none';
+    }
+    
+    // إنشاء كود جديد
+    function createNewCode(e) {
+      e.preventDefault();
+      
+      const code = document.getElementById('code').value.trim().toUpperCase();
+      const type = document.getElementById('type').value;
+      const value = parseInt(document.getElementById('value').value);
+      const appliesTo = document.getElementById('appliesTo').value;
+      const description = document.getElementById('description').value;
+      const maxUses = document.getElementById('maxUses').value ? parseInt(document.getElementById('maxUses').value) : null;
+      const minOrder = document.getElementById('minOrder').value ? parseInt(document.getElementById('minOrder').value) : null;
+      const expiry = document.getElementById('expiry').value;
+      
+      let scope = document.getElementById('scope').value;
+      if (scope === 'custom') {
+        scope = document.getElementById('customName').value;
+        if (!scope) {
+          showAlert('❌ أدخل اسم المطعم', 'error');
+          return;
+        }
+      }
+      
+      // التحقق من الصيانة
+      if (!code || !type || !value || !appliesTo) {
+        showAlert('❌ أكمل جميع الحقول المطلوبة', 'error');
+        return;
+      }
+      
+      // محاكاة الدالة (في التطبيق الفعلي ستستخدم الدالة الفعلية)
+      const codeObj = {
+        code,
+        type,
+        value,
+        appliesTo,
+        scope,
+        active: true,
+        description,
+        minOrderValue: minOrder,
+        maxUses,
+        expiryDate: expiry,
+        usedCount: 0,
+        createdAt: new Date().toISOString()
+      };
+      
+      // حفظ في localStorage (محاكاة)
+      let codes = JSON.parse(localStorage.getItem('tyr_discount_codes_admin') || '{}');
+      codes[code] = codeObj;
+      localStorage.setItem('tyr_discount_codes_admin', JSON.stringify(codes));
+      
+      showAlert(`✅ تم إنشاء الكود ${code} بنجاح!`, 'success');
+      document.getElementById('createCodeForm').reset();
+      updateStats();
+    }
+    
+    // عرض الأكواد
+    function displayCodes() {
+      let codes = JSON.parse(localStorage.getItem('tyr_discount_codes_admin') || '{}');
+      const container = document.getElementById('codesTableContainer');
+      
+      if (Object.keys(codes).length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <p>لا توجد أكواد بعد</p>
+            <p style="font-size: 12px; margin-top: 10px;">انتقل لتاب "إنشاء كود جديد" لإضافة الأول</p>
+          </div>
+        `;
+        return;
+      }
+      
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>الكود</th>
+              <th>النوع</th>
+              <th>القيمة</th>
+              <th>النطاق</th>
+              <th>الحالة</th>
+              <th>الاستخدام</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      
+      Object.values(codes).forEach(code => {
+        const statusBadge = code.active 
+          ? '<span class="badge badge-success">✅ نشط</span>'
+          : '<span class="badge badge-danger">❌ معطل</span>';
+        
+        const usageText = code.maxUses 
+          ? `${code.usedCount || 0}/${code.maxUses}`
+          : 'غير محدود';
+        
+        html += `
+          <tr>
+            <td><strong>${code.code}</strong></td>
+            <td>${code.type === 'fixed' ? 'ثابت' : 'نسبة'}</td>
+            <td>${code.value}${code.type === 'percentage' ? '%' : ' ج.م'}</td>
+            <td>${code.scope === 'all' ? '🌍 عام' : `🏪 ${code.scope}`}</td>
+            <td>${statusBadge}</td>
+            <td>${usageText}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-success" onclick="toggleCode('${code.code}', ${!code.active})">
+                  ${code.active ? '❌' : '✅'}
+                </button>
+                <button class="btn-danger" onclick="deleteCode('${code.code}')">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      
+      html += `
+          </tbody>
+        </table>
+      `;
+      
+      container.innerHTML = html;
+    }
+    
+    // تبديل حالة الكود
+    function toggleCode(code, active) {
+      let codes = JSON.parse(localStorage.getItem('tyr_discount_codes_admin') || '{}');
+      if (codes[code]) {
+        codes[code].active = active;
+        localStorage.setItem('tyr_discount_codes_admin', JSON.stringify(codes));
+        displayCodes();
+        updateStats();
+        showAlert(active ? `✅ تم تفعيل ${code}` : `❌ تم تعطيل ${code}`, 'success');
+      }
+    }
+    
+    // حذف كود
+    function deleteCode(code) {
+      if (confirm(`هل متأكد من حذف الكود ${code}؟`)) {
+        let codes = JSON.parse(localStorage.getItem('tyr_discount_codes_admin') || '{}');
+        delete codes[code];
+        localStorage.setItem('tyr_discount_codes_admin', JSON.stringify(codes));
+        displayCodes();
+        updateStats();
+        showAlert(`✅ تم حذف الكود ${code}`, 'success');
+      }
+    }
+    
+    // البحث عن الأكواد
+    function searchCodes() {
+      const search = document.getElementById('searchCode').value.toUpperCase();
+      let codes = JSON.parse(localStorage.getItem('tyr_discount_codes_admin') || '{}');
+      
+      const filtered = Object.values(codes).filter(code => 
+        code.code.includes(search) || code.description.includes(search)
+      );
+      
+      // تطبيق البحث على الجدول
+      document.querySelectorAll('table tbody tr').forEach(row => {
+        const code = row.querySelector('td strong').textContent;
+        row.style.display = code.includes(search) ? '' : 'none';
+      });
+    }
+    
+    // تفعيل/تعطيل الكل
+    function toggleAllCodes(active) {
+      let codes = JSON.parse(localStorage.getItem('tyr_discount_codes_admin') || '{}');
+      Object.values(codes).forEach(code => {
+        code.active = active;
+      });
+      localStorage.setItem('tyr_discount_codes_admin', JSON.stringify(codes));
+      displayCodes();
+      updateStats();
+      showAlert(active ? '✅ تم تفعيل جميع الأكواد' : '❌ تم تعطيل جميع الأكواد', 'success');
+    }
+    
+    // حذف جميع الأكواد
+    function clearAllCodes() {
+      if (confirm('⚠️ هل متأكد من حذف جميع الأكواد؟ هذا لا يمكن التراجع عنه!')) {
+        localStorage.removeItem('tyr_discount_codes_admin');
+        displayCodes();
+        updateStats();
+        showAlert('✅ تم حذف جميع الأكواد', 'success');
+      }
+    }
+    
+    // حذف الأكواد المنتهية
+    function deleteExpiredCodes() {
+      let codes = JSON.parse(localStorage.getItem('tyr_discount_codes_admin') || '{}');
+      let deleted = 0;
+      
+      Object.keys(codes).forEach(key => {
+        if (codes[key].expiryDate && new Date(codes[key].expiryDate) < new Date()) {
+          delete codes[key];
+          deleted++;
+        }
+      });
+      
+      localStorage.setItem('tyr_discount_codes_admin', JSON.stringify(codes));
+      displayCodes();
+      updateStats();
+      showAlert(`✅ تم حذف ${deleted} كود منتهي الصلاحية`, 'success');
+    }
+    
+    // تصدير الأكواد
+    function exportCodes() {
+      let codes = JSON.parse(localStorage.getItem('tyr_discount_codes_admin') || '{}');
+      const json = JSON.stringify(codes, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `discount_codes_${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showAlert('✅ تم تصدير الأكواد', 'success');
+    }
+    
+    // تحديث الإحصائيات
+    function updateStats() {
+      let codes = JSON.parse(localStorage.getItem('tyr_discount_codes_admin') || '{}');
+      const codesArray = Object.values(codes);
+      
+      const totalCodes = codesArray.length;
+      const activeCodes = codesArray.filter(c => c.active).length;
+      const totalUsage = codesArray.reduce((sum, c) => sum + (c.usedCount || 0), 0);
+      const genericCodes = codesArray.filter(c => c.scope === 'all').length;
+      
+      document.getElementById('total-codes').textContent = totalCodes;
+      document.getElementById('active-codes').textContent = activeCodes;
+      document.getElementById('total-usage').textContent = totalUsage;
+      document.getElementById('generic-codes').textContent = genericCodes;
+    }
+    
+    // إظهار التنبيهات
+    function showAlert(message, type) {
+      const alert = document.getElementById('alert');
+      alert.textContent = message;
+      alert.className = `alert alert-${type} show`;
+      setTimeout(() => {
+        alert.classList.remove('show');
+      }, 3000);
+    }
+    
+    // تحميل البيانات عند فتح الصفحة
+    window.addEventListener('load', () => {
+      updateStats();
+    });
+  </script>
+</body>
+</html>

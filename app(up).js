@@ -1,212 +1,3 @@
-// ========================================
-// 🌍 نظام Geofencing متقدم لتطبيق طيار
-// ========================================
-
-// ========== 1. قاعدة البيانات الجغرافية للمدن ==========
-const GEOFENCING_CITIES = {
-  'tayyar_10th_ramadan': {
-    name: 'العاشر من رمضان',
-    center: { lat: 30.306503, lng: 31.741455 },
-    // حدود المدينة الفعلية - Polygon بإحداثيات دقيقة
-    polygon: [
-      { lat: 30.25, lng: 31.68 },
-      { lat: 30.25, lng: 31.81 },
-      { lat: 30.36, lng: 31.81 },
-      { lat: 30.36, lng: 31.75 },
-      { lat: 30.40, lng: 31.75 },
-      { lat: 30.40, lng: 31.68 },
-      { lat: 30.36, lng: 31.68 },
-      { lat: 30.36, lng: 31.71 },
-      { lat: 30.25, lng: 31.71 },
-      { lat: 30.25, lng: 31.68 }
-    ],
-    radiusKm: 15,
-    isActive: true
-  }
-};
-
-// ========== 2. نظام التحقق من الموقع (Point in Polygon) ==========
-function isPointInPolygon(point, polygon) {
-  if (!polygon || polygon.length < 3) return false;
-  const { lat, lng } = point;
-  let isInside = false;
-  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-    const xi = polygon[i].lat;
-    const yi = polygon[i].lng;
-    const xj = polygon[j].lat;
-    const yj = polygon[j].lng;
-    const intersect = yi > lng !== yj > lng && lat < ((xj - xi) * (lng - yi)) / (yj - yi) + xi;
-    if (intersect) isInside = !isInside;
-  }
-  return isInside;
-}
-
-function getDistanceFromLatLng(lat1, lng1, lat2, lng2) {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLng = ((lng2 - lng1) * Math.PI) / 180;
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) *
-    Math.sin(dLng / 2) * Math.sin(dLng / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
-
-function isUserInServiceArea(userLocation, cityKey = 'tayyar_10th_ramadan') {
-  const city = GEOFENCING_CITIES[cityKey];
-  if (!city || !city.isActive) return false;
-  const { lat, lng } = userLocation;
-  if (city.polygon && city.polygon.length > 0) {
-    if (isPointInPolygon(userLocation, city.polygon)) return true;
-  }
-  const distance = getDistanceFromLatLng(lat, lng, city.center.lat, city.center.lng);
-  return distance <= city.radiusKm;
-}
-
-// ========== 3. إدارة الموقع المحفوظ ==========
-function saveUserLocation(latitude, longitude) {
-  const locationData = {
-    lat: latitude,
-    lng: longitude,
-    timestamp: Date.now(),
-    verified: true
-  };
-  localStorage.setItem('tyr_user_location', JSON.stringify(locationData));
-  localStorage.setItem('tyr_location_verified', 'true');
-}
-
-function getSavedLocation() {
-  try {
-    const saved = localStorage.getItem('tyr_user_location');
-    return saved ? JSON.parse(saved) : null;
-  } catch (e) {
-    return null;
-  }
-}
-
-function isLocationStillValid() {
-  const saved = getSavedLocation();
-  if (!saved) return false;
-  const ageHours = (Date.now() - saved.timestamp) / (1000 * 60 * 60);
-  return ageHours < 24;
-}
-
-// ========== 4. طلب الموقع من المستخدم ==========
-function requestUserLocationFromDevice() {
-  return new Promise((resolve, reject) => {
-    if (!navigator.geolocation) {
-      reject(new Error('الجهاز لا يدعم تحديد الموقع'));
-      return;
-    }
-    const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        resolve({ lat: latitude, lng: longitude });
-      },
-      (error) => {
-        let errorMsg = '';
-        switch (error.code) {
-          case error.PERMISSION_DENIED: errorMsg = 'يرجى السماح بالوصول إلى الموقع الجغرافي'; break;
-          case error.POSITION_UNAVAILABLE: errorMsg = 'الموقع غير متاح حالياً. تأكد من تشغيل GPS'; break;
-          case error.TIMEOUT: errorMsg = 'انتهت مهلة البحث عن الموقع. حاول مرة أخرى'; break;
-          default: errorMsg = 'حدث خطأ في تحديد الموقع';
-        }
-        reject(new Error(errorMsg));
-      },
-      options
-    );
-  });
-}
-
-// ========== 5. واجهة المستخدم وإظهار الرسائل ==========
-function showLocationErrorMessage(errorMessage) {
-  let msgElement = document.getElementById('location-error-msg');
-  if (!msgElement) {
-    msgElement = document.createElement('div');
-    msgElement.id = 'location-error-msg';
-    msgElement.style.cssText = `position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ff4444, #ff6666); color: white; padding: 16px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; z-index: 9999; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); animation: slideDown 0.3s ease-out; text-align: center; max-width: 90%;`;
-    document.body.appendChild(msgElement);
-  }
-  msgElement.innerHTML = errorMessage;
-  msgElement.style.display = 'block';
-  setTimeout(() => { msgElement.style.display = 'none'; }, 5000);
-}
-
-function showLocationSuccessMessage(message) {
-  let msgElement = document.getElementById('location-success-msg');
-  if (!msgElement) {
-    msgElement = document.createElement('div');
-    msgElement.id = 'location-success-msg';
-    msgElement.style.cssText = `position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #44aa44, #66dd66); color: white; padding: 16px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; z-index: 9999; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); animation: slideDown 0.3s ease-out; text-align: center; max-width: 90%;`;
-    document.body.appendChild(msgElement);
-  }
-  msgElement.innerHTML = message;
-  msgElement.style.display = 'block';
-  setTimeout(() => { msgElement.style.display = 'none'; }, 3000);
-}
-
-function showLocationLoadingSpinner() {
-  let spinner = document.getElementById('location-spinner');
-  if (!spinner) {
-    spinner = document.createElement('div');
-    spinner.id = 'location-spinner';
-    spinner.style.cssText = `position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0, 0, 0, 0.8); color: white; padding: 30px; border-radius: 12px; z-index: 10000; text-align: center; font-size: 14px;`;
-    spinner.innerHTML = `<div style="border: 4px solid rgba(255, 255, 255, 0.3); border-top: 4px solid #ff9f3d; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div><p>جاري تحديد موقعك...</p>`;
-    document.body.appendChild(spinner);
-  }
-  spinner.style.display = 'block';
-}
-
-function hideLocationLoadingSpinner() {
-  const spinner = document.getElementById('location-spinner');
-  if (spinner) spinner.style.display = 'none';
-}
-
-const geoStyle = document.createElement('style');
-geoStyle.textContent = `
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes slideDown {
-    from { transform: translate(-50%, -100%); opacity: 0; }
-    to { transform: translate(-50%, 0); opacity: 1; }
-  }
-`;
-document.head.appendChild(geoStyle);
-
-// ========== 6. الدالة الرئيسية للتحقق من الموقع ==========
-async function verifyUserLocation(cityKey = 'tayyar_10th_ramadan') {
-  try {
-    const savedLocation = getSavedLocation();
-    if (savedLocation && isLocationStillValid()) {
-      if (isUserInServiceArea(savedLocation, cityKey)) {
-        return { success: true, cached: true, location: savedLocation };
-      }
-    }
-    showLocationLoadingSpinner();
-    const currentLocation = await requestUserLocationFromDevice();
-    hideLocationLoadingSpinner();
-    if (isUserInServiceArea(currentLocation, cityKey)) {
-      saveUserLocation(currentLocation.lat, currentLocation.lng);
-      showLocationSuccessMessage('✅ تم التحقق من موقعك بنجاح');
-      return { success: true, cached: false, location: currentLocation };
-    } else {
-      showLocationErrorMessage('⚠️ طيار متاح حاليًا داخل العاشر من رمضان فقط');
-      return { success: false, location: currentLocation };
-    }
-  } catch (error) {
-    hideLocationLoadingSpinner();
-    showLocationErrorMessage(`❌ ${error.message}`);
-    return { success: false, error: error.message };
-  }
-}
-
-async function checkLocationBeforeOrder() {
-  const result = await verifyUserLocation('tayyar_10th_ramadan');
-  return result.success;
-}
-
-// ===== انهاية نظام Geofencing =====
-
 const SERVICE_FEE = 5;
 const SHOPPING_FEE = 10;
 
@@ -785,11 +576,6 @@ function buildReceipt(oid, nm, ph, ad, it, tot, payLbl, notes) {
   const serviceFee = SERVICE_FEE;
   const grandTotal = tot + del + SERVICE_FEE;
 
-  const savedLocation = getSavedLocation();
-  const locationLink = savedLocation 
-    ? `https://maps.google.com/maps?q=${savedLocation.lat},${savedLocation.lng}`
-    : '';
-
   // تجميع المنتجات حسب البراند
   const byBrand = it.reduce((acc, i) => {
     (acc[i.brand] ??= []).push(i);
@@ -821,7 +607,6 @@ return `• ${i.n}${i.extras&&i.extras.length?`\n  ➕ ${i.extras.map(e=>e.n+' (
     divider,
     `👤 *الاسم:* ${nm}\n📱 *الموبايل:* ${ph}\n🗺️ *العنوان:* ${ad}`,
     loc ? `📍 *الخريطة:* ${loc.url}` : '',
-     locationLink ? `📍 *موقع العميل:* ${locationLink}` : '',
     divider,
     `📦 *تفاصيل الطلب:*${itemsText}\n`,
     divider,
@@ -863,7 +648,7 @@ function prefillUserProfile(){
   url.searchParams.delete('u_ph');
   url.searchParams.delete('u_ad');
   window.history.replaceState({},'',url);
-  toast('👋 أهلاً! تم حفظ بياناتك تلقائياً'); 
+  toast('👋 أهلاً! تم حفظ بياناتك تلقائياً');
 }
 function clearUserProfile(){
   localStorage.removeItem('tyr_user');
@@ -871,18 +656,11 @@ function clearUserProfile(){
   toast('🗑️ تم مسح بياناتك المحفوظة');
 }
 
-async function placeOrder(){
+function placeOrder(){
  if(!isOpen(brand)) {
     toast('🔴 هذا المطعم مغلق حالياً', 1);
     return;
   }
-  
-  // ✅ فحص الموقع قبل السماح بالطلب
-  const locationOk = await checkLocationBeforeOrder();
-  if (!locationOk) {
-    return; // منع الطلب إذا كان خارج النطاق
-  }
-  
   // باقي الكود زي ما هو
   const it=cartItems(),tot=cartTotal();
   const nm=document.getElementById('cn').value.trim();
@@ -1761,3 +1539,72 @@ window.goStep = function(n) {
     setTimeout(renderDiscountUI, 100);
   }
 };
+
+// ===== نظام التحقق من الموقع الجغرافي =====
+// إحداثيات العاشر من رمضان (تقريبية)
+const DELIVERY_CENTER = {
+  lat: 30.6,
+  lng: 31.4,
+  radiusKm: 15 // نطاق الخدمة بالكيلومتر
+};
+
+// حساب المسافة بين نقطتين بالكيلومتر
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // نصف قطر الأرض بالكيلومتر
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
+// التحقق من أن المستخدم في منطقة التوصيل
+async function verifyDeliveryLocation() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      console.warn('جهازك لا يدعم تحديد الموقع');
+      toast('⚠️ تأكد من تفعيل خدمة الموقع');
+      resolve(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const distance = calculateDistance(
+          latitude, 
+          longitude, 
+          DELIVERY_CENTER.lat, 
+          DELIVERY_CENTER.lng
+        );
+
+        if (distance <= DELIVERY_CENTER.radiusKm) {
+          resolve(true);
+        } else {
+          toast(`❌ آسف، الخدمة متاحة فقط في العاشر من رمضان (أنت على بعد ${distance.toFixed(1)} كم)`);
+          resolve(false);
+        }
+      },
+      (error) => {
+        console.warn('خطأ في تحديد الموقع:', error.message);
+        toast('⚠️ من فضلك فعّل خدمة الموقع');
+        resolve(false);
+      }
+    );
+  });
+}
+
+// تعديل دالة submitOrder الأصلية للتحقق من الموقع
+const placeOrder_original = window.placeOrder;
+if (submitOrder_original && typeof placeOrder_original === 'function') {
+  window.placeOrder = async function() {
+    const isInDeliveryArea = await verifyDeliveryLocation();
+    if (!isInDeliveryArea) {
+      return; // توقف الطلب إذا لم يكن في منطقة التوصيل
+    }
+    // استمر مع الطلب الأصلي
+    return placeOrder_original.call(this);
+  };
+}
