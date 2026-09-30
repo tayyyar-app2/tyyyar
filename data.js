@@ -313,7 +313,9 @@ const MENU=[
   { id: 261, brand: 'Karam El Sham', n: 'دجاج مخلي كامله', d: 'مشويات', p: 420, img: './img/logo karm alshm 2.jpeg' },
   { id: 262, brand: 'Karam El Sham', n: 'دجاج مخلي نص', d: 'مشويات', p: 230, img: './img/logo karm alshm 2.jpeg' },
   { id: 263, brand: 'Karam El Sham', n: 'وجبه شيش وكفته', d: 'مشويات', p: 200, img: './img/logo karm alshm 2.jpeg' },
-  { id: 945, brand: 'B Laban', n: '  بظابيظو مانجوا', e:'بلبن', d: 'حلوى', p: 135, img: './img/بظابيظوا مانجو.jpg' ,sizes: [
+  // بلبن///
+  { id:894 , brand: 'B Laban', n: 'الغوريلا ', e:'بلبن', d: 'الغوريلا كيك نوتيلا غرقان كراميلا. متعة السولتد كراميل كروكاند. مع موس الميلك تشوكليت. تقدم مع صوص الكينج كونج باشون فرويت توفيتو', p:210, img: './img/بلبن الغوريلا.webp' },
+  { id: 893, brand: 'B Laban', n: '  بظابيظو مانجوا', e:'بلبن', d: 'حلوى', p: 135, img: './img/بظابيظوا مانجو.jpg' ,sizes: [
   { id: "medium", label: "وسط", price: "135" },
   { id: "large", label: "كبير", price: "260" },
   ]},
