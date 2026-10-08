@@ -1608,3 +1608,122 @@ if (submitOrder_original && typeof placeOrder_original === 'function') {
     return placeOrder_original.call(this);
   };
 }
+// ===== قد يعجبك أيضاً (توصيات ديناميكية من نفس المطعم) =====
+const REC_MAX_ITEMS = 10;
+
+function recEsc(s){
+  return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// التصنيف والـ tags: بيتقريوا لو موجودين في بيانات المنتج، ولو مش موجودين بيرجع null/[] والترتيب يعتمد على المطعم
+function recGroupOf(p){
+  return p.category ?? p.subcategory ?? p.cat ?? null;
+}
+function recTagsOf(p){
+  return Array.isArray(p.tags) ? p.tags : [];
+}
+
+// المطعم = الـ brand الموجود في منتجات السلة (لو السلة فيها أكتر من مطعم، بياخد اللي عدد قطعه أكبر)
+function recMerchantFromCart(items){
+  const qtyByBrand = {};
+  items.forEach(i => { if(i.brand) qtyByBrand[i.brand] = (qtyByBrand[i.brand] || 0) + i.q; });
+  let best = null, bestQty = -1;
+  Object.keys(qtyByBrand).forEach(b => {
+    if(qtyByBrand[b] > bestQty){ best = b; bestQty = qtyByBrand[b]; }
+  });
+  return best;
+}
+
+function getRecommendations(){
+  const items = cartItems();
+  if(!items.length) return [];
+  const merchant = recMerchantFromCart(items);
+  if(!merchant) return [];
+
+  const groups = new Set(), tags = new Set();
+  items.forEach(i => {
+    const g = recGroupOf(i);
+    if(g != null) groups.add(g);
+    recTagsOf(i).forEach(t => tags.add(t));
+  });
+
+  const seen = new Set();
+  const scored = [];
+  MENU.forEach((p, idx) => {
+    if(p.brand !== merchant) return;               // نفس المطعم بس
+    if(cart[p.id] > 0) return;                     // مش موجود في السلة
+    if(seen.has(p.id)) return;                     // مش مكرر
+    if(getProductStatus(p.id) === 'soldout') return;
+    seen.add(p.id);
+    const g = recGroupOf(p);
+    const sameGroup = (g != null && groups.has(g)) ? 1 : 0;
+    const tagHits = recTagsOf(p).filter(t => tags.has(t)).length;
+    scored.push({ p, idx, score: sameGroup * 100 + tagHits });
+  });
+
+  scored.sort((a, b) => (b.score - a.score) || (a.idx - b.idx));
+  return scored.slice(0, REC_MAX_ITEMS).map(s => s.p);
+}
+
+function recCardHtml(p){
+  const img = p.img
+    ? `<img src="${recEsc(p.img)}" alt="${recEsc(p.n)}" loading="lazy">`
+    : `<div class="rec-emoji">${p.e || '🍽️'}</div>`;
+  return `<div class="rec-card">
+      <div class="rec-img">${img}</div>
+      <div class="rec-name">${recEsc(p.n)}</div>
+      <div class="rec-bottom">
+        <div class="rec-price">${p.p} ج.م</div>
+        <button class="rec-add" onclick="recAdd(${p.id})" aria-label="إضافة ${recEsc(p.n)}">+</button>
+      </div>
+    </div>`;
+}
+
+function renderRecommendations(){
+  const box = document.getElementById('rec-section');
+  if(!box) return;
+  const v3 = document.getElementById('view-3');
+  if(!v3 || !v3.classList.contains('active')){ box.style.display = 'none'; return; }
+
+  const recs = getRecommendations();
+  if(!recs.length){ box.style.display = 'none'; box.innerHTML = ''; return; }
+
+  const prevLeft = box.querySelector('.rec-track')?.scrollLeft || 0;
+  box.innerHTML = `
+    <div class="rec-title">👍 قد يعجبك أيضاً</div>
+    <div class="rec-track">${recs.map(recCardHtml).join('')}</div>`;
+  const track = box.querySelector('.rec-track');
+  if(track) track.scrollLeft = prevLeft;
+  box.style.display = 'block';
+}
+
+// الإضافة بتستخدم نظام السلة الحالي نفسه (chg) — بيفتح اختيار الحجم/الإضافات لو المنتج عليه
+function recAdd(id){
+  const p = MENU.find(x => x.id == id);
+  if(!p) return;
+  const needsOptions = (p.sizes && p.sizes.length) || (p.extras && p.extras.length);
+  const before = cart[id] || 0;
+  chg(id, 1);
+  if(!needsOptions && (cart[id] || 0) > before) toast('✅ تمت الإضافة');
+}
+
+// تحديث ملخص الطلب والإجمالي فورًا لما السلة تتغير وإحنا في شاشة المراجعة
+function recSyncReview(){
+  const v3 = document.getElementById('view-3');
+  if(!v3 || !v3.classList.contains('active')) return;
+  if(cartItems().length === 0) return;
+  refreshReview();
+  renderRecommendations();
+}
+
+const _recBaseUpdateFab = updateFab;
+updateFab = function(){
+  _recBaseUpdateFab();
+  recSyncReview();
+};
+
+const _recBaseGoStep = goStep;
+goStep = function(n){
+  _recBaseGoStep(n);
+  renderRecommendations();
+};
