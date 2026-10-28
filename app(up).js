@@ -937,11 +937,14 @@ const del=getDeliveryFee(address);
 const serviceFee = SERVICE_FEE;
 const shoppingFee = 10;
 const locLine=otherLoc?`\n📍 *الخريطة:* ${otherLoc.url}`:'';
+const phone = document.getElementById("other-phone").value.trim();
 
 // const confirmed = confirm(`📢 تنبيه!\n\nهيتضاف 10 ج.م رسوم مشاوير فوق رسوم التوصيل والخدمة.\n\nالإجمالي الإضافي: ${del + serviceFee + shoppingFee} ج.م\n\nهتكمل؟`);
 // if(!confirmed) return;
   const typeLabels={restaurant:'🍽️ مطعم',supermarket:'🛒 سوبر ماركت',pharmacy:'💊 صيدلية',};
   const msg=`🚀 *طلب جديد من طيار*
+  ━━━━━━━━━━━━━━━
+📱 رقم العميل: ${phone}
 ━━━━━━━━━━━━━━━
 ${typeLabels[otherType]}: *${placeName}*
 ━━━━━━━━━━━━━━━
@@ -962,6 +965,33 @@ _تم الإرسال من تطبيق طيار_ 🛵`;
  
 fbq('track', 'InitiateCheckout');
   window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`,'_blank');
+
+  // ===== إرسال نفس الفاتورة على التليجرام (اطلب من اماكن اخرى) =====
+  const OTHER_TG_TOKEN = '8675153795:AAHHqvGPGMhMGmrYpn4rqRe6r79yHcl7ekA';
+  const OTHER_TG_CHAT_IDS = ['8767256379'];
+  OTHER_TG_CHAT_IDS.forEach(chatId => {
+    const tgUrl = 'https://api.telegram.org/bot' + OTHER_TG_TOKEN + '/sendMessage';
+    fetch(tgUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
+    })
+    .then(r => r.json())
+    .then(d => {
+      if (d.ok) return console.log('✅ Telegram other sent:', chatId);
+      // لو Markdown اترفض بسبب نص المستخدم، نبعت نفس الرسالة كنص عادي
+      return fetch(tgUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: msg })
+      })
+      .then(r => r.json())
+      .then(d2 => console.log('Telegram plain result:', d2));
+    })
+    .catch(e => console.log('❌ Telegram other error:', e));
+  });
+  // =================================================================
+
   showOtherSuccess();
 }
 
